@@ -23,7 +23,7 @@ export default function CreatePostView(props: {
         className="CreatePostViewMessageInput"
         value={message}
         onChange={(event: React.ChangeEvent<HTMLTextAreaElement>) =>
-          setMessage(event.target.value.slice(0, 255))
+          setMessage(event.target.value.slice(0, 8192))
         }
         required
       ></textarea>
