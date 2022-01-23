@@ -1,9 +1,8 @@
-import React, { useState } from "react";
-import { User } from "../data/user";
-import Database from "../database/database";
-import HomePage from "../home/HomePage";
+import React from "react";
+import Database from "../../database/database";
 import LoginForm from "./LoginForm";
 import RegisterForm from "./RegisterForm";
+import { useNavigate } from "react-router-dom";
 
 enum welcomeStateType {
   login,
@@ -13,29 +12,25 @@ enum welcomeStateType {
 export default function WelcomePage(props: { database: Database }) {
   const [welcomeState, setWelcomeState] =
     React.useState<welcomeStateType | null>(null);
-  const [user, setUser] = useState<User | null>(null);
 
-  props.database.getUser().then((loggedinUser) => {
+  let navigate = useNavigate();
+
+  props.database.getUser().then(async (loggedinUser) => {
     if (loggedinUser == null) {
       console.log("Not Logged in!");
       setWelcomeState(welcomeStateType.register);
       return;
     }
     console.log(`Logged in as ${loggedinUser.name}`);
-    setUser(loggedinUser);
-    setWelcomeState(welcomeStateType.login);
+
+    navigate("/home");
   });
 
   return (
     <>
-      {user != null ? (
-        <HomePage database={props.database} user={user}></HomePage>
-      ) : (
-        <></>
-      )}
       {welcomeState != null ? (
         <>
-          {welcomeState === welcomeStateType.register ? (
+          {welcomeState === welcomeStateType.login ? (
             <>
               <h1>Register</h1>
               <RegisterForm database={props.database}></RegisterForm>

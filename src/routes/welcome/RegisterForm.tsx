@@ -1,15 +1,21 @@
 import React from "react";
-import Database from "../database/database";
+import { useNavigate } from "react-router-dom";
+import Database from "../../database/database";
 
-export default function LoginForm(props: { database: Database }) {
+export default function RegisterForm(props: { database: Database }) {
+  const [username, setUsername] = React.useState("");
   const [email, setEmail] = React.useState("");
   const [password, setPassword] = React.useState("");
+
+  let navigate = useNavigate();
 
   async function onSubmitHandler(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
     try {
-      await props.database.login(email, password);
+      await props.database.createAccount(email, username, password);
       alert("Account created");
+
+      navigate("/home");
     } catch (error) {
       alert(`Error ${error}`);
     }
@@ -17,6 +23,17 @@ export default function LoginForm(props: { database: Database }) {
 
   return (
     <form onSubmit={onSubmitHandler}>
+      <div>
+        <label>Username:</label>
+        <input
+          type="text"
+          value={username}
+          onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
+            setUsername(event.target.value)
+          }
+          required
+        />
+      </div>
       <div>
         <label>Email:</label>
         <input
