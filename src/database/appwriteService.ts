@@ -58,6 +58,7 @@ export default class AppwriteService {
       {
         message: message,
         creator: user.$id,
+        date: Date.now(),
       },
       ["role:all"]
     );
