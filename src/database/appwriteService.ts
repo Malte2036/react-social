@@ -17,8 +17,7 @@ export default class AppwriteService {
 
   async getUser(): Promise<User | null> {
     try {
-      const user = await this.appwrite.account.get();
-      return { id: user.$id, email: user.email, name: user.name };
+      return await this.appwrite.account.get<User>();
     } catch (error) {
       return null;
     }
@@ -26,7 +25,7 @@ export default class AppwriteService {
 
   async createAccount(email: string, username: string, password: string) {
     console.log("createAccount");
-    await this.appwrite.account.create("unique()", email, password, username);
+    await this.appwrite.account.create(username, email, password, username);
     await this.login(email, password);
   }
 

@@ -1,5 +1,3 @@
-export interface User {
-  id: string;
-  email: string;
-  name: string;
-}
+import type { Models } from "appwrite";
+
+export type User = Models.User<Models.Preferences>;
