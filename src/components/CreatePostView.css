@@ -1,0 +1,10 @@
+.CreatePostView {
+  margin-bottom: 1%;
+  width: 100%;
+}
+
+.CreatePostViewMessageInput {
+  width: 100%;
+  min-height: 5rem;
+  resize: vertical;
+}

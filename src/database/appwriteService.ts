@@ -44,4 +44,22 @@ export default class AppwriteService {
     );
     return listDocuments.documents;
   }
+
+  async createPost(message: string) {
+    const user: User | null = await this.getUser();
+    if (user === null) {
+      console.error("User null on createPost");
+      return;
+    }
+
+    await this.appwrite.database.createDocument(
+      this.postsCollectionId,
+      "unique()",
+      {
+        message: message,
+        creator: user.$id,
+      },
+      ["role:all"]
+    );
+  }
 }

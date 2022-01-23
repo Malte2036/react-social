@@ -6,6 +6,7 @@ import AppwriteService from "../../database/appwriteService";
 import PostView from "../../components/PostView";
 import "./HomePage.css";
 import { Post } from "../../database/data/post";
+import CreatePostView from "../../components/CreatePostView";
 
 export default function HomePage(props: { appwriteService: AppwriteService }) {
   const [user, setUser] = useState<User | null>(null);
@@ -21,7 +22,6 @@ export default function HomePage(props: { appwriteService: AppwriteService }) {
       }
       setUser(userFromDatabase);
 
-      console.log("fetch");
       props.appwriteService
         .getAllPosts()
         .then((postsFromDatabase) => setPosts(postsFromDatabase));
@@ -32,6 +32,7 @@ export default function HomePage(props: { appwriteService: AppwriteService }) {
   return (
     <div className="HomePage">
       <h1>Feed</h1>
+      <CreatePostView appwriteService={props.appwriteService}></CreatePostView>
       {posts.map((post) => (
         <>
           <PostView post={post}></PostView>
