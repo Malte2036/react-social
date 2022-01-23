@@ -1,7 +1,7 @@
-import { Appwrite, Models } from "appwrite";
-import { User } from "../data/user";
+import { Appwrite } from "appwrite";
+import { User } from "./data/user";
 
-export default class Database {
+export default class AppwriteService {
   appwrite: Appwrite;
   constructor(endpoint: string, projectId: string) {
     this.appwrite = new Appwrite();

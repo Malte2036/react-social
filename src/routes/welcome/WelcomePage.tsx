@@ -1,5 +1,5 @@
 import React from "react";
-import Database from "../../database/database";
+import AppwriteService from "../../database/appwriteService";
 import LoginForm from "./LoginForm";
 import RegisterForm from "./RegisterForm";
 import { useNavigate } from "react-router-dom";
@@ -9,13 +9,13 @@ enum welcomeStateType {
   register,
 }
 
-export default function WelcomePage(props: { database: Database }) {
+export default function WelcomePage(props: { appwriteService: AppwriteService }) {
   const [welcomeState, setWelcomeState] =
     React.useState<welcomeStateType | null>(null);
 
   let navigate = useNavigate();
 
-  props.database.getUser().then(async (loggedinUser) => {
+  props.appwriteService.getUser().then(async (loggedinUser) => {
     if (loggedinUser == null) {
       console.log("Not Logged in!");
       setWelcomeState(welcomeStateType.register);
@@ -33,12 +33,12 @@ export default function WelcomePage(props: { database: Database }) {
           {welcomeState === welcomeStateType.login ? (
             <>
               <h1>Register</h1>
-              <RegisterForm database={props.database}></RegisterForm>
+              <RegisterForm appwriteService={props.appwriteService}></RegisterForm>
             </>
           ) : (
             <>
               <h1>Login</h1>
-              <LoginForm database={props.database}></LoginForm>
+              <LoginForm appwriteService={props.appwriteService}></LoginForm>
             </>
           )}
         </>

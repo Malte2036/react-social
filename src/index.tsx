@@ -4,9 +4,9 @@ import "./index.css";
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import HomePage from "./routes/home/HomePage";
 import WelcomePage from "./routes/welcome/WelcomePage";
-import Database from "./database/database";
+import AppwriteService from "./database/appwriteService";
 
-const database = new Database("http://192.168.179.115/v1", "react-test");
+const appwriteService = new AppwriteService("https://appwrite.maltelab.tk/v1", "react-test");
 
 ReactDOM.render(
   <React.StrictMode>
@@ -14,11 +14,11 @@ ReactDOM.render(
       <Routes>
         <Route
           path="/login"
-          element={<WelcomePage database={database} />}
+          element={<WelcomePage appwriteService={appwriteService} />}
         ></Route>
         <Route
           path="/home"
-          element={<HomePage database={database}></HomePage>}
+          element={<HomePage appwriteService={appwriteService}></HomePage>}
         ></Route>
         <Route path="/" element={<Navigate to="/home" />}></Route>
       </Routes>

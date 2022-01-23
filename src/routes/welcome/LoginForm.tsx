@@ -1,8 +1,8 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import Database from "../../database/database";
+import AppwriteService from "../../database/appwriteService";
 
-export default function LoginForm(props: { database: Database }) {
+export default function LoginForm(props: { appwriteService: AppwriteService }) {
   const [email, setEmail] = React.useState("");
   const [password, setPassword] = React.useState("");
 
@@ -11,7 +11,7 @@ export default function LoginForm(props: { database: Database }) {
   async function onSubmitHandler(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
     try {
-      await props.database.login(email, password);
+      await props.appwriteService.login(email, password);
       alert("Logged in");
 
       navigate("/home");

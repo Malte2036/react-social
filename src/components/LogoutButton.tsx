@@ -1,11 +1,11 @@
 import { useNavigate } from "react-router-dom";
-import Database from "../database/database";
+import AppwriteService from "../database/appwriteService";
 
-export default function LogoutButton(props: { database: Database }) {
+export default function LogoutButton(props: { appwriteService: AppwriteService }) {
   let navigate = useNavigate();
 
   async function onClickHandler() {
-    await props.database.logout();
+    await props.appwriteService.logout();
     navigate("/login");
   }
 
