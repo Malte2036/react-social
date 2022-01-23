@@ -8,7 +8,8 @@ import AppwriteService from "./database/appwriteService";
 
 const appwriteService = new AppwriteService(
   "https://appwrite.maltelab.tk/v1",
-  "react-test"
+  "react-test",
+  "postsCollectionId"
 );
 
 ReactDOM.render(

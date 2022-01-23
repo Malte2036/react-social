@@ -1,14 +1,18 @@
 import { Appwrite } from "appwrite";
 import { User } from "./data/user";
+import { Post } from "./data/post";
 
 export default class AppwriteService {
+  postsCollectionId: string;
   appwrite: Appwrite;
-  constructor(endpoint: string, projectId: string) {
+  constructor(endpoint: string, projectId: string, postsCollectionId: string) {
     this.appwrite = new Appwrite();
 
     this.appwrite
       .setEndpoint(endpoint) // Your Appwrite Endpoint
       .setProject(projectId); // Your project ID
+
+    this.postsCollectionId = postsCollectionId;
   }
 
   async getUser(): Promise<User | null> {
@@ -33,5 +37,12 @@ export default class AppwriteService {
 
   async logout() {
     await this.appwrite.account.deleteSession("current");
+  }
+
+  async getAllPosts(): Promise<Post[]> {
+    const listDocuments = await this.appwrite.database.listDocuments<Post>(
+      this.postsCollectionId
+    );
+    return listDocuments.documents;
   }
 }

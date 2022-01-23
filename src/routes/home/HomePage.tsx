@@ -5,9 +5,11 @@ import { User } from "../../database/data/user";
 import AppwriteService from "../../database/appwriteService";
 import PostView from "../../components/PostView";
 import "./HomePage.css";
+import { Post } from "../../database/data/post";
 
 export default function HomePage(props: { appwriteService: AppwriteService }) {
   const [user, setUser] = useState<User | null>(null);
+  const [posts, setPosts] = useState<Post[]>([]);
 
   let navigate = useNavigate();
 
@@ -18,32 +20,24 @@ export default function HomePage(props: { appwriteService: AppwriteService }) {
         return;
       }
       setUser(userFromDatabase);
+
+      console.log("fetch");
+      props.appwriteService
+        .getAllPosts()
+        .then((postsFromDatabase) => setPosts(postsFromDatabase));
     });
-  }
-  if (user == null) {
     return <></>;
   }
 
   return (
     <div className="HomePage">
       <h1>Feed</h1>
-      <PostView
-        post={{
-          id: "12345",
-          message:
-            "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam",
-          creator: "TestUser",
-        }}
-      ></PostView>
-      <br />
-      <PostView
-        post={{ id: "123456", message: "Test123", creator: "Malte" }}
-      ></PostView>
-      <br />
-      <PostView
-        post={{ id: "1234567", message: "Hallo", creator: "Malte" }}
-      ></PostView>
-      <br />
+      {posts.map((post) => (
+        <>
+          <PostView post={post}></PostView>
+          <br />
+        </>
+      ))}
       <LogoutButton appwriteService={props.appwriteService}></LogoutButton>
     </div>
   );
