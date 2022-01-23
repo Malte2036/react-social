@@ -1,0 +1,6 @@
+.ProfilePicture {
+  height: 70%;
+  border-radius: 50%;
+  border: 2px solid hsl(85, 68%, 40%);
+  margin-left: 10px;
+}
