@@ -6,7 +6,10 @@ import HomePage from "./routes/home/HomePage";
 import WelcomePage from "./routes/welcome/WelcomePage";
 import AppwriteService from "./database/appwriteService";
 
-const appwriteService = new AppwriteService("https://appwrite.maltelab.tk/v1", "react-test");
+const appwriteService = new AppwriteService(
+  "https://appwrite.maltelab.tk/v1",
+  "react-test"
+);
 
 ReactDOM.render(
   <React.StrictMode>
@@ -15,12 +18,12 @@ ReactDOM.render(
         <Route
           path="/login"
           element={<WelcomePage appwriteService={appwriteService} />}
-        ></Route>
+        />
         <Route
           path="/home"
-          element={<HomePage appwriteService={appwriteService}></HomePage>}
+          element={<HomePage appwriteService={appwriteService} />}
         ></Route>
-        <Route path="/" element={<Navigate to="/home" />}></Route>
+        <Route path="/" element={<Navigate to="/home" />} />
       </Routes>
     </BrowserRouter>
   </React.StrictMode>,
