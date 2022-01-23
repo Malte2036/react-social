@@ -3,41 +3,66 @@ import AppwriteService from "../../database/appwriteService";
 import LoginForm from "./LoginForm";
 import RegisterForm from "./RegisterForm";
 import { useNavigate } from "react-router-dom";
+import "./WelcomePage.css";
 
 enum welcomeStateType {
   login,
   register,
 }
 
-export default function WelcomePage(props: { appwriteService: AppwriteService }) {
+export default function WelcomePage(props: {
+  appwriteService: AppwriteService;
+}) {
   const [welcomeState, setWelcomeState] =
     React.useState<welcomeStateType | null>(null);
 
   let navigate = useNavigate();
 
-  props.appwriteService.getUser().then(async (loggedinUser) => {
-    if (loggedinUser == null) {
-      console.log("Not Logged in!");
-      setWelcomeState(welcomeStateType.register);
-      return;
-    }
-    console.log(`Logged in as ${loggedinUser.name}`);
+  if (welcomeState === null) {
+    props.appwriteService.getUser().then(async (loggedinUser) => {
+      if (loggedinUser == null) {
+        console.log("Not Logged in!");
+        setWelcomeState(welcomeStateType.register);
+        return;
+      }
+      console.log(`Logged in as ${loggedinUser.name}`);
 
-    navigate("/home");
-  });
+      navigate("/home");
+    });
+  }
 
   return (
     <>
       {welcomeState != null ? (
         <>
-          {welcomeState === welcomeStateType.login ? (
+          {welcomeState === welcomeStateType.register ? (
             <>
               <h1>Register</h1>
-              <RegisterForm appwriteService={props.appwriteService}></RegisterForm>
+              <span className="switchWelcomeStateText">
+                or&nbsp;
+                <span
+                  onClick={() => setWelcomeState(welcomeStateType.login)}
+                  style={{ textDecoration: "underline" }}
+                >
+                  login
+                </span>
+              </span>
+              <RegisterForm
+                appwriteService={props.appwriteService}
+              ></RegisterForm>
             </>
           ) : (
             <>
               <h1>Login</h1>
+              <span className="switchWelcomeStateText">
+                or&nbsp;
+                <span
+                  onClick={() => setWelcomeState(welcomeStateType.register)}
+                  style={{ textDecoration: "underline" }}
+                >
+                  register
+                </span>
+              </span>
               <LoginForm appwriteService={props.appwriteService}></LoginForm>
             </>
           )}
