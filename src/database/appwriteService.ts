@@ -25,7 +25,7 @@ export default class AppwriteService {
 
   async createAccount(email: string, username: string, password: string) {
     console.log("createAccount");
-    await this.appwrite.account.create(username, email, password, username);
+    await this.appwrite.account.create(username, email, password);
     await this.login(email, password);
   }
 
@@ -59,7 +59,6 @@ export default class AppwriteService {
       "unique()",
       {
         message: message,
-        creator: account.$id,
         date: Date.now(),
       },
       ["role:all"]
