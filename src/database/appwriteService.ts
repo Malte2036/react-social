@@ -40,7 +40,9 @@ export default class AppwriteService {
 
   async getAllPosts(): Promise<Post[]> {
     const listDocuments = await this.appwrite.database.listDocuments<Post>(
-      this.postsCollectionId
+      this.postsCollectionId,
+      undefined,
+      100
     );
     return listDocuments.documents;
   }
