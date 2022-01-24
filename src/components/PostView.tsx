@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import AppwriteService from "../database/appwriteService";
 import { Post } from "../database/data/post";
 import "./PostView.css";
@@ -11,6 +12,8 @@ export default function PostView(props: {
   const [profilePicture, setProfilePicture] = useState<
     string | null | undefined
   >(undefined);
+
+  let navigate = useNavigate();
 
   const creator = props.post.$write[0].replace("user:", "");
 
@@ -35,7 +38,12 @@ export default function PostView(props: {
         <ProfilePicture
           image={profilePicture !== undefined ? profilePicture : null}
         ></ProfilePicture>
-        <span className="PostViewHeaderCreatorName">{creator}</span>
+        <span
+          className="PostViewHeaderCreatorName"
+          onClick={() => navigate(`/user/${creator}`)}
+        >
+          {creator}
+        </span>
       </div>
       <p className="PostViewMessage">{props.post.message}</p>
     </div>
