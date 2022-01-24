@@ -33,14 +33,16 @@ export default function HomePage(props: { appwriteService: AppwriteService }) {
     <div className="HomePage">
       <h1>Feed</h1>
       <CreatePostView appwriteService={props.appwriteService}></CreatePostView>
-      {posts
-        .sort((a: Post, b: Post) => b.date - a.date)
-        .map((post) => (
-          <>
-            <PostView post={post}></PostView>
-            <br />
-          </>
-        ))}
+      <div className="Posts">
+        {posts
+          .sort((a: Post, b: Post) => b.date - a.date)
+          .map((post) => (
+            <>
+              <PostView post={post}></PostView>
+              <div className="PostSpace"></div>
+            </>
+          ))}
+      </div>
       <LogoutButton appwriteService={props.appwriteService}></LogoutButton>
     </div>
   );

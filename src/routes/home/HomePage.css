@@ -1,3 +1,12 @@
 .HomePage {
-    margin: 7%;
+  margin: 7%;
+}
+
+.Posts {
+  display: flex;
+  flex-direction: column;
+}
+
+.PostSpace {
+  height: 25px;
 }
