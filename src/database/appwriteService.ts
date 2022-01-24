@@ -1,11 +1,18 @@
 import { Appwrite } from "appwrite";
 import { Account } from "./data/account";
 import { Post } from "./data/post";
+import { User } from "./data/user";
 
 export default class AppwriteService {
   postsCollectionId: string;
+  usersCollectionId: string;
   appwrite: Appwrite;
-  constructor(endpoint: string, projectId: string, postsCollectionId: string) {
+  constructor(
+    endpoint: string,
+    projectId: string,
+    postsCollectionId: string,
+    usersCollectionId: string
+  ) {
     this.appwrite = new Appwrite();
 
     this.appwrite
@@ -13,6 +20,7 @@ export default class AppwriteService {
       .setProject(projectId); // Your project ID
 
     this.postsCollectionId = postsCollectionId;
+    this.usersCollectionId = usersCollectionId;
   }
 
   async getAccount(): Promise<Account | null> {
@@ -27,6 +35,12 @@ export default class AppwriteService {
     console.log("createAccount");
     await this.appwrite.account.create(username, email, password);
     await this.login(email, password);
+    await this.appwrite.database.createDocument(
+      this.usersCollectionId,
+      username,
+      { picture: null },
+      ["role:all"]
+    );
   }
 
   async login(email: string, password: string) {
@@ -63,5 +77,37 @@ export default class AppwriteService {
       },
       ["role:all"]
     );
+  }
+
+  async getUserById(userId: string): Promise<User | null> {
+    try {
+      return await this.appwrite.database.getDocument<User>(
+        this.usersCollectionId,
+        userId
+      );
+    } catch (error) {
+      return null;
+    }
+  }
+
+  async setCurrentUserProfilePicture(picture: File) {
+    const file = await this.appwrite.storage.createFile("unique()", picture, [
+      "role:all",
+    ]);
+    console.log(file);
+
+    const account = await this.getAccount();
+    const user = await this.getUserById(account!.$id);
+
+    user!.picture = file.$id;
+    await this.appwrite.database.updateDocument(
+      this.usersCollectionId,
+      user!.$id,
+      user!
+    );
+  }
+
+  async getFileById(fileId: string) {
+    return this.appwrite.storage.getFileView(fileId);
   }
 }

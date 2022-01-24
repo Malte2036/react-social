@@ -1,8 +1,7 @@
 import "./ProfilePicture.css";
 
-export default function ProfilePicture(props: { image: string }) {
-  console.log(props.image);
+export default function ProfilePicture(props: { image: string|null}) {
   return (
-      <img className="ProfilePicture" src={props.image} alt="ProfilePicture" />
+      <img className="ProfilePicture"  src={props.image?.toString()} alt="" />
   );
 }

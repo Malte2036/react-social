@@ -5,11 +5,13 @@ import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import HomePage from "./routes/home/HomePage";
 import WelcomePage from "./routes/welcome/WelcomePage";
 import AppwriteService from "./database/appwriteService";
+import UserPage from "./routes/user/UserPage";
 
 const appwriteService = new AppwriteService(
   "https://appwrite.maltelab.tk/v1",
   "react-test",
-  "postsCollectionId"
+  "postsCollectionId",
+  "usersCollectionId"
 );
 
 ReactDOM.render(
@@ -23,7 +25,11 @@ ReactDOM.render(
         <Route
           path="/home"
           element={<HomePage appwriteService={appwriteService} />}
-        ></Route>
+        />
+        <Route
+          path="/user/:userId"
+          element={<UserPage appwriteService={appwriteService} />}
+        />
         <Route path="/" element={<Navigate to="/home" />} />
       </Routes>
     </BrowserRouter>
