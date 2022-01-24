@@ -2,12 +2,12 @@
   word-wrap: break-word;
   text-align: start;
   border-radius: 1rem;
-  border: 2px solid #73ad21;
+  border: 2px solid var(--second-color);
 }
 
 .PostViewHeader {
   height: 3rem;
-  border-bottom: 2px solid #73ad21;
+  border-bottom: 2px solid var(--second-color);
   display: flex;
   align-items: center;
 }
@@ -17,5 +17,5 @@
 }
 
 .PostViewHeaderCreatorName {
-    margin-left: 0.5rem;
+  margin-left: 0.5rem;
 }
