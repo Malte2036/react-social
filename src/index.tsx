@@ -8,10 +8,10 @@ import AppwriteService from "./database/appwriteService";
 import UserPage from "./routes/user/UserPage";
 
 const appwriteService = new AppwriteService(
-  "https://appwrite.maltelab.tk/v1",
-  "react-test",
-  "postsCollectionId",
-  "usersCollectionId"
+  process.env.REACT_APP_APPWRITE_URL!,
+  process.env.REACT_APP_APPWRITE_PROJECT_ID!,
+  process.env.REACT_APP_APPWRITE_POSTS_COLLECTION_ID!,
+  process.env.REACT_APP_APPWRITE_USERS_COLLECTION_ID!
 );
 
 ReactDOM.render(
