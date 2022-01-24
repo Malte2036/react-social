@@ -3,6 +3,8 @@
   text-align: start;
   border-radius: 1rem;
   border: 2px solid var(--second-color);
+  margin-top: 0.75rem;
+  margin-bottom: 0.75rem;
 }
 
 .PostViewHeader {
