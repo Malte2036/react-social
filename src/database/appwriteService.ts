@@ -1,5 +1,5 @@
 import { Appwrite } from "appwrite";
-import { User } from "./data/user";
+import { Account } from "./data/account";
 import { Post } from "./data/post";
 
 export default class AppwriteService {
@@ -15,9 +15,9 @@ export default class AppwriteService {
     this.postsCollectionId = postsCollectionId;
   }
 
-  async getUser(): Promise<User | null> {
+  async getAccount(): Promise<Account | null> {
     try {
-      return await this.appwrite.account.get<User>();
+      return await this.appwrite.account.get<Account>();
     } catch (error) {
       return null;
     }
@@ -46,9 +46,9 @@ export default class AppwriteService {
   }
 
   async createPost(message: string) {
-    const user: User | null = await this.getUser();
-    if (user === null) {
-      console.error("User null on createPost");
+    const account: Account | null = await this.getAccount();
+    if (account === null) {
+      console.error("Account null on createPost");
       return;
     }
 
@@ -57,7 +57,7 @@ export default class AppwriteService {
       "unique()",
       {
         message: message,
-        creator: user.$id,
+        creator: account.$id,
         date: Date.now(),
       },
       ["role:all"]

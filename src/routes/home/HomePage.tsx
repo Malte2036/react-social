@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import LogoutButton from "../../components/LogoutButton";
-import { User } from "../../database/data/user";
+import { Account } from "../../database/data/account";
 import AppwriteService from "../../database/appwriteService";
 import PostView from "../../components/PostView";
 import "./HomePage.css";
@@ -9,18 +9,18 @@ import { Post } from "../../database/data/post";
 import CreatePostView from "../../components/CreatePostView";
 
 export default function HomePage(props: { appwriteService: AppwriteService }) {
-  const [user, setUser] = useState<User | null>(null);
+  const [account, setAccount] = useState<Account | null>(null);
   const [posts, setPosts] = useState<Post[]>([]);
 
   let navigate = useNavigate();
 
-  if (user == null) {
-    props.appwriteService.getUser().then((userFromDatabase) => {
-      if (userFromDatabase === null) {
+  if (account == null) {
+    props.appwriteService.getAccount().then((accountFromDatabase) => {
+      if (accountFromDatabase === null) {
         navigate("/login");
         return;
       }
-      setUser(userFromDatabase);
+      setAccount(accountFromDatabase);
 
       props.appwriteService
         .getAllPosts()
