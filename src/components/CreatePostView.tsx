@@ -7,11 +7,18 @@ export default function CreatePostView(props: {
 }) {
   const [message, setMessage] = useState("");
   const [active, setActive] = useState<Boolean>(false);
+  const [image, setImage] = useState<File | null>(null);
 
   async function onSubmitHandler(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     try {
-      await props.appwriteService.createPost(message);
+      let fileId = undefined;
+      if (image != null) {
+        const file = await props.appwriteService.uploadFile(image);
+        fileId = file.$id;
+      }
+
+      await props.appwriteService.createPost(message, fileId);
       alert("Post created");
     } catch (error) {
       alert(`Error ${error}`);
@@ -36,6 +43,15 @@ export default function CreatePostView(props: {
             }
             required
           ></textarea>
+          <input
+            type="file"
+            onChange={(event) => {
+              if (event.target.files != null) {
+                console.log(event.target.files[0]);
+                setImage(event.target.files[0]);
+              }
+            }}
+          />
           <button type="submit">Create Post</button>
         </form>
       ) : (

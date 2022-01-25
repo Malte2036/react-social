@@ -1,4 +1,4 @@
-import { Appwrite } from "appwrite";
+import { Appwrite, Models } from "appwrite";
 import { Account } from "./data/account";
 import { Post } from "./data/post";
 import { User } from "./data/user";
@@ -61,7 +61,7 @@ export default class AppwriteService {
     return listDocuments.documents;
   }
 
-  async createPost(message: string) {
+  async createPost(message: string, image?: string) {
     const account: Account | null = await this.getAccount();
     if (account === null) {
       console.error("Account null on createPost");
@@ -74,6 +74,7 @@ export default class AppwriteService {
       {
         message: message,
         date: Date.now(),
+        image: image,
       },
       ["role:all"]
     );
@@ -91,10 +92,7 @@ export default class AppwriteService {
   }
 
   async setCurrentUserProfilePicture(picture: File) {
-    const file = await this.appwrite.storage.createFile("unique()", picture, [
-      "role:all",
-    ]);
-    console.log(file);
+    const file = await this.uploadFile(picture);
 
     const account = await this.getAccount();
     const user = await this.getUserById(account!.$id);
@@ -105,6 +103,12 @@ export default class AppwriteService {
       user!.$id,
       user!
     );
+  }
+
+  async uploadFile(file: File): Promise<Models.File> {
+    return await this.appwrite.storage.createFile("unique()", file, [
+      "role:all",
+    ]);
   }
 
   async getFileById(fileId: string) {
