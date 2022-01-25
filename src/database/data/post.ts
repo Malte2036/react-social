@@ -4,4 +4,5 @@ export type Post = {
   id: string;
   message: string;
   date: number;
-} & Models.Document
+  image: string;
+} & Models.Document;

@@ -2,8 +2,10 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import AppwriteService from "../database/appwriteService";
 import { Post } from "../database/data/post";
+import PostViewImage from "./PostViewImage";
 import "./PostView.css";
 import ProfilePicture from "./ProfilePicture";
+import { url } from "inspector";
 
 export default function PostView(props: {
   appwriteService: AppwriteService;
@@ -12,6 +14,9 @@ export default function PostView(props: {
   const [profilePicture, setProfilePicture] = useState<
     string | null | undefined
   >(undefined);
+  const [postImage, setPostImage] = useState<string | null | undefined>(
+    undefined
+  );
 
   let navigate = useNavigate();
 
@@ -31,7 +36,15 @@ export default function PostView(props: {
       }
     });
   }
-
+  if (postImage === undefined) {
+    if (props.post.image == null) {
+      setPostImage(null);
+    } else {
+      props.appwriteService
+        .getFileById(props.post.image)
+        .then((url) => setPostImage(url.toString()));
+    }
+  }
   return (
     <div className="PostView">
       <div className="PostViewHeader">
@@ -46,6 +59,11 @@ export default function PostView(props: {
         </span>
       </div>
       <p className="PostViewMessage">{props.post.message}</p>
+      {postImage !== undefined && postImage != null ? (
+        <PostViewImage image={postImage}></PostViewImage>
+      ) : (
+        <></>
+      )}
     </div>
   );
 }
