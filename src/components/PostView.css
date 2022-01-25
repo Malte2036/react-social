@@ -14,8 +14,14 @@
   align-items: center;
 }
 
+.PostViewMain {
+  margin: 2rem;
+  display: flex;
+  flex-direction: column;
+}
+
 .PostViewMessage {
-  padding: 0 1rem;
+  margin-top: 0;
 }
 
 .PostViewHeaderCreatorName {

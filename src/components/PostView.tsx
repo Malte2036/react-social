@@ -58,12 +58,14 @@ export default function PostView(props: {
           {creator}
         </span>
       </div>
-      <p className="PostViewMessage">{props.post.message}</p>
-      {postImage !== undefined && postImage != null ? (
-        <PostViewImage image={postImage}></PostViewImage>
-      ) : (
-        <></>
-      )}
+      <div className="PostViewMain">
+        <p className="PostViewMessage">{props.post.message}</p>
+        {postImage !== undefined && postImage != null ? (
+          <PostViewImage image={postImage}></PostViewImage>
+        ) : (
+          <></>
+        )}
+      </div>
     </div>
   );
 }
