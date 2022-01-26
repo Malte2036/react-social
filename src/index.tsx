@@ -6,6 +6,7 @@ import HomePage from "./routes/home/HomePage";
 import WelcomePage from "./routes/welcome/WelcomePage";
 import AppwriteService from "./database/appwriteService";
 import UserPage from "./routes/user/UserPage";
+import ErrorPage from "./routes/error/ErrorPage";
 
 const appwriteService = new AppwriteService(
   process.env.REACT_APP_APPWRITE_URL!,
@@ -31,6 +32,10 @@ ReactDOM.render(
           element={<UserPage appwriteService={appwriteService} />}
         />
         <Route path="/" element={<Navigate to="/home" />} />
+        <Route
+          path="*"
+          element={<ErrorPage code={404} message="Not Found"></ErrorPage>}
+        />
       </Routes>
     </BrowserRouter>
   </React.StrictMode>,
