@@ -12,7 +12,7 @@ export default function ErrorPage(props: {
       <h1
         className="ErrorPageMessage"
         onClick={() =>
-          navigate(props.navigate !== undefined ? props.navigate : "/")
+          navigate(props.navigate !== undefined ? props.navigate : "/home")
         }
       >
         {props.code}-{props.message}
