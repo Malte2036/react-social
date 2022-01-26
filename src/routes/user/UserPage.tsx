@@ -4,11 +4,11 @@ import { Account } from "../../database/data/account";
 import AppwriteService from "../../database/appwriteService";
 import "./UserPage.css";
 import { User } from "../../database/data/user";
-import ProfilePicture from "../../components/ProfilePicture";
+import ErrorPage from "../error/ErrorPage";
 
 export default function UserPage(props: { appwriteService: AppwriteService }) {
   const [account, setAccount] = useState<Account | null>(null);
-  const [user, setUser] = useState<User | null>(null);
+  const [user, setUser] = useState<User | null | undefined>(undefined);
 
   let navigate = useNavigate();
 
@@ -31,10 +31,19 @@ export default function UserPage(props: { appwriteService: AppwriteService }) {
     return <></>;
   }
 
+  if (user === null) {
+    return (
+      <ErrorPage
+        code={404}
+        message={`User with id=${userId} not found`}
+      ></ErrorPage>
+    );
+  }
+
   return (
     <div className="UserPage">
       <h1>User: {userId}</h1>
-      {user != null && account.$id === user.$id && (
+      {user !== undefined && account.$id === user.$id && (
         <>
           <h4>
             ID: {user!.$write[0].replace("user:", "")}
