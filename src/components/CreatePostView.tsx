@@ -47,7 +47,6 @@ export default function CreatePostView(props: {
             type="file"
             onChange={(event) => {
               if (event.target.files != null) {
-                console.log(event.target.files[0]);
                 setImage(event.target.files[0]);
               }
             }}

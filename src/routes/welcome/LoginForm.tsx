@@ -12,7 +12,6 @@ export default function LoginForm(props: { appwriteService: AppwriteService }) {
     event.preventDefault();
     try {
       await props.appwriteService.login(email, password);
-      alert("Logged in");
 
       navigate("/home");
     } catch (error) {

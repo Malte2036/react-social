@@ -32,7 +32,6 @@ export default class AppwriteService {
   }
 
   async createAccount(email: string, username: string, password: string) {
-    console.log("createAccount");
     await this.appwrite.account.create(username, email, password);
     await this.login(email, password);
     await this.appwrite.database.createDocument(
@@ -44,7 +43,6 @@ export default class AppwriteService {
   }
 
   async login(email: string, password: string) {
-    console.log("login");
     await this.appwrite.account.createSession(email, password);
   }
 

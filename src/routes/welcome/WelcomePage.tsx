@@ -21,12 +21,9 @@ export default function WelcomePage(props: {
   if (welcomeState === null) {
     props.appwriteService.getAccount().then(async (loggedinAccount) => {
       if (loggedinAccount == null) {
-        console.log("Not Logged in!");
         setWelcomeState(welcomeStateType.register);
         return;
       }
-      console.log(`Logged in as ${loggedinAccount.name}`);
-
       navigate("/home");
     });
   }

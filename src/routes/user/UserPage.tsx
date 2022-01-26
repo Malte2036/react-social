@@ -47,7 +47,6 @@ export default function UserPage(props: { appwriteService: AppwriteService }) {
               type="file"
               onChange={(event) => {
                 if (event.target.files != null) {
-                  console.log(event.target.files[0]);
                   props.appwriteService.setCurrentUserProfilePicture(
                     event.target.files[0]
                   );

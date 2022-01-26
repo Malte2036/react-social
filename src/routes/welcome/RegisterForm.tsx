@@ -2,7 +2,9 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 import AppwriteService from "../../database/appwriteService";
 
-export default function RegisterForm(props: { appwriteService: AppwriteService }) {
+export default function RegisterForm(props: {
+  appwriteService: AppwriteService;
+}) {
   const [username, setUsername] = React.useState("");
   const [email, setEmail] = React.useState("");
   const [password, setPassword] = React.useState("");
@@ -13,7 +15,6 @@ export default function RegisterForm(props: { appwriteService: AppwriteService }
     event.preventDefault();
     try {
       await props.appwriteService.createAccount(email, username, password);
-      alert("Account created");
 
       navigate("/home");
     } catch (error) {
