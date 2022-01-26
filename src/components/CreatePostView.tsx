@@ -19,7 +19,8 @@ export default function CreatePostView(props: {
       }
 
       await props.appwriteService.createPost(message, fileId);
-      alert("Post created");
+
+      window.location.reload();
     } catch (error) {
       alert(`Error ${error}`);
     }
