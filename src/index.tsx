@@ -15,9 +15,21 @@ const appwriteService = new AppwriteService(
   process.env.REACT_APP_APPWRITE_USERS_COLLECTION_ID!
 );
 
+if (
+  localStorage.theme === "dark" ||
+  (!("theme" in localStorage) &&
+    window.matchMedia("(prefers-color-scheme: dark)").matches)
+) {
+  document.documentElement.classList.add("dark");
+  document.documentElement.classList.add("bg-slate-900");
+} else {
+  document.documentElement.classList.remove("dark");
+  document.documentElement.classList.add("bg-gray-200");
+}
+
 ReactDOM.render(
   <React.StrictMode>
-    <div className="min-h-screen">
+    <div className="min-h-screen dark:text-white">
       <BrowserRouter>
         <Routes>
           <Route

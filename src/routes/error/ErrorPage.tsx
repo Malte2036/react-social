@@ -9,7 +9,7 @@ export default function ErrorPage(props: {
   return (
     <div className="h-screen w-screen items-center flex justify-center">
       <h1
-        className="cursor-pointer text-center text-5xl font-extrabold text-gray-900"
+        className="cursor-pointer text-center text-5xl font-extrabold"
         onClick={() =>
           navigate(props.navigate !== undefined ? props.navigate : "/home")
         }

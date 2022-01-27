@@ -45,18 +45,18 @@ export default function UserPage(props: { appwriteService: AppwriteService }) {
 
   return (
     <div className="UserPage">
-      <h1 className="mt-6 text-center text-5xl font-extrabold text-gray-900">
+      <h1 className="mt-6 text-center text-5xl font-extrabold ">
         User: {userId}
       </h1>
       {account.$id === user.$id && (
         <>
-          <h4 className="mt-6 text-center text-3xl text-gray-900">
+          <h4 className="mt-6 text-center text-3xl">
             ID: {user!.$write[0].replace("user:", "")}
             <br />
             Email: {account.email}
           </h4>
           <div>
-            <h4 className="mt-6 text-center text-3xl text-gray-900">
+            <h4 className="mt-6 text-center text-3xl">
               Upload ProfilePicture:
             </h4>
             <input
