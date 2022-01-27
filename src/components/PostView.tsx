@@ -3,9 +3,7 @@ import { useNavigate } from "react-router-dom";
 import AppwriteService from "../database/appwriteService";
 import { Post } from "../database/data/post";
 import PostViewImage from "./PostViewImage";
-import "./PostView.css";
 import ProfilePicture from "./ProfilePicture";
-import { url } from "inspector";
 
 export default function PostView(props: {
   appwriteService: AppwriteService;
@@ -46,20 +44,20 @@ export default function PostView(props: {
     }
   }
   return (
-    <div className="PostView">
-      <div className="PostViewHeader">
+    <div className="rounded-lg my-3 border-4 border-gray-800 ">
+      <div className="h-12 flex items-center border-b-4 border-gray-800">
         <ProfilePicture
           image={profilePicture !== undefined ? profilePicture : null}
         ></ProfilePicture>
         <span
-          className="PostViewHeaderCreatorName"
+          className="ml-2 cursor-pointer"
           onClick={() => navigate(`/user/${creator}`)}
         >
           {creator}
         </span>
       </div>
-      <div className="PostViewMain">
-        <p className="PostViewMessage">{props.post.message}</p>
+      <div className="m-8 flex flex-col">
+        <p className="mt-0">{props.post.message}</p>
         {postImage !== undefined && postImage != null ? (
           <PostViewImage image={postImage}></PostViewImage>
         ) : (

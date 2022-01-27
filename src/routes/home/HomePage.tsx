@@ -4,7 +4,6 @@ import LogoutButton from "../../components/LogoutButton";
 import { Account } from "../../database/data/account";
 import AppwriteService from "../../database/appwriteService";
 import PostView from "../../components/PostView";
-import "./HomePage.css";
 import { Post } from "../../database/data/post";
 import CreatePostView from "../../components/CreatePostView";
 
@@ -30,10 +29,10 @@ export default function HomePage(props: { appwriteService: AppwriteService }) {
   }
 
   return (
-    <div className="HomePage">
-      <h1>Feed</h1>
+    <div className="m-10">
+      <h1 className="text-center text-5xl font-extrabold text-gray-900">Feed</h1>
       <CreatePostView appwriteService={props.appwriteService}></CreatePostView>
-      <div className="Posts">
+      <div className="flex flex-col">
         {posts
           .sort((a: Post, b: Post) => b.date - a.date)
           .map((post) => (

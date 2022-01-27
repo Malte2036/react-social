@@ -1,8 +1,0 @@
-.ProfilePicture {
-  height: 2rem;
-  width: 2rem;
-  border-radius: 50%;
-  border: 2px solid var(--second-color);
-  margin-left: 0.75rem;
-  object-fit: cover;
-}

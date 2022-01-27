@@ -1,6 +1,5 @@
 import { ChangeEvent, FormEvent, useState } from "react";
 import AppwriteService from "../database/appwriteService";
-import "./CreatePostView.css";
 
 export default function CreatePostView(props: {
   appwriteService: AppwriteService;
@@ -28,31 +27,40 @@ export default function CreatePostView(props: {
 
   return (
     <>
-      <button
-        className="ShowCreatePostButton"
-        onClick={() => setActive(!active)}
-      >
+      <button className="w-full" onClick={() => setActive(!active)}>
         {active ? "Hide" : "Show"} Create Post
       </button>
       {active ? (
-        <form className="CreatePostView" onSubmit={onSubmitHandler}>
-          <textarea
-            className="CreatePostViewMessageInput"
-            value={message}
-            onChange={(event: ChangeEvent<HTMLTextAreaElement>) =>
-              setMessage(event.target.value.slice(0, 8192))
-            }
-            required
-          ></textarea>
-          <input
-            type="file"
-            onChange={(event) => {
-              if (event.target.files != null) {
-                setImage(event.target.files[0]);
+        <form
+          className="w-full mt-8 space-y-6 flex-col"
+          onSubmit={onSubmitHandler}
+        >
+          <div>
+            <textarea
+              value={message}
+              placeholder="Message"
+              onChange={(event: ChangeEvent<HTMLTextAreaElement>) =>
+                setMessage(event.target.value.slice(0, 8192))
               }
-            }}
-          />
-          <button type="submit">Create Post</button>
+              required
+              className="resize-y appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
+            ></textarea>
+            <input
+              type="file"
+              onChange={(event) => {
+                if (event.target.files != null) {
+                  setImage(event.target.files[0]);
+                }
+              }}
+              className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
+            />
+          </div>
+          <button
+            type="submit"
+            className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+          >
+            Create Post
+          </button>
         </form>
       ) : (
         <></>
