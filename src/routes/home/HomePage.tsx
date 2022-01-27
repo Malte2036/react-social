@@ -29,21 +29,25 @@ export default function HomePage(props: { appwriteService: AppwriteService }) {
   }
 
   return (
-    <div className="m-10">
-      <h1 className="text-center text-5xl font-extrabold ">Feed</h1>
-      <CreatePostView appwriteService={props.appwriteService}></CreatePostView>
-      <div className="flex flex-col">
-        {posts
-          .sort((a: Post, b: Post) => b.date - a.date)
-          .map((post) => (
-            <PostView
-              appwriteService={props.appwriteService}
-              post={post}
-              key={post.$id}
-            ></PostView>
-          ))}
+    <div className="flex justify-center">
+      <div className="m-5 mt-10 max-w-4xl">
+        <h1 className="text-center text-5xl font-extrabold">Feed</h1>
+        <CreatePostView
+          appwriteService={props.appwriteService}
+        ></CreatePostView>
+        <div className="flex flex-col">
+          {posts
+            .sort((a: Post, b: Post) => b.date - a.date)
+            .map((post) => (
+              <PostView
+                appwriteService={props.appwriteService}
+                post={post}
+                key={post.$id}
+              ></PostView>
+            ))}
+        </div>
+        <LogoutButton appwriteService={props.appwriteService}></LogoutButton>
       </div>
-      <LogoutButton appwriteService={props.appwriteService}></LogoutButton>
     </div>
   );
 }
