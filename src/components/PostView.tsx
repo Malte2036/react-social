@@ -44,8 +44,8 @@ export default function PostView(props: {
     }
   }
   return (
-    <div className="bg-white dark:bg-slate-800 rounded-lg my-3 border-4 border-gray-800 dark:border-white">
-      <div className="h-12 flex items-center border-b-4 border-gray-800 dark:border-white">
+    <div className="bg-white dark:bg-slate-800 rounded-lg my-3 shadow-xl">
+      <div className="h-12 flex items-center border-b-2 border-gray-200 dark:border-gray-900">
         <ProfilePicture
           image={profilePicture !== undefined ? profilePicture : null}
         ></ProfilePicture>
