@@ -2,6 +2,7 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 import AppwriteService from "../../database/appwriteService";
 import { LockClosedIcon } from "@heroicons/react/solid";
+import InputField from "../../components/form/InputField";
 
 export default function LoginForm(props: { appwriteService: AppwriteService }) {
   const [email, setEmail] = React.useState("");
@@ -23,31 +24,28 @@ export default function LoginForm(props: { appwriteService: AppwriteService }) {
   return (
     <form className="mt-8 space-y-6" onSubmit={onSubmitHandler}>
       <div className="rounded-md shadow-sm -space-y-px">
-        <div>
-          <input
-            type="email"
-            value={email}
-            autoComplete="email"
-            onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
-              setEmail(event.target.value)
-            }
-            required
-            placeholder="Email address"
-            className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
-          />
-        </div>
-        <div className="rounded-md shadow-sm -space-y-px">
-          <input
-            type="password"
-            value={password}
-            onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
-              setPassword(event.target.value)
-            }
-            placeholder="Password"
-            required
-            className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
-          />
-        </div>
+        <InputField
+          type="email"
+          value={email}
+          autoComplete="email"
+          onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
+            setEmail(event.target.value)
+          }
+          required
+          placeholder="Email address"
+          className="rounded-t-md"
+        />
+
+        <InputField
+          type="password"
+          value={password}
+          onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
+            setPassword(event.target.value)
+          }
+          placeholder="Password"
+          required
+          className="rounded-b-md"
+        />
       </div>
       <button
         type="submit"

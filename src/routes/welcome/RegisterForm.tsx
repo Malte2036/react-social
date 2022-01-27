@@ -1,6 +1,7 @@
 import { LockClosedIcon } from "@heroicons/react/solid";
 import React from "react";
 import { useNavigate } from "react-router-dom";
+import InputField from "../../components/form/InputField";
 import AppwriteService from "../../database/appwriteService";
 
 export default function RegisterForm(props: {
@@ -26,8 +27,8 @@ export default function RegisterForm(props: {
   return (
     <form className="mt-8 space-y-6" onSubmit={onSubmitHandler}>
       <div>
-        <div className="rounded-md shadow-sm -space-y-px">
-          <input
+        <div className="">
+          <InputField
             type="text"
             value={username}
             onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
@@ -35,11 +36,9 @@ export default function RegisterForm(props: {
             }
             required
             placeholder="Username"
-            className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
+            className="rounded-t-md"
           />
-        </div>
-        <div className="rounded-md shadow-sm -space-y-px">
-          <input
+          <InputField
             type="email"
             value={email}
             autoComplete="email"
@@ -48,11 +47,8 @@ export default function RegisterForm(props: {
             }
             required
             placeholder="Email address"
-            className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
           />
-        </div>
-        <div className="rounded-md shadow-sm -space-y-px">
-          <input
+          <InputField
             type="password"
             value={password}
             onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
@@ -60,7 +56,7 @@ export default function RegisterForm(props: {
             }
             placeholder="Password"
             required
-            className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
+            className="rounded-b-md"
           />
         </div>
       </div>
