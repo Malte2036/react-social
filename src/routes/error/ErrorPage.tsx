@@ -1,5 +1,4 @@
 import { useNavigate } from "react-router-dom";
-import "./ErrorPage.css";
 
 export default function ErrorPage(props: {
   code: number;
@@ -8,9 +7,9 @@ export default function ErrorPage(props: {
 }) {
   let navigate = useNavigate();
   return (
-    <div className="ErrorPage">
+    <div className="h-screen w-screen items-center flex justify-center">
       <h1
-        className="ErrorPageMessage"
+        className="cursor-pointer text-center text-5xl font-extrabold text-gray-900"
         onClick={() =>
           navigate(props.navigate !== undefined ? props.navigate : "/home")
         }
