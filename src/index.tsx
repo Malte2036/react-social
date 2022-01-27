@@ -15,11 +15,12 @@ const appwriteService = new AppwriteService(
   process.env.REACT_APP_APPWRITE_USERS_COLLECTION_ID!
 );
 
-if (
+/*if (
   localStorage.theme === "dark" ||
   (!("theme" in localStorage) &&
     window.matchMedia("(prefers-color-scheme: dark)").matches)
-) {
+) {*/
+if (window.matchMedia("(prefers-color-scheme: dark)").matches) {
   document.documentElement.classList.add("dark");
   document.documentElement.classList.add("bg-slate-900");
 } else {
