@@ -1,8 +1,0 @@
-.switchWelcomeStateText {
-  font-size: larger;
-  color: grey;
-}
-
-.switchWelcomeStateText :hover {
-  cursor: pointer;
-}

@@ -17,27 +17,29 @@ const appwriteService = new AppwriteService(
 
 ReactDOM.render(
   <React.StrictMode>
-    <BrowserRouter>
-      <Routes>
-        <Route
-          path="/login"
-          element={<WelcomePage appwriteService={appwriteService} />}
-        />
-        <Route
-          path="/home"
-          element={<HomePage appwriteService={appwriteService} />}
-        />
-        <Route
-          path="/user/:userId"
-          element={<UserPage appwriteService={appwriteService} />}
-        />
-        <Route path="/" element={<Navigate to="/home" />} />
-        <Route
-          path="*"
-          element={<ErrorPage code={404} message="Not Found"></ErrorPage>}
-        />
-      </Routes>
-    </BrowserRouter>
+    <div className="min-h-screen">
+      <BrowserRouter>
+        <Routes>
+          <Route
+            path="/login"
+            element={<WelcomePage appwriteService={appwriteService} />}
+          />
+          <Route
+            path="/home"
+            element={<HomePage appwriteService={appwriteService} />}
+          />
+          <Route
+            path="/user/:userId"
+            element={<UserPage appwriteService={appwriteService} />}
+          />
+          <Route path="/" element={<Navigate to="/home" />} />
+          <Route
+            path="*"
+            element={<ErrorPage code={404} message="Not Found"></ErrorPage>}
+          />
+        </Routes>
+      </BrowserRouter>
+    </div>
   </React.StrictMode>,
   document.getElementById("root")
 );
