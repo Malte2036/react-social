@@ -78,43 +78,4 @@ export default function RegisterForm(props: {
       </button>
     </form>
   );
-
-  return (
-    <form onSubmit={onSubmitHandler}>
-      <div>
-        <label>Username:</label>
-        <input
-          type="text"
-          value={username}
-          onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
-            setUsername(event.target.value)
-          }
-          required
-        />
-      </div>
-      <div>
-        <label>Email:</label>
-        <input
-          type="text"
-          value={email}
-          onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
-            setEmail(event.target.value)
-          }
-          required
-        />
-      </div>
-      <div>
-        <label>Password:</label>
-        <input
-          type="password"
-          value={password}
-          onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
-            setPassword(event.target.value)
-          }
-          required
-        />
-      </div>
-      <button type="submit">Submit</button>
-    </form>
-  );
 }
