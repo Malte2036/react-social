@@ -2,7 +2,6 @@ import { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { Account } from "../../database/data/account";
 import AppwriteService from "../../database/appwriteService";
-import "./UserPage.css";
 import { User } from "../../database/data/user";
 import ErrorPage from "../error/ErrorPage";
 
@@ -40,18 +39,26 @@ export default function UserPage(props: { appwriteService: AppwriteService }) {
     );
   }
 
+  if (user === undefined) {
+    return <></>;
+  }
+
   return (
     <div className="UserPage">
-      <h1>User: {userId}</h1>
-      {user !== undefined && account.$id === user.$id && (
+      <h1 className="mt-6 text-center text-5xl font-extrabold text-gray-900">
+        User: {userId}
+      </h1>
+      {account.$id === user.$id && (
         <>
-          <h4>
+          <h4 className="mt-6 text-center text-3xl text-gray-900">
             ID: {user!.$write[0].replace("user:", "")}
             <br />
             Email: {account.email}
           </h4>
           <div>
-            <h2>Upload ProfilePicture:</h2>
+            <h4 className="mt-6 text-center text-3xl text-gray-900">
+              Upload ProfilePicture:
+            </h4>
             <input
               type="file"
               onChange={(event) => {
