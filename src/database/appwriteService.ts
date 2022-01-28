@@ -87,6 +87,10 @@ export default class AppwriteService {
     );
   }
 
+  async deletePost(postId: string) {
+    await this.appwrite.database.deleteDocument(this.postsCollectionId, postId);
+  }
+
   async getUserById(userId: string): Promise<User | null> {
     try {
       return await this.appwrite.database.getDocument<User>(

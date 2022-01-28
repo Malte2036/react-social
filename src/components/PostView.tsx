@@ -2,6 +2,8 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import AppwriteService from "../database/appwriteService";
 import { Post } from "../database/data/post";
+import useAccount from "../hooks/AccountHook";
+import PostViewDropdown from "./PostViewDropdown";
 import PostViewImage from "./PostViewImage";
 import ProfilePicture from "./ProfilePicture";
 
@@ -9,6 +11,7 @@ export default function PostView(props: {
   appwriteService: AppwriteService;
   post: Post;
 }) {
+  const [account] = useAccount(props.appwriteService);
   const creator = props.post.$write[0].replace("user:", "");
 
   const [profilePicture, setProfilePicture] = useState<
@@ -44,16 +47,28 @@ export default function PostView(props: {
 
   return (
     <div className="bg-white dark:bg-slate-800 rounded-lg my-3 shadow-xl">
-      <div className="h-12 flex items-center border-b-2 border-gray-200 dark:border-gray-900">
-        <ProfilePicture
-          image={profilePicture !== undefined ? profilePicture : null}
-        ></ProfilePicture>
-        <span
-          className="ml-2 cursor-pointer"
-          onClick={() => navigate(`/user/${creator}`)}
-        >
-          {creator}
-        </span>
+      <div className="relative h-12 border-b-2 border-gray-200 dark:border-gray-900">
+        <div className="absolute left-0 m-2 flex flex-row">
+          <ProfilePicture
+            image={profilePicture !== undefined ? profilePicture : null}
+          ></ProfilePicture>
+          <span
+            className="m-1 ml-2 cursor-pointer"
+            onClick={() => navigate(`/user/${creator}`)}
+          >
+            {creator}
+          </span>
+        </div>
+        {account?.$id === creator ? (
+          <div className="absolute right-3 m-3">
+            <PostViewDropdown
+              appwriteService={props.appwriteService}
+              post={props.post}
+            ></PostViewDropdown>
+          </div>
+        ) : (
+          <></>
+        )}
       </div>
       <div className="m-8 flex flex-col">
         <p className="mt-0">{props.post.message}</p>
