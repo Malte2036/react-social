@@ -90,6 +90,10 @@ export default class AppwriteService {
   }
 
   async setCurrentUserProfilePicture(picture: File) {
+    if (!picture.type.includes("image")) {
+      throw `ProfilePicture should be of type image, but was of type ${picture.type}`;
+    }
+
     const file = await this.uploadFile(picture);
 
     const account = await this.getAccount();
