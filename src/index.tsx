@@ -25,7 +25,7 @@ ReactDOM.render(
 );
 
 function App() {
-  useDarkmode();
+  useDarkmode(appwriteService);
   return (
     <div className="min-h-screen dark:text-white">
       <BrowserRouter>

@@ -1,17 +1,18 @@
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
+import AppwriteService from "../database/appwriteService";
 
-export default function useDarkmode(): [
-  boolean,
-  Dispatch<SetStateAction<boolean>>
-] {
-  const [darkmode, setDarkmode] = useState<boolean>(
-    localStorage.theme === "dark" ||
-      (!("theme" in localStorage) &&
-        window.matchMedia("(prefers-color-scheme: dark)").matches)
-  );
+export default function useDarkmode(
+  appwriteService: AppwriteService
+): [boolean, Dispatch<SetStateAction<boolean>>] {
+  const [darkmode, setDarkmode] = useState<boolean>(() => {
+    appwriteService
+      .getAccountPrefs()
+      .then((accountPrefs) => setDarkmode(accountPrefs.darkmode));
+    return true;
+  });
 
   useEffect(() => {
-    localStorage.theme = darkmode ? "dark" : "light";
+    appwriteService.updateAccountPrefs({ darkmode: darkmode });
 
     if (darkmode) {
       window.document.documentElement.classList.add("dark");

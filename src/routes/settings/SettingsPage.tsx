@@ -9,7 +9,7 @@ export default function SettingsPage(props: {
   appwriteService: AppwriteService;
 }) {
   const [account] = useAccount(props.appwriteService);
-  const [darkmode, setDarkmode] = useDarkmode();
+  const [darkmode, setDarkmode] = useDarkmode(props.appwriteService);
 
   let navigate = useNavigate();
 

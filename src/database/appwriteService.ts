@@ -1,5 +1,6 @@
 import { Appwrite, Models } from "appwrite";
 import { Account } from "./data/account";
+import { AccountPrefs } from "./data/accountPrefs";
 import { Post } from "./data/post";
 import { User } from "./data/user";
 
@@ -40,6 +41,14 @@ export default class AppwriteService {
       { picture: null },
       ["role:all"]
     );
+  }
+
+  async getAccountPrefs(): Promise<AccountPrefs> {
+    return await this.appwrite.account.getPrefs();
+  }
+
+  async updateAccountPrefs(accountPrefs: AccountPrefs) {
+    await this.appwrite.account.updatePrefs(accountPrefs);
   }
 
   async login(email: string, password: string) {
