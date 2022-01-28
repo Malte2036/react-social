@@ -27,10 +27,8 @@ export default function LoginForm(props: { appwriteService: AppwriteService }) {
         <InputField
           type="email"
           value={email}
+          setValue={setEmail}
           autoComplete="email"
-          onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
-            setEmail(event.target.value)
-          }
           required
           placeholder="Email address"
           className="rounded-t-md"
@@ -39,9 +37,7 @@ export default function LoginForm(props: { appwriteService: AppwriteService }) {
         <InputField
           type="password"
           value={password}
-          onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
-            setPassword(event.target.value)
-          }
+          setValue={setPassword}
           placeholder="Password"
           required
           className="rounded-b-md"

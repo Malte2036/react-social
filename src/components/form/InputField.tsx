@@ -1,4 +1,9 @@
-import { ChangeEvent, ChangeEventHandler, useState } from "react";
+import {
+  ChangeEvent,
+  ChangeEventHandler,
+  Dispatch,
+  SetStateAction,
+} from "react";
 
 export default function InputField(props: {
   type: string;
@@ -6,20 +11,19 @@ export default function InputField(props: {
   placeholder?: string;
   required?: boolean;
   className?: string;
-  value?: string;
+  value: string;
+  setValue: Dispatch<SetStateAction<string>>;
   autoComplete?: string;
 }) {
-  const [value, setValue] = useState<string>(props.value ?? "");
-
   return (
     <div className="rounded-md shadow-sm -space-y-px">
       <div>
         <input
           type={props.type}
-          value={value}
+          value={props.value}
           autoComplete={props.autoComplete}
           onChange={(event: ChangeEvent<HTMLInputElement>) => {
-            setValue(event.target.value);
+            props.setValue(event.target.value);
 
             if (props.onChange) {
               props.onChange(event);

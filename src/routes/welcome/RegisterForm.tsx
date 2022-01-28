@@ -31,9 +31,7 @@ export default function RegisterForm(props: {
           <InputField
             type="text"
             value={username}
-            onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
-              setUsername(event.target.value)
-            }
+            setValue={setUsername}
             required
             placeholder="Username"
             className="rounded-t-md"
@@ -41,19 +39,15 @@ export default function RegisterForm(props: {
           <InputField
             type="email"
             value={email}
+            setValue={setEmail}
             autoComplete="email"
-            onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
-              setEmail(event.target.value)
-            }
             required
             placeholder="Email address"
           />
           <InputField
             type="password"
             value={password}
-            onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
-              setPassword(event.target.value)
-            }
+            setValue={setPassword}
             placeholder="Password"
             required
             className="rounded-b-md"
