@@ -9,7 +9,7 @@ import useAccount from "../../hooks/AccountHook";
 
 export default function HomePage(props: { appwriteService: AppwriteService }) {
   const [account] = useAccount(props.appwriteService);
-  const [posts, setPosts] = useState<Post[]>([]);
+  const [posts, setPosts] = useState<Post[] | undefined>(undefined);
 
   useEffect(() => {
     if (account === null) {
@@ -25,7 +25,7 @@ export default function HomePage(props: { appwriteService: AppwriteService }) {
 
   let navigate = useNavigate();
 
-  if (account == null) {
+  if (account == null || posts === undefined) {
     return <></>;
   }
 
