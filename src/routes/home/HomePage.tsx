@@ -1,30 +1,31 @@
-import React, { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import LogoutButton from "../../components/LogoutButton";
-import { Account } from "../../database/data/account";
 import AppwriteService from "../../database/appwriteService";
 import PostView from "../../components/PostView";
 import { Post } from "../../database/data/post";
 import CreatePostView from "../../components/CreatePostView";
+import useAccount from "../../hooks/AccountHook";
 
 export default function HomePage(props: { appwriteService: AppwriteService }) {
-  const [account, setAccount] = useState<Account | null>(null);
+  const [account] = useAccount(props.appwriteService);
   const [posts, setPosts] = useState<Post[]>([]);
+
+  useEffect(() => {
+    if (account === null) {
+      navigate("/login");
+      return;
+    }
+    async function getPosts() {
+      setPosts(await props.appwriteService.getAllPosts());
+    }
+
+    getPosts();
+  }, [account]);
 
   let navigate = useNavigate();
 
   if (account == null) {
-    props.appwriteService.getAccount().then((accountFromDatabase) => {
-      if (accountFromDatabase === null) {
-        navigate("/login");
-        return;
-      }
-      setAccount(accountFromDatabase);
-
-      props.appwriteService
-        .getAllPosts()
-        .then((postsFromDatabase) => setPosts(postsFromDatabase));
-    });
     return <></>;
   }
 

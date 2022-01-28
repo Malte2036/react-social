@@ -1,32 +1,37 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { Account } from "../../database/data/account";
 import AppwriteService from "../../database/appwriteService";
 import { User } from "../../database/data/user";
 import ErrorPage from "../error/ErrorPage";
+import useAccount from "../../hooks/AccountHook";
 
 export default function UserPage(props: { appwriteService: AppwriteService }) {
-  const [account, setAccount] = useState<Account | null>(null);
+  const [account] = useAccount(props.appwriteService);
   const [user, setUser] = useState<User | null | undefined>(undefined);
 
   let navigate = useNavigate();
 
   const { userId } = useParams();
-  if (userId == null) {
-    navigate("/home");
-    return <></>;
-  }
 
-  if (account == null) {
-    props.appwriteService.getAccount().then(async (accountFromDatabase) => {
-      if (accountFromDatabase === null) {
-        navigate("/login");
+  useEffect(() => {
+    if (account === null) {
+      navigate("/login");
+      return;
+    }
+
+    async function fetchUser() {
+      if (userId == null) {
+        navigate("/home");
         return;
       }
-      setAccount(accountFromDatabase);
 
       setUser(await props.appwriteService.getUserById(userId));
-    });
+    }
+
+    fetchUser();
+  }, [account]);
+
+  if (userId == null) {
     return <></>;
   }
 
@@ -39,7 +44,7 @@ export default function UserPage(props: { appwriteService: AppwriteService }) {
     );
   }
 
-  if (user === undefined) {
+  if (account == null || user === undefined) {
     return <></>;
   }
 

@@ -9,18 +9,11 @@ export default function PostView(props: {
   appwriteService: AppwriteService;
   post: Post;
 }) {
-  const [profilePicture, setProfilePicture] = useState<
-    string | null | undefined
-  >(undefined);
-  const [postImage, setPostImage] = useState<string | null | undefined>(
-    undefined
-  );
-
-  let navigate = useNavigate();
-
   const creator = props.post.$write[0].replace("user:", "");
 
-  if (profilePicture === undefined) {
+  const [profilePicture, setProfilePicture] = useState<
+    string | null | undefined
+  >(() => {
     props.appwriteService.getUserById(creator).then(async (user) => {
       if (user == null || user.picture == null) {
         setProfilePicture(null);
@@ -33,16 +26,22 @@ export default function PostView(props: {
         setProfilePicture(null);
       }
     });
-  }
-  if (postImage === undefined) {
+    return undefined;
+  });
+  const [postImage, setPostImage] = useState<string | null | undefined>(() => {
     if (props.post.image == null) {
-      setPostImage(null);
+      return null;
     } else {
       props.appwriteService
         .getFileById(props.post.image)
         .then((url) => setPostImage(url.toString()));
     }
-  }
+
+    return undefined;
+  });
+
+  let navigate = useNavigate();
+
   return (
     <div className="bg-white dark:bg-slate-800 rounded-lg my-3 shadow-xl">
       <div className="h-12 flex items-center border-b-2 border-gray-200 dark:border-gray-900">

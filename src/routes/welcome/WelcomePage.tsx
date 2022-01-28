@@ -13,20 +13,18 @@ export default function WelcomePage(props: {
   appwriteService: AppwriteService;
 }) {
   const [welcomeState, setWelcomeState] =
-    React.useState<welcomeStateType | null>(null);
-  console.log(welcomeState);
+    React.useState<welcomeStateType | null>(() => {
+      props.appwriteService.getAccount().then(async (loggedinAccount) => {
+        if (loggedinAccount == null) {
+          setWelcomeState(welcomeStateType.login);
+          return;
+        }
+        navigate("/home");
+      });
+      return null;
+    });
 
   let navigate = useNavigate();
-
-  if (welcomeState === null) {
-    props.appwriteService.getAccount().then(async (loggedinAccount) => {
-      if (loggedinAccount == null) {
-        setWelcomeState(welcomeStateType.login);
-        return;
-      }
-      navigate("/home");
-    });
-  }
 
   return (
     <div className="min-h-screen flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
