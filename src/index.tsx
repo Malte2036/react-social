@@ -7,6 +7,8 @@ import WelcomePage from "./routes/welcome/WelcomePage";
 import AppwriteService from "./database/appwriteService";
 import UserPage from "./routes/user/UserPage";
 import ErrorPage from "./routes/error/ErrorPage";
+import SettingsPage from "./routes/settings/SettingsPage";
+import useDarkmode from "./hooks/DarkmodeHook";
 
 const appwriteService = new AppwriteService(
   process.env.REACT_APP_APPWRITE_URL!,
@@ -15,21 +17,16 @@ const appwriteService = new AppwriteService(
   process.env.REACT_APP_APPWRITE_USERS_COLLECTION_ID!
 );
 
-/*if (
-  localStorage.theme === "dark" ||
-  (!("theme" in localStorage) &&
-    window.matchMedia("(prefers-color-scheme: dark)").matches)
-) {*/
-if (window.matchMedia("(prefers-color-scheme: dark)").matches) {
-  document.documentElement.classList.add("dark");
-  document.documentElement.classList.add("bg-slate-900");
-} else {
-  document.documentElement.classList.remove("dark");
-  document.documentElement.classList.add("bg-gray-200");
-}
-
 ReactDOM.render(
   <React.StrictMode>
+    <App />
+  </React.StrictMode>,
+  document.getElementById("root")
+);
+
+function App() {
+  useDarkmode();
+  return (
     <div className="min-h-screen dark:text-white">
       <BrowserRouter>
         <Routes>
@@ -40,6 +37,10 @@ ReactDOM.render(
           <Route
             path="/home"
             element={<HomePage appwriteService={appwriteService} />}
+          />
+          <Route
+            path="/settings"
+            element={<SettingsPage appwriteService={appwriteService} />}
           />
           <Route
             path="/user/:userId"
@@ -53,6 +54,5 @@ ReactDOM.render(
         </Routes>
       </BrowserRouter>
     </div>
-  </React.StrictMode>,
-  document.getElementById("root")
-);
+  );
+}
