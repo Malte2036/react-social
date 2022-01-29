@@ -15,7 +15,7 @@ export default function App() {
     process.env.REACT_APP_APPWRITE_USERS_COLLECTION_ID!
   );
 
-  useDarkmode(appwriteService);
+  const [darkmode, setDarkmode] = useDarkmode(appwriteService);
 
   return (
     <div className="min-h-screen dark:text-white">
@@ -31,7 +31,13 @@ export default function App() {
           />
           <Route
             path="/settings"
-            element={<SettingsPage appwriteService={appwriteService} />}
+            element={
+              <SettingsPage
+                appwriteService={appwriteService}
+                darkmode={darkmode}
+                setDarkmode={setDarkmode}
+              />
+            }
           />
           <Route
             path="/user/:userId"

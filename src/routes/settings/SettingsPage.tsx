@@ -1,15 +1,15 @@
-import { useEffect } from "react";
+import { Dispatch, SetStateAction, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import ToogleSwitch from "../../components/form/ToogleSwitch";
 import AppwriteService from "../../database/appwriteService";
 import useAccount from "../../hooks/AccountHook";
-import useDarkmode from "../../hooks/DarkmodeHook";
 
 export default function SettingsPage(props: {
   appwriteService: AppwriteService;
+  darkmode: boolean;
+  setDarkmode: Dispatch<SetStateAction<boolean>>;
 }) {
   const [account] = useAccount(props.appwriteService);
-  const [darkmode, setDarkmode] = useDarkmode(props.appwriteService);
 
   let navigate = useNavigate();
 
@@ -23,11 +23,11 @@ export default function SettingsPage(props: {
   return (
     <div>
       <h1 className="mt-6 text-center text-5xl font-extrabold ">Settings</h1>
-      <br/>
+      <br />
       <div className="flex justify-center">
         <ToogleSwitch
-          toogle={darkmode}
-          setToogle={() => setDarkmode(!darkmode)}
+          toogle={props.darkmode}
+          setToogle={() => props.setDarkmode(!props.darkmode)}
         ></ToogleSwitch>
       </div>
     </div>
