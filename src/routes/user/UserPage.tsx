@@ -4,6 +4,7 @@ import AppwriteService from "../../database/appwriteService";
 import { User } from "../../database/data/user";
 import ErrorPage from "../error/ErrorPage";
 import useAccount from "../../hooks/AccountHook";
+import { getCreatorByWritePermission } from "../../database/data/post";
 
 export default function UserPage(props: { appwriteService: AppwriteService }) {
   const [account] = useAccount(props.appwriteService);
@@ -56,7 +57,7 @@ export default function UserPage(props: { appwriteService: AppwriteService }) {
       {account.$id === user.$id && (
         <>
           <h4 className="mt-6 text-center text-3xl">
-            ID: {user!.$write[0].replace("user:", "")}
+            ID: {getCreatorByWritePermission(user!.$write[0])}
             <br />
             Email: {account.email}
           </h4>

@@ -6,3 +6,7 @@ export type Post = {
   date: number;
   image: string;
 } & Models.Document;
+
+export function getCreatorByWritePermission(permission: string) {
+  return permission.replace("user:", "");
+}

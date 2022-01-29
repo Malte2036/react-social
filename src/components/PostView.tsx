@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import AppwriteService from "../database/appwriteService";
-import { Post } from "../database/data/post";
+import { getCreatorByWritePermission, Post } from "../database/data/post";
 import useAccount from "../hooks/AccountHook";
 import PostViewDropdown from "./PostViewDropdown";
 import PostViewImage from "./PostViewImage";
@@ -12,7 +12,7 @@ export default function PostView(props: {
   post: Post;
 }) {
   const [account] = useAccount(props.appwriteService);
-  const creator = props.post.$write[0].replace("user:", "");
+  const creator = getCreatorByWritePermission(props.post.$write[0]);
 
   const [profilePicture, setProfilePicture] = useState<
     string | null | undefined
