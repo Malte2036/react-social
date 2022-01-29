@@ -71,7 +71,7 @@ export default function PostView(props: {
         )}
       </div>
       <div className="m-8 flex flex-col">
-        <p className="mt-0">{props.post.message}</p>
+        <p className="mt-0 break-all">{props.post.message}</p>
         {postImage !== undefined && postImage != null ? (
           <PostViewImage image={postImage}></PostViewImage>
         ) : (
