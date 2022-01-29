@@ -1,6 +1,7 @@
 import { Menu, Transition } from "@headlessui/react";
 import { ChevronDownIcon } from "@heroicons/react/solid";
 import { Fragment } from "react";
+import { useNavigate } from "react-router-dom";
 import AppwriteService from "../database/appwriteService";
 import { Post } from "../database/data/post";
 
@@ -8,6 +9,7 @@ export default function PostViewDropdown(props: {
   appwriteService: AppwriteService;
   post: Post;
 }) {
+  let navigate = useNavigate();
   return (
     <Menu as="div" className="relative inline-block text-left">
       <div>
@@ -35,8 +37,7 @@ export default function PostViewDropdown(props: {
                 <span
                   onClick={async () => {
                     await props.appwriteService.deletePost(props.post.$id);
-
-                    window.location.reload();
+                    navigate(`/home`);
                   }}
                   className={"block px-4 py-2 text-sm cursor-pointer ".concat(
                     active ? "bg-gray-200 text-gray-900" : "dark:text-gray-200"
