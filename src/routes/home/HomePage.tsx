@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import LogoutButton from "../../components/LogoutButton";
 import AppwriteService from "../../database/appwriteService";
 import PostView from "../../components/PostView";
 import { Post } from "../../database/data/post";
 import CreatePostView from "../../components/CreatePostView";
 import useAccount from "../../hooks/AccountHook";
+import Button from "../../components/Button";
 
 export default function HomePage(props: { appwriteService: AppwriteService }) {
   const [account] = useAccount(props.appwriteService);
@@ -49,7 +49,13 @@ export default function HomePage(props: { appwriteService: AppwriteService }) {
               ))}
           </div>
         </div>
-        <LogoutButton appwriteService={props.appwriteService}></LogoutButton>
+        <Button
+          children={"Logout"}
+          onClickHandler={async () => {
+            await props.appwriteService.logout();
+            navigate("/login");
+          }}
+        ></Button>
       </div>
     </div>
   );
