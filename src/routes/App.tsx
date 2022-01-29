@@ -3,6 +3,7 @@ import AppwriteService from "../database/appwriteService";
 import useDarkmode from "../hooks/DarkmodeHook";
 import ErrorPage from "./error/ErrorPage";
 import HomePage from "./home/HomePage";
+import SinglePostPage from "./post/SinglePostPage";
 import SettingsPage from "./settings/SettingsPage";
 import UserPage from "./user/UserPage";
 import WelcomePage from "./welcome/WelcomePage";
@@ -42,6 +43,10 @@ export default function App() {
           <Route
             path="/user/:userId"
             element={<UserPage appwriteService={appwriteService} />}
+          />
+          <Route
+            path="/post/:postId"
+            element={<SinglePostPage appwriteService={appwriteService} />}
           />
           <Route path="/" element={<Navigate to="/home" />} />
           <Route

@@ -68,6 +68,17 @@ export default class AppwriteService {
     return listDocuments.documents;
   }
 
+  async getPostById(postId: string): Promise<Post | null> {
+    try {
+      return await this.appwrite.database.getDocument<Post>(
+        this.postsCollectionId,
+        postId
+      );
+    } catch (error) {
+      return null;
+    }
+  }
+
   async createPost(message: string, image?: string) {
     const account: Account | null = await this.getAccount();
     if (account === null) {

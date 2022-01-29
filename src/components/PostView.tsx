@@ -70,13 +70,19 @@ export default function PostView(props: {
           <></>
         )}
       </div>
-      <div className="m-8 flex flex-col">
-        <p className="mt-0 break-all">{props.post.message}</p>
-        {postImage !== undefined && postImage != null ? (
-          <PostViewImage image={postImage}></PostViewImage>
-        ) : (
-          <></>
-        )}
+
+      <div
+        className="cursor-pointer"
+        onClick={() => navigate(`/post/${props.post.$id}`)}
+      >
+        <div className="m-8 flex flex-col">
+          <p className="mt-0 break-all">{props.post.message}</p>
+          {postImage !== undefined && postImage != null ? (
+            <PostViewImage image={postImage}></PostViewImage>
+          ) : (
+            <></>
+          )}
+        </div>
       </div>
     </div>
   );
