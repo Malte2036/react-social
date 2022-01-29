@@ -39,7 +39,7 @@ export default class AppwriteService {
       this.usersCollectionId,
       username,
       { picture: null },
-      ["role:all"]
+      ["role:member"]
     );
   }
 
@@ -83,7 +83,7 @@ export default class AppwriteService {
         date: Date.now(),
         image: image,
       },
-      ["role:all"]
+      ["role:member"]
     );
   }
 
