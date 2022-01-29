@@ -31,7 +31,7 @@ export default function HomePage(props: { appwriteService: AppwriteService }) {
 
   return (
     <div className="flex justify-center">
-      <div className="m-5 mt-10 max-w-4xl">
+      <div className="m-5 mt-10 max-w-4xl w-full">
         <h1 className="text-center text-5xl font-extrabold">Feed</h1>
         <CreatePostView
           appwriteService={props.appwriteService}
