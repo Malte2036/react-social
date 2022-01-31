@@ -1,3 +1,4 @@
+import { Switch } from "@headlessui/react";
 import { Dispatch, SetStateAction } from "react";
 
 export default function ToogleSwitch(props: {
@@ -6,24 +7,24 @@ export default function ToogleSwitch(props: {
   onChange?: Function;
 }) {
   return (
-    <>
-      <h2>Darkmode: </h2>
-      <div
-        className="md:w-14 md:h-7 w-12 h-6 flex items-center bg-gray-300 rounded-full p-1 cursor-pointer"
-        onClick={() => {
-          props.setToogle(!props.toogle);
-          if (props.onChange) {
-            props.onChange();
-          }
-        }}
-      >
-        <div
-          className={
-            "bg-white md:w-6 md:h-6 h-5 w-5 rounded-full shadow-md transform" +
-            (props.toogle ? null : " transform translate-x-6")
-          }
-        ></div>
-      </div>
-    </>
+    <Switch
+      checked={props.toogle}
+      onChange={() => {
+        props.setToogle(!props.toogle);
+        if (props.onChange) {
+          props.onChange();
+        }
+      }}
+      className={`${
+        props.toogle ? "bg-indigo-600" : "bg-slate-800"
+      } relative inline-flex items-center h-6 rounded-full w-11`}
+    >
+      <span className="sr-only">Enable notifications</span>
+      <span
+        className={`${
+          props.toogle ? "translate-x-6" : "translate-x-1"
+        } inline-block w-4 h-4 transform bg-white rounded-full`}
+      />
+    </Switch>
   );
 }
