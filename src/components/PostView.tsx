@@ -59,14 +59,17 @@ export default function PostView(props: {
             {creator}
           </span>
         </div>
-        {account?.$id === creator && (
-          <div className="absolute right-3 m-3">
+        <div className="absolute right-3 m-3 flex flex-row">
+          <span className="text-xs pt-0.5 opacity-50">
+            {new Date(props.post.date).toDateString()}
+          </span>
+          {account?.$id === creator && (
             <PostViewDropdown
               appwriteService={props.appwriteService}
               post={props.post}
             ></PostViewDropdown>
-          </div>
-        )}
+          )}
+        </div>
       </div>
 
       <div

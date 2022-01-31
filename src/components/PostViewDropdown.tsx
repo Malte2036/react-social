@@ -15,7 +15,7 @@ export default function PostViewDropdown(props: {
       <div>
         <Menu.Button>
           <ChevronDownIcon
-            className="-mr-1 ml-2 h-5 w-5 text-gray-900 dark:text-gray-200"
+            className="-mr-1 ml-2 h-5 w-5 text-gray-900 dark:text-gray-200 opacity-50"
             aria-hidden="true"
           />
         </Menu.Button>
