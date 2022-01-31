@@ -19,42 +19,44 @@ export default function App() {
   const [darkmode, setDarkmode] = useDarkmode(appwriteService);
 
   return (
-    <div className="min-h-screen dark:text-white">
-      <BrowserRouter>
-        <Routes>
-          <Route
-            path="/login"
-            element={<WelcomePage appwriteService={appwriteService} />}
-          />
-          <Route
-            path="/home"
-            element={<HomePage appwriteService={appwriteService} />}
-          />
-          <Route
-            path="/settings"
-            element={
-              <SettingsPage
-                appwriteService={appwriteService}
-                darkmode={darkmode}
-                setDarkmode={setDarkmode}
-              />
-            }
-          />
-          <Route
-            path="/user/:userId"
-            element={<UserPage appwriteService={appwriteService} />}
-          />
-          <Route
-            path="/post/:postId"
-            element={<SinglePostPage appwriteService={appwriteService} />}
-          />
-          <Route path="/" element={<Navigate to="/home" />} />
-          <Route
-            path="*"
-            element={<ErrorPage code={404} message="Not Found"></ErrorPage>}
-          />
-        </Routes>
-      </BrowserRouter>
+    <div className={darkmode ? "dark" : ""}>
+      <div className="min-h-screen dark:text-white bg-gray-200 dark:bg-slate-900">
+        <BrowserRouter>
+          <Routes>
+            <Route
+              path="/login"
+              element={<WelcomePage appwriteService={appwriteService} />}
+            />
+            <Route
+              path="/home"
+              element={<HomePage appwriteService={appwriteService} />}
+            />
+            <Route
+              path="/settings"
+              element={
+                <SettingsPage
+                  appwriteService={appwriteService}
+                  darkmode={darkmode}
+                  setDarkmode={setDarkmode}
+                />
+              }
+            />
+            <Route
+              path="/user/:userId"
+              element={<UserPage appwriteService={appwriteService} />}
+            />
+            <Route
+              path="/post/:postId"
+              element={<SinglePostPage appwriteService={appwriteService} />}
+            />
+            <Route path="/" element={<Navigate to="/home" />} />
+            <Route
+              path="*"
+              element={<ErrorPage code={404} message="Not Found"></ErrorPage>}
+            />
+          </Routes>
+        </BrowserRouter>
+      </div>
     </div>
   );
 }

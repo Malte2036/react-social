@@ -50,8 +50,8 @@ export default function UserPage(props: { appwriteService: AppwriteService }) {
   }
 
   return (
-    <div className="UserPage">
-      <h1 className="mt-6 text-center text-5xl font-extrabold ">
+    <>
+      <h1 className="pt-6 text-center text-5xl font-extrabold ">
         User: {userId}
       </h1>
       {account.$id === user.$id && (
@@ -78,6 +78,6 @@ export default function UserPage(props: { appwriteService: AppwriteService }) {
           </div>
         </>
       )}
-    </div>
+    </>
   );
 }

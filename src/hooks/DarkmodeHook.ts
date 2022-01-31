@@ -13,16 +13,6 @@ export default function useDarkmode(
 
   useEffect(() => {
     appwriteService.updateAccountPrefs({ darkmode: darkmode });
-
-    if (darkmode) {
-      window.document.documentElement.classList.add("dark");
-      window.document.documentElement.classList.add("bg-slate-900");
-      window.document.documentElement.classList.remove("bg-gray-200");
-    } else {
-      window.document.documentElement.classList.remove("dark");
-      window.document.documentElement.classList.remove("bg-slate-900");
-      window.document.documentElement.classList.add("bg-gray-200");
-    }
   });
 
   return [darkmode, setDarkmode];
