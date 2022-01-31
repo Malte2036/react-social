@@ -59,15 +59,13 @@ export default function PostView(props: {
             {creator}
           </span>
         </div>
-        {account?.$id === creator ? (
+        {account?.$id === creator && (
           <div className="absolute right-3 m-3">
             <PostViewDropdown
               appwriteService={props.appwriteService}
               post={props.post}
             ></PostViewDropdown>
           </div>
-        ) : (
-          <></>
         )}
       </div>
 
@@ -77,10 +75,8 @@ export default function PostView(props: {
       >
         <div className="m-8 flex flex-col">
           <p className="mt-0 break-all">{props.post.message}</p>
-          {postImage !== undefined && postImage != null ? (
+          {postImage != null && (
             <PostViewImage image={postImage}></PostViewImage>
-          ) : (
-            <></>
           )}
         </div>
       </div>

@@ -31,7 +31,7 @@ export default function CreatePostView(props: {
       <button className="w-full" onClick={() => setActive(!active)}>
         {active ? "Hide" : "Show"} Create Post
       </button>
-      {active ? (
+      {active && (
         <form
           className="w-full mt-8 space-y-6 flex-col"
           onSubmit={onSubmitHandler}
@@ -58,8 +58,6 @@ export default function CreatePostView(props: {
           </div>
           <Button children={"Create Post"} type="submit" />
         </form>
-      ) : (
-        <></>
       )}
     </>
   );
