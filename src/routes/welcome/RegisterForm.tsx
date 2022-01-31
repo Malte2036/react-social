@@ -1,22 +1,28 @@
 import { LockClosedIcon } from "@heroicons/react/solid";
-import React from "react";
+import React, { Dispatch, SetStateAction } from "react";
 import { useNavigate } from "react-router-dom";
 import InputField from "../../components/form/InputField";
 import AppwriteService from "../../database/appwriteService";
 
 export default function RegisterForm(props: {
   appwriteService: AppwriteService;
+  username: string;
+  setUsername: Dispatch<SetStateAction<string>>;
+  email: string;
+  setEmail: Dispatch<SetStateAction<string>>;
+  password: string;
+  setPassword: Dispatch<SetStateAction<string>>;
 }) {
-  const [username, setUsername] = React.useState("");
-  const [email, setEmail] = React.useState("");
-  const [password, setPassword] = React.useState("");
-
   let navigate = useNavigate();
 
   async function onSubmitHandler(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
     try {
-      await props.appwriteService.createAccount(email, username, password);
+      await props.appwriteService.createAccount(
+        props.email,
+        props.username,
+        props.password
+      );
 
       navigate("/home");
     } catch (error) {
@@ -30,24 +36,24 @@ export default function RegisterForm(props: {
         <div className="">
           <InputField
             type="text"
-            value={username}
-            setValue={setUsername}
+            value={props.username}
+            setValue={props.setUsername}
             required
             placeholder="Username"
             className="rounded-t-md"
           />
           <InputField
             type="email"
-            value={email}
-            setValue={setEmail}
+            value={props.email}
+            setValue={props.setEmail}
             autoComplete="email"
             required
             placeholder="Email address"
           />
           <InputField
             type="password"
-            value={password}
-            setValue={setPassword}
+            value={props.password}
+            setValue={props.setPassword}
             placeholder="Password"
             required
             className="rounded-b-md"

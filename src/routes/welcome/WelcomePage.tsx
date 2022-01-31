@@ -24,6 +24,10 @@ export default function WelcomePage(props: {
       return null;
     });
 
+  const [username, setUsername] = React.useState("");
+  const [email, setEmail] = React.useState("");
+  const [password, setPassword] = React.useState("");
+
   let navigate = useNavigate();
 
   return (
@@ -56,9 +60,21 @@ export default function WelcomePage(props: {
           {welcomeState === welcomeStateType.register ? (
             <RegisterForm
               appwriteService={props.appwriteService}
+              username={username}
+              setUsername={setUsername}
+              email={email}
+              setEmail={setEmail}
+              password={password}
+              setPassword={setPassword}
             ></RegisterForm>
           ) : (
-            <LoginForm appwriteService={props.appwriteService}></LoginForm>
+            <LoginForm
+              appwriteService={props.appwriteService}
+              email={email}
+              setEmail={setEmail}
+              password={password}
+              setPassword={setPassword}
+            ></LoginForm>
           )}
         </div>
       </div>

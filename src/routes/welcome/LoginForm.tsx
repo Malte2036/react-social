@@ -1,19 +1,22 @@
-import React from "react";
+import React, { Dispatch, SetStateAction } from "react";
 import { useNavigate } from "react-router-dom";
 import AppwriteService from "../../database/appwriteService";
 import { LockClosedIcon } from "@heroicons/react/solid";
 import InputField from "../../components/form/InputField";
 
-export default function LoginForm(props: { appwriteService: AppwriteService }) {
-  const [email, setEmail] = React.useState("");
-  const [password, setPassword] = React.useState("");
-
+export default function LoginForm(props: {
+  appwriteService: AppwriteService;
+  email: string;
+  setEmail: Dispatch<SetStateAction<string>>;
+  password: string;
+  setPassword: Dispatch<SetStateAction<string>>;
+}) {
   let navigate = useNavigate();
 
   async function onSubmitHandler(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
     try {
-      await props.appwriteService.login(email, password);
+      await props.appwriteService.login(props.email, props.password);
 
       navigate("/home");
     } catch (error) {
@@ -26,8 +29,8 @@ export default function LoginForm(props: { appwriteService: AppwriteService }) {
       <div className="rounded-md shadow-sm -space-y-px">
         <InputField
           type="email"
-          value={email}
-          setValue={setEmail}
+          value={props.email}
+          setValue={props.setEmail}
           autoComplete="email"
           required
           placeholder="Email address"
@@ -36,8 +39,8 @@ export default function LoginForm(props: { appwriteService: AppwriteService }) {
 
         <InputField
           type="password"
-          value={password}
-          setValue={setPassword}
+          value={props.password}
+          setValue={props.setPassword}
           placeholder="Password"
           required
           className="rounded-b-md"
