@@ -1,9 +1,9 @@
 import { ChangeEvent, FormEvent, useState } from "react";
-import AppwriteService from "../database/appwriteService";
+import BackendService from "../database/backendService";
 import Button from "./Button";
 
 export default function CreatePostView(props: {
-  appwriteService: AppwriteService;
+  backendService: BackendService;
 }) {
   const [message, setMessage] = useState("");
   const [active, setActive] = useState<Boolean>(false);
@@ -14,11 +14,11 @@ export default function CreatePostView(props: {
     try {
       let fileId = undefined;
       if (image != null) {
-        const file = await props.appwriteService.uploadFile(image);
+        const file = await props.backendService.uploadFile(image);
         fileId = file.$id;
       }
 
-      await props.appwriteService.createPost(message, fileId);
+      await props.backendService.createPost(message, fileId);
 
       window.location.reload();
     } catch (error) {

@@ -1,15 +1,15 @@
 import { Dispatch, SetStateAction, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import ToogleSwitch from "../../components/form/ToogleSwitch";
-import AppwriteService from "../../database/appwriteService";
+import BackendService from "../../database/backendService";
 import useAccount from "../../hooks/AccountHook";
 
 export default function SettingsPage(props: {
-  appwriteService: AppwriteService;
+  backendService: BackendService;
   darkmode: boolean;
   setDarkmode: Dispatch<SetStateAction<boolean>>;
 }) {
-  const [account] = useAccount(props.appwriteService);
+  const [account] = useAccount(props.backendService);
 
   let navigate = useNavigate();
 

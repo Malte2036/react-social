@@ -1,18 +1,18 @@
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
-import AppwriteService from "../database/appwriteService";
+import BackendService from "../database/backendService";
 
 export default function useDarkmode(
-  appwriteService: AppwriteService
+  backendService: BackendService
 ): [boolean, Dispatch<SetStateAction<boolean>>] {
   const [darkmode, setDarkmode] = useState<boolean>(() => {
-    appwriteService
+    backendService
       .getAccountPrefs()
       .then((accountPrefs) => setDarkmode(accountPrefs.darkmode));
     return true;
   });
 
   useEffect(() => {
-    appwriteService.updateAccountPrefs({ darkmode: darkmode });
+    backendService.updateAccountPrefs({ darkmode: darkmode });
   });
 
   return [darkmode, setDarkmode];

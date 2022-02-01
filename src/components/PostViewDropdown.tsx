@@ -2,11 +2,11 @@ import { Menu, Transition } from "@headlessui/react";
 import { ChevronDownIcon } from "@heroicons/react/solid";
 import { Fragment } from "react";
 import { useNavigate } from "react-router-dom";
-import AppwriteService from "../database/appwriteService";
+import BackendService from "../database/backendService";
 import { Post } from "../database/data/post";
 
 export default function PostViewDropdown(props: {
-  appwriteService: AppwriteService;
+  backendService: BackendService;
   post: Post;
 }) {
   let navigate = useNavigate();
@@ -36,7 +36,7 @@ export default function PostViewDropdown(props: {
               {({ active }) => (
                 <span
                   onClick={async () => {
-                    await props.appwriteService.deletePost(props.post.$id);
+                    await props.backendService.deletePost(props.post.$id);
                     navigate(`/home`);
                   }}
                   className={"block px-4 py-2 text-sm cursor-pointer ".concat(

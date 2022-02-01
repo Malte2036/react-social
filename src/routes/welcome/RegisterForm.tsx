@@ -2,10 +2,10 @@ import { LockClosedIcon } from "@heroicons/react/solid";
 import React, { Dispatch, SetStateAction } from "react";
 import { useNavigate } from "react-router-dom";
 import InputField from "../../components/form/InputField";
-import AppwriteService from "../../database/appwriteService";
+import BackendService from "../../database/backendService";
 
 export default function RegisterForm(props: {
-  appwriteService: AppwriteService;
+  backendService: BackendService;
   username: string;
   setUsername: Dispatch<SetStateAction<string>>;
   email: string;
@@ -18,7 +18,7 @@ export default function RegisterForm(props: {
   async function onSubmitHandler(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
     try {
-      await props.appwriteService.createAccount(
+      await props.backendService.createAccount(
         props.email,
         props.username,
         props.password

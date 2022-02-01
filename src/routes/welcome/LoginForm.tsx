@@ -1,11 +1,11 @@
 import React, { Dispatch, SetStateAction } from "react";
 import { useNavigate } from "react-router-dom";
-import AppwriteService from "../../database/appwriteService";
+import BackendService from "../../database/backendService";
 import { LockClosedIcon } from "@heroicons/react/solid";
 import InputField from "../../components/form/InputField";
 
 export default function LoginForm(props: {
-  appwriteService: AppwriteService;
+  backendService: BackendService;
   email: string;
   setEmail: Dispatch<SetStateAction<string>>;
   password: string;
@@ -16,7 +16,7 @@ export default function LoginForm(props: {
   async function onSubmitHandler(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
     try {
-      await props.appwriteService.login(props.email, props.password);
+      await props.backendService.login(props.email, props.password);
 
       navigate("/home");
     } catch (error) {

@@ -1,14 +1,14 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import AppwriteService from "../../database/appwriteService";
+import BackendService from "../../database/backendService";
 import PostView from "../../components/PostView";
 import { Post } from "../../database/data/post";
 import CreatePostView from "../../components/CreatePostView";
 import useAccount from "../../hooks/AccountHook";
 import Button from "../../components/Button";
 
-export default function HomePage(props: { appwriteService: AppwriteService }) {
-  const [account] = useAccount(props.appwriteService);
+export default function HomePage(props: { backendService: BackendService }) {
+  const [account] = useAccount(props.backendService);
   const [posts, setPosts] = useState<Post[] | undefined>(undefined);
 
   useEffect(() => {
@@ -17,7 +17,7 @@ export default function HomePage(props: { appwriteService: AppwriteService }) {
       return;
     }
     async function getPosts() {
-      setPosts(await props.appwriteService.getAllPosts());
+      setPosts(await props.backendService.getAllPosts());
     }
 
     getPosts();
@@ -35,14 +35,14 @@ export default function HomePage(props: { appwriteService: AppwriteService }) {
         <div>
           <h1 className="text-center text-5xl font-extrabold">Feed</h1>
           <CreatePostView
-            appwriteService={props.appwriteService}
+            backendService={props.backendService}
           ></CreatePostView>
           <div className="flex flex-col">
             {posts
               .sort((a: Post, b: Post) => b.date - a.date)
               .map((post) => (
                 <PostView
-                  appwriteService={props.appwriteService}
+                  backendService={props.backendService}
                   post={post}
                   key={post.$id}
                 ></PostView>
@@ -52,7 +52,7 @@ export default function HomePage(props: { appwriteService: AppwriteService }) {
         <Button
           children={"Logout"}
           onClickHandler={async () => {
-            await props.appwriteService.logout();
+            await props.backendService.logout();
             navigate("/login");
           }}
         ></Button>

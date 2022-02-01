@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import AppwriteService from "../database/appwriteService";
+import BackendService from "../database/backendService";
 import { getCreatorByWritePermission, Post } from "../database/data/post";
 import useAccount from "../hooks/AccountHook";
 import PostViewDropdown from "./PostViewDropdown";
@@ -8,22 +8,22 @@ import PostViewImage from "./PostViewImage";
 import ProfilePicture from "./ProfilePicture";
 
 export default function PostView(props: {
-  appwriteService: AppwriteService;
+  backendService: BackendService;
   post: Post;
 }) {
-  const [account] = useAccount(props.appwriteService);
+  const [account] = useAccount(props.backendService);
   const creator = getCreatorByWritePermission(props.post.$write[0]);
 
   const [profilePicture, setProfilePicture] = useState<
     string | null | undefined
   >(() => {
-    props.appwriteService.getUserById(creator).then(async (user) => {
+    props.backendService.getUserById(creator).then(async (user) => {
       if (user == null || user.picture == null) {
         setProfilePicture(null);
         return;
       }
       try {
-        const url = await props.appwriteService.getFileById(user.picture);
+        const url = await props.backendService.getFileById(user.picture);
         setProfilePicture(url.toString());
       } catch (error) {
         setProfilePicture(null);
@@ -35,7 +35,7 @@ export default function PostView(props: {
     if (props.post.image == null) {
       return null;
     } else {
-      props.appwriteService
+      props.backendService
         .getFileById(props.post.image)
         .then((url) => setPostImage(url.toString()));
     }
@@ -65,7 +65,7 @@ export default function PostView(props: {
           </span>
           {account?.$id === creator && (
             <PostViewDropdown
-              appwriteService={props.appwriteService}
+              backendService={props.backendService}
               post={props.post}
             ></PostViewDropdown>
           )}

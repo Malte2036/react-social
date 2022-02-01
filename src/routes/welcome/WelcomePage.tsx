@@ -1,5 +1,5 @@
 import React from "react";
-import AppwriteService from "../../database/appwriteService";
+import BackendService from "../../database/backendService";
 import LoginForm from "./LoginForm";
 import RegisterForm from "./RegisterForm";
 import { useNavigate } from "react-router-dom";
@@ -10,11 +10,11 @@ enum welcomeStateType {
 }
 
 export default function WelcomePage(props: {
-  appwriteService: AppwriteService;
+  backendService: BackendService;
 }) {
   const [welcomeState, setWelcomeState] =
     React.useState<welcomeStateType | null>(() => {
-      props.appwriteService.getAccount().then(async (loggedinAccount) => {
+      props.backendService.getAccount().then(async (loggedinAccount) => {
         if (loggedinAccount == null) {
           setWelcomeState(welcomeStateType.login);
           return;
@@ -59,7 +59,7 @@ export default function WelcomePage(props: {
           </p>
           {welcomeState === welcomeStateType.register ? (
             <RegisterForm
-              appwriteService={props.appwriteService}
+              backendService={props.backendService}
               username={username}
               setUsername={setUsername}
               email={email}
@@ -69,7 +69,7 @@ export default function WelcomePage(props: {
             ></RegisterForm>
           ) : (
             <LoginForm
-              appwriteService={props.appwriteService}
+              backendService={props.backendService}
               email={email}
               setEmail={setEmail}
               password={password}

@@ -1,13 +1,13 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import AppwriteService from "../../database/appwriteService";
+import BackendService from "../../database/backendService";
 import { User } from "../../database/data/user";
 import ErrorPage from "../error/ErrorPage";
 import useAccount from "../../hooks/AccountHook";
 import { getCreatorByWritePermission } from "../../database/data/post";
 
-export default function UserPage(props: { appwriteService: AppwriteService }) {
-  const [account] = useAccount(props.appwriteService);
+export default function UserPage(props: { backendService: BackendService }) {
+  const [account] = useAccount(props.backendService);
   const [user, setUser] = useState<User | null | undefined>(undefined);
 
   let navigate = useNavigate();
@@ -26,7 +26,7 @@ export default function UserPage(props: { appwriteService: AppwriteService }) {
         return;
       }
 
-      setUser(await props.appwriteService.getUserById(userId));
+      setUser(await props.backendService.getUserById(userId));
     }
 
     fetchUser();
@@ -69,7 +69,7 @@ export default function UserPage(props: { appwriteService: AppwriteService }) {
               type="file"
               onChange={(event) => {
                 if (event.target.files != null) {
-                  props.appwriteService.setCurrentUserProfilePicture(
+                  props.backendService.setCurrentUserProfilePicture(
                     event.target.files[0]
                   );
                 }

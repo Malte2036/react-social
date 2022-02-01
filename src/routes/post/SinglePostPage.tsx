@@ -3,15 +3,15 @@ import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import Button from "../../components/Button";
 import PostView from "../../components/PostView";
-import AppwriteService from "../../database/appwriteService";
+import BackendService from "../../database/backendService";
 import { Post } from "../../database/data/post";
 import useAccount from "../../hooks/AccountHook";
 import ErrorPage from "../error/ErrorPage";
 
 export default function SinglePostPage(props: {
-  appwriteService: AppwriteService;
+  backendService: BackendService;
 }) {
-  const [account] = useAccount(props.appwriteService);
+  const [account] = useAccount(props.backendService);
   const [post, setPost] = useState<Post | null | undefined>(undefined);
 
   let navigate = useNavigate();
@@ -30,7 +30,7 @@ export default function SinglePostPage(props: {
         return;
       }
 
-      setPost(await props.appwriteService.getPostById(postId));
+      setPost(await props.backendService.getPostById(postId));
     }
 
     fetchPost();
@@ -56,7 +56,7 @@ export default function SinglePostPage(props: {
           onClick={() => navigate("/home")}
         ></ArrowLeftIcon>
         <PostView
-          appwriteService={props.appwriteService}
+          backendService={props.backendService}
           post={post}
         ></PostView>
       </div>

@@ -1,5 +1,5 @@
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
-import AppwriteService from "../database/appwriteService";
+import BackendService from "../database/backendService";
 import useDarkmode from "../hooks/DarkmodeHook";
 import ErrorPage from "./error/ErrorPage";
 import HomePage from "./home/HomePage";
@@ -9,14 +9,12 @@ import UserPage from "./user/UserPage";
 import WelcomePage from "./welcome/WelcomePage";
 
 export default function App() {
-  const appwriteService = new AppwriteService(
+  const backendService = new BackendService(
     process.env.REACT_APP_APPWRITE_URL!,
-    process.env.REACT_APP_APPWRITE_PROJECT_ID!,
-    process.env.REACT_APP_APPWRITE_POSTS_COLLECTION_ID!,
-    process.env.REACT_APP_APPWRITE_USERS_COLLECTION_ID!
+    Number.parseInt(process.env.REACT_APP_APPWRITE_PORT!)
   );
 
-  const [darkmode, setDarkmode] = useDarkmode(appwriteService);
+  const [darkmode, setDarkmode] = useDarkmode(backendService);
 
   return (
     <div className={darkmode ? "dark" : ""}>
@@ -25,17 +23,17 @@ export default function App() {
           <Routes>
             <Route
               path="/login"
-              element={<WelcomePage appwriteService={appwriteService} />}
+              element={<WelcomePage backendService={backendService} />}
             />
             <Route
               path="/home"
-              element={<HomePage appwriteService={appwriteService} />}
+              element={<HomePage backendService={backendService} />}
             />
             <Route
               path="/settings"
               element={
                 <SettingsPage
-                  appwriteService={appwriteService}
+                  backendService={backendService}
                   darkmode={darkmode}
                   setDarkmode={setDarkmode}
                 />
@@ -43,11 +41,11 @@ export default function App() {
             />
             <Route
               path="/user/:userId"
-              element={<UserPage appwriteService={appwriteService} />}
+              element={<UserPage backendService={backendService} />}
             />
             <Route
               path="/post/:postId"
-              element={<SinglePostPage appwriteService={appwriteService} />}
+              element={<SinglePostPage backendService={backendService} />}
             />
             <Route path="/" element={<Navigate to="/home" />} />
             <Route
