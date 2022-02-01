@@ -10,8 +10,8 @@ import WelcomePage from "./welcome/WelcomePage";
 
 export default function App() {
   const backendService = new BackendService(
-    process.env.REACT_APP_APPWRITE_URL!,
-    Number.parseInt(process.env.REACT_APP_APPWRITE_PORT!)
+    process.env.REACT_APP_BACKEND_URL!,
+    Number.parseInt(process.env.REACT_APP_BACKEND_PORT!)
   );
 
   const [darkmode, setDarkmode] = useDarkmode(backendService);

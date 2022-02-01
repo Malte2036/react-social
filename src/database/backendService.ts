@@ -1,22 +1,40 @@
 import { Models } from "appwrite";
-import * as https from "https";
+import axios from "axios";
 import { Account } from "./data/account";
 import { AccountPrefs } from "./data/accountPrefs";
 import { Post } from "./data/post";
 import { User } from "./data/user";
 
 export default class BackendService {
-  url: string;
-  port: number;
+  endpoint: string;
+  bearerToken: string | null = null;
   constructor(url: string, port: number) {
-    this.url = url;
-    this.port = port;
+    this.endpoint = `http://${url}:${port}`;
   }
   async getAccount(): Promise<Account | null> {
+    console.log(this.bearerToken);
+    if (this.bearerToken) {
+      return {
+        $id: "empty",
+        name: "empty",
+        registration: 0,
+        status: true,
+        passwordUpdate: 0,
+        email: "empty",
+        emailVerification: false,
+        prefs: await this.getAccountPrefs(),
+      };
+    }
     return null;
   }
 
   async createAccount(email: string, username: string, password: string) {
+    await axios.post(`${this.endpoint}/auth/register`, {
+      email: email,
+      name: username,
+      password: password,
+    });
+    await this.login(email, password);
   }
 
   async getAccountPrefs(): Promise<AccountPrefs> {
@@ -25,9 +43,22 @@ export default class BackendService {
 
   async updateAccountPrefs(accountPrefs: AccountPrefs) {}
 
-  async login(email: string, password: string) {}
+  async login(email: string, password: string) {
+    const response = await axios.post(`${this.endpoint}/auth/login`, {
+      email: email,
+      password: password,
+    });
+    if (response.status !== 200) {
+      throw response.statusText;
+    }
+    console.log(`Logged in as ${response.data.user.name}`);
+    this.bearerToken = response.data.token;
+    console.log(this.bearerToken);
+  }
 
-  async logout() {}
+  async logout() {
+    this.bearerToken = null;
+  }
 
   async getAllPosts(): Promise<Post[]> {
     return [];
