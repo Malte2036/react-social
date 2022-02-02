@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import BackendService from "../database/backendService";
+import { MyFile } from "../database/data/myFile";
 import { Post } from "../database/data/post";
 import useAccount from "../hooks/AccountHook";
 import PostViewDropdown from "./PostViewDropdown";
@@ -29,17 +30,9 @@ export default function PostView(props: {
     }*/
     return undefined;
   });
-  const [postImage, setPostImage] = useState<string | null | undefined>(() => {
-    if (props.post.image == null) {
-      return null;
-    } else {
-      props.backendService
-        .getFileById(props.post.image)
-        .then((url) => setPostImage(url.toString()));
-    }
-
-    return undefined;
-  });
+  const [postImage, setPostImage] = useState<MyFile | null | undefined>(
+    () => props.post.image
+  );
 
   let navigate = useNavigate();
 

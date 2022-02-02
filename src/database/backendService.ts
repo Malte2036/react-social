@@ -2,6 +2,7 @@ import { Models } from "appwrite";
 import axios, { AxiosRequestHeaders } from "axios";
 import { Account } from "./data/account";
 import { AccountPrefs } from "./data/accountPrefs";
+import { MyFile } from "./data/myFile";
 import { Post } from "./data/post";
 import { User } from "./data/user";
 
@@ -110,11 +111,27 @@ export default class BackendService {
     return null;
   }
 
-  async createPost(message: string, image?: string) {
+  async createPost(message: string, image?: File) {
+    let imageData = undefined;
+    if (image) {
+      const base64 = await new Promise<string>((resolve, reject) => {
+        const reader = new FileReader();
+        reader.readAsDataURL(image);
+        reader.onload = () => resolve(reader.result?.toString() || "");
+        reader.onerror = (error) => reject(error);
+      });
+      imageData = {
+        name: image.name,
+        data: base64,
+        mimeType: image.type,
+      };
+    }
+
     await axios.post(
       `${this.endpoint}/post`,
       {
         message: message,
+        image: imageData,
       },
       {
         headers: this.authHeader(),
@@ -138,22 +155,44 @@ export default class BackendService {
     return null;
   }
 
-  async setCurrentUserProfilePicture(picture: File) {}
-
-  async uploadFile(file: File): Promise<Models.File> {
-    return await this.getFileById("");
+  async setCurrentUserProfilePicture(picture: File) {
+    await this.uploadFile(picture);
   }
 
-  async getFileById(fileId: string) {
-    return {
-      $id: "empty",
-      $read: [],
-      $write: [],
-      name: "empty",
-      dateCreated: 0,
-      signature: "empty",
-      mimeType: "",
-      sizeOriginal: 10,
-    };
+  async uploadFile(file: File): Promise<MyFile> {
+    const base64 = await new Promise<string>((resolve, reject) => {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = () => resolve(reader.result?.toString() || "");
+      reader.onerror = (error) => reject(error);
+    });
+
+    return await axios.post(
+      `${this.endpoint}/file`,
+      {
+        name: file.name,
+        data: base64,
+        mimeType: file.type,
+      },
+      {
+        headers: this.authHeader(),
+      }
+    );
+  }
+
+  async getFileById(fileId: string): Promise<MyFile | null> {
+    try {
+      const response = await axios.get(`${this.endpoint}/file/${fileId}`, {
+        headers: this.authHeader(),
+      });
+
+      console.log(response)
+
+      if (response.status !== 200) {
+        return null;
+      }
+      return response.data as MyFile;
+    } catch (error) {}
+    return null;
   }
 }

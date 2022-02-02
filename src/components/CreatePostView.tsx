@@ -12,13 +12,7 @@ export default function CreatePostView(props: {
   async function onSubmitHandler(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     try {
-      let fileId = undefined;
-      if (image != null) {
-        const file = await props.backendService.uploadFile(image);
-        fileId = file.$id;
-      }
-
-      await props.backendService.createPost(message, fileId);
+      await props.backendService.createPost(message, image ?? undefined);
 
       window.location.reload();
     } catch (error) {
