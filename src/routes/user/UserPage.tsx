@@ -4,7 +4,6 @@ import BackendService from "../../database/backendService";
 import { User } from "../../database/data/user";
 import ErrorPage from "../error/ErrorPage";
 import useAccount from "../../hooks/AccountHook";
-import { getCreatorByWritePermission } from "../../database/data/post";
 
 export default function UserPage(props: { backendService: BackendService }) {
   const [account] = useAccount(props.backendService);

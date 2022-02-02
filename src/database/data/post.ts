@@ -1,11 +1,9 @@
-import type { Models } from "appwrite";
+import { User } from "./user";
 
 export type Post = {
+  id: string;
   message: string;
   date: number;
-  image: string;
-} & Models.Document;
-
-export function getCreatorByWritePermission(permission: string) {
-  return permission.replace("user:", "");
-}
+  image?:string;
+  creator: User;
+};

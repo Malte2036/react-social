@@ -44,7 +44,7 @@ export default function HomePage(props: { backendService: BackendService }) {
                 <PostView
                   backendService={props.backendService}
                   post={post}
-                  key={post.$id}
+                  key={post.id}
                 ></PostView>
               ))}
           </div>

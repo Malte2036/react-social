@@ -36,7 +36,7 @@ export default function PostViewDropdown(props: {
               {({ active }) => (
                 <span
                   onClick={async () => {
-                    await props.backendService.deletePost(props.post.$id);
+                    await props.backendService.deletePost(props.post.id);
                     navigate(`/home`);
                   }}
                   className={"block px-4 py-2 text-sm cursor-pointer ".concat(

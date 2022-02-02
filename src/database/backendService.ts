@@ -79,6 +79,18 @@ export default class BackendService {
   }
 
   async getAllPosts(): Promise<Post[]> {
+    
+    try {
+      const response = await axios.get(`${this.endpoint}/posts`, {
+        headers: this.authHeader(),
+      });
+
+      if (response.status !== 200) {
+        return [];
+      }
+
+      return response.data;
+    } catch (error) {}
     return [];
   }
 

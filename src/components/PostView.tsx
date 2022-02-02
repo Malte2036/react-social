@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import BackendService from "../database/backendService";
-import { getCreatorByWritePermission, Post } from "../database/data/post";
+import { Post } from "../database/data/post";
 import useAccount from "../hooks/AccountHook";
 import PostViewDropdown from "./PostViewDropdown";
 import PostViewImage from "./PostViewImage";
@@ -12,23 +12,21 @@ export default function PostView(props: {
   post: Post;
 }) {
   const [account] = useAccount(props.backendService);
-  const creator = getCreatorByWritePermission(props.post.$write[0]);
 
   const [profilePicture, setProfilePicture] = useState<
     string | null | undefined
   >(() => {
-    props.backendService.getUserById(creator).then(async (user) => {
-      if (user == null || user.picture == null) {
-        setProfilePicture(null);
-        return;
-      }
-      try {
-        const url = await props.backendService.getFileById(user.picture);
-        setProfilePicture(url.toString());
-      } catch (error) {
-        setProfilePicture(null);
-      }
-    });
+    /*const user = props.post.creator;
+    if (user == null || user.picture == null) {
+      setProfilePicture(null);
+      return;
+    }
+    try {
+      const url = await props.backendService.getFileById(user.picture);
+      setProfilePicture(url.toString());
+    } catch (error) {
+      setProfilePicture(null);
+    }*/
     return undefined;
   });
   const [postImage, setPostImage] = useState<string | null | undefined>(() => {
@@ -54,16 +52,16 @@ export default function PostView(props: {
           ></ProfilePicture>
           <span
             className="m-1 ml-2 cursor-pointer"
-            onClick={() => navigate(`/user/${creator}`)}
+            onClick={() => navigate(`/user/${props.post.creator.id}`)}
           >
-            {creator}
+            {props.post.creator.name}
           </span>
         </div>
         <div className="absolute right-3 m-3 flex flex-row">
           <span className="text-xs pt-0.5 opacity-50">
             {new Date(props.post.date).toDateString()}
           </span>
-          {account?.id === creator && (
+          {account?.id === props.post.creator.id && (
             <PostViewDropdown
               backendService={props.backendService}
               post={props.post}
@@ -74,7 +72,7 @@ export default function PostView(props: {
 
       <div
         className="cursor-pointer"
-        onClick={() => navigate(`/post/${props.post.$id}`)}
+        onClick={() => navigate(`/post/${props.post.id}`)}
       >
         <div className="m-8 flex flex-col">
           <p className="mt-0 break-all">{props.post.message}</p>
