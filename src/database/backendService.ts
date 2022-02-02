@@ -1,5 +1,5 @@
 import { Models } from "appwrite";
-import axios from "axios";
+import axios, { AxiosRequestHeaders } from "axios";
 import { Account } from "./data/account";
 import { AccountPrefs } from "./data/accountPrefs";
 import { Post } from "./data/post";
@@ -11,12 +11,31 @@ export default class BackendService {
   constructor(url: string, port: number) {
     this.endpoint = `http://${url}:${port}`;
   }
-  async getAccount(): Promise<Account | null> {
-    console.log(this.bearerToken);
+
+  authHeader(): AxiosRequestHeaders | undefined {
     if (this.bearerToken) {
+      return { "x-auth-token": `Bearer ${this.bearerToken}` };
+    } else {
+      return {};
+    }
+  }
+
+  async getAccount(): Promise<Account | null> {
+    try {
+      console.log(this.bearerToken);
+      const response = await axios.get(`${this.endpoint}/user`, {
+        headers: this.authHeader(),
+      });
+
+      if (response.status !== 200) {
+        return null;
+      }
+
+      const data = response.data;
+
       return {
-        $id: "empty",
-        name: "empty",
+        $id: data.id,
+        name: data.name,
         registration: 0,
         status: true,
         passwordUpdate: 0,
@@ -24,7 +43,7 @@ export default class BackendService {
         emailVerification: false,
         prefs: await this.getAccountPrefs(),
       };
-    }
+    } catch (error) {}
     return null;
   }
 
