@@ -92,7 +92,9 @@ export default class BackendService {
         return [];
       }
 
-      return response.data;
+      return (response.data as Array<Post>).map((post) => {
+        return { ...post, date: new Date(post.date) };
+      });
     } catch (error) {}
     return [];
   }
@@ -106,7 +108,7 @@ export default class BackendService {
       if (response.status !== 200) {
         return null;
       }
-      return response.data as Post;
+      return { ...response.data, date: new Date(response.data.date) } as Post;
     } catch (error) {}
     return null;
   }
@@ -186,7 +188,7 @@ export default class BackendService {
         headers: this.authHeader(),
       });
 
-      console.log(response)
+      console.log(response);
 
       if (response.status !== 200) {
         return null;

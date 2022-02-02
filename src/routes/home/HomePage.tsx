@@ -39,7 +39,7 @@ export default function HomePage(props: { backendService: BackendService }) {
           ></CreatePostView>
           <div className="flex flex-col">
             {posts
-              .sort((a: Post, b: Post) => b.date - a.date)
+              .sort((a: Post, b: Post) => b.date.valueOf() - a.date.valueOf())
               .map((post) => (
                 <PostView
                   backendService={props.backendService}
