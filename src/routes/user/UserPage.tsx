@@ -54,10 +54,9 @@ export default function UserPage(props: { backendService: BackendService }) {
       <h1 className="pt-6 text-center text-5xl font-extrabold ">
         User: {userId}
       </h1>
-      {account.$id === user.$id && (
+      {account.id === user.id && (
         <>
           <h4 className="mt-6 text-center text-3xl">
-            ID: {getCreatorByWritePermission(user!.$write[0])}
             <br />
             Email: {account.email}
           </h4>

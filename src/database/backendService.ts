@@ -42,18 +42,7 @@ export default class BackendService {
         return null;
       }
 
-      const data = response.data;
-
-      return {
-        $id: data.id,
-        name: data.name,
-        registration: 0,
-        status: true,
-        passwordUpdate: 0,
-        email: "empty",
-        emailVerification: false,
-        prefs: await this.getAccountPrefs(),
-      };
+      return response.data;
     } catch (error) {}
     return null;
   }
@@ -102,6 +91,16 @@ export default class BackendService {
   async deletePost(postId: string) {}
 
   async getUserById(userId: string): Promise<User | null> {
+    try {
+      const response = await axios.get(`${this.endpoint}/user/${userId}`, {
+        headers: this.authHeader(),
+      });
+
+      if (response.status !== 200) {
+        return null;
+      }
+      return response.data as User;
+    } catch (error) {}
     return null;
   }
 

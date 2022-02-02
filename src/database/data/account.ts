@@ -1,3 +1,3 @@
-import type { Models } from "appwrite";
+import { User } from "./user";
 
-export type Account = Models.User<Models.Preferences>;
+export type Account = { email: string } & User;

@@ -1,3 +1,5 @@
-import type { Models } from "appwrite";
-
-export type User = { picture: string } & Models.Document;
+export type User = {
+  id: string;
+  name: string;
+  picture?: string;
+};

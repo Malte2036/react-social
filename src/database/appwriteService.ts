@@ -3,7 +3,7 @@ import { Account } from "./data/account";
 import { AccountPrefs } from "./data/accountPrefs";
 import { Post } from "./data/post";
 import { User } from "./data/user";
-
+/*
 export default class AppwriteService {
   postsCollectionId: string;
   usersCollectionId: string;
@@ -141,3 +141,4 @@ export default class AppwriteService {
     return this.appwrite.storage.getFileView(fileId);
   }
 }
+*/

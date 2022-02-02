@@ -63,7 +63,7 @@ export default function PostView(props: {
           <span className="text-xs pt-0.5 opacity-50">
             {new Date(props.post.date).toDateString()}
           </span>
-          {account?.$id === creator && (
+          {account?.id === creator && (
             <PostViewDropdown
               backendService={props.backendService}
               post={props.post}
