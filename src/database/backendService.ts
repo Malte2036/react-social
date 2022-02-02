@@ -79,7 +79,6 @@ export default class BackendService {
   }
 
   async getAllPosts(): Promise<Post[]> {
-    
     try {
       const response = await axios.get(`${this.endpoint}/posts`, {
         headers: this.authHeader(),
@@ -95,10 +94,30 @@ export default class BackendService {
   }
 
   async getPostById(postId: string): Promise<Post | null> {
+    try {
+      const response = await axios.get(`${this.endpoint}/post/${postId}`, {
+        headers: this.authHeader(),
+      });
+
+      if (response.status !== 200) {
+        return null;
+      }
+      return response.data as Post;
+    } catch (error) {}
     return null;
   }
 
-  async createPost(message: string, image?: string) {}
+  async createPost(message: string, image?: string) {
+    await axios.post(
+      `${this.endpoint}/post`,
+      {
+        message: message,
+      },
+      {
+        headers: this.authHeader(),
+      }
+    );
+  }
 
   async deletePost(postId: string) {}
 
