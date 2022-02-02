@@ -7,22 +7,33 @@ import { User } from "./data/user";
 
 export default class BackendService {
   endpoint: string;
-  bearerToken: string | null = null;
   constructor(url: string, port: number) {
     this.endpoint = `http://${url}:${port}`;
   }
 
   authHeader(): AxiosRequestHeaders | undefined {
-    if (this.bearerToken) {
-      return { "x-auth-token": `Bearer ${this.bearerToken}` };
+    const bearerToken = this.getBearerToken();
+    if (bearerToken) {
+      return { "x-auth-token": `Bearer ${bearerToken}` };
     } else {
       return {};
     }
   }
 
+  getBearerToken(): string | null {
+    return localStorage.getItem("bearerToken") ?? null;
+  }
+
+  setBearerToken(bearerToken: string | null) {
+    if (bearerToken) {
+      localStorage.setItem("bearerToken", bearerToken);
+    } else {
+      localStorage.removeItem("bearerToken");
+    }
+  }
+
   async getAccount(): Promise<Account | null> {
     try {
-      console.log(this.bearerToken);
       const response = await axios.get(`${this.endpoint}/user`, {
         headers: this.authHeader(),
       });
@@ -71,12 +82,11 @@ export default class BackendService {
       throw response.statusText;
     }
     console.log(`Logged in as ${response.data.user.name}`);
-    this.bearerToken = response.data.token;
-    console.log(this.bearerToken);
+    this.setBearerToken(response.data.token);
   }
 
   async logout() {
-    this.bearerToken = null;
+    this.setBearerToken(null);
   }
 
   async getAllPosts(): Promise<Post[]> {
