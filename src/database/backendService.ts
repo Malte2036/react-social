@@ -57,10 +57,13 @@ export default class BackendService {
   }
 
   async getAccountPrefs(): Promise<AccountPrefs> {
-    return { darkmode: true };
+    const prefs = localStorage.getItem("accountPrefs");
+    return prefs ? JSON.parse(prefs) : { darkmode: true };
   }
 
-  async updateAccountPrefs(accountPrefs: AccountPrefs) {}
+  async updateAccountPrefs(accountPrefs: AccountPrefs) {
+    localStorage.setItem("accountPrefs", JSON.stringify(accountPrefs));
+  }
 
   async login(email: string, password: string) {
     const response = await axios.post(`${this.endpoint}/auth/login`, {
