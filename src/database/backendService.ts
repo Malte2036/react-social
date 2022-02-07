@@ -15,7 +15,7 @@ export default class BackendService {
   authHeader(): AxiosRequestHeaders | undefined {
     const bearerToken = this.getBearerToken();
     if (bearerToken) {
-      return { "x-auth-token": `Bearer ${bearerToken}` };
+      return { Authorization: `Bearer ${bearerToken}` };
     } else {
       return {};
     }
@@ -35,7 +35,7 @@ export default class BackendService {
 
   async getAccount(): Promise<Account | null> {
     try {
-      const response = await axios.get(`${this.endpoint}/user`, {
+      const response = await axios.get(`${this.endpoint}/users`, {
         headers: this.authHeader(),
       });
 
@@ -71,11 +71,11 @@ export default class BackendService {
       email: email,
       password: password,
     });
-    if (response.status !== 200) {
+    if (response.status !== 201) {
       throw response.statusText;
     }
-    console.log(`Logged in as ${response.data.user.name}`);
-    this.setBearerToken(response.data.token);
+    console.log("Logged in!");
+    this.setBearerToken(response.data.access_token);
   }
 
   async logout() {
@@ -101,7 +101,7 @@ export default class BackendService {
 
   async getPostById(postId: string): Promise<Post | null> {
     try {
-      const response = await axios.get(`${this.endpoint}/post/${postId}`, {
+      const response = await axios.get(`${this.endpoint}/posts/${postId}`, {
         headers: this.authHeader(),
       });
 
@@ -130,7 +130,7 @@ export default class BackendService {
     }
 
     await axios.post(
-      `${this.endpoint}/post`,
+      `${this.endpoint}/posts`,
       {
         message: message,
         image: imageData,
@@ -145,7 +145,7 @@ export default class BackendService {
 
   async getUserById(userId: string): Promise<User | null> {
     try {
-      const response = await axios.get(`${this.endpoint}/user/${userId}`, {
+      const response = await axios.get(`${this.endpoint}/users/${userId}`, {
         headers: this.authHeader(),
       });
 
