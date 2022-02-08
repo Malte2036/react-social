@@ -1,5 +1,6 @@
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import BackendService from "../database/backendService";
+import Websocket from "../database/websocket";
 import useDarkmode from "../hooks/DarkmodeHook";
 import ErrorPage from "./error/ErrorPage";
 import HomePage from "./home/HomePage";
@@ -10,6 +11,10 @@ import WelcomePage from "./welcome/WelcomePage";
 
 export default function App() {
   const backendService = new BackendService(
+    process.env.REACT_APP_BACKEND_URL!,
+    Number.parseInt(process.env.REACT_APP_BACKEND_PORT!)
+  );
+  const webhook = new Websocket(
     process.env.REACT_APP_BACKEND_URL!,
     Number.parseInt(process.env.REACT_APP_BACKEND_PORT!)
   );
