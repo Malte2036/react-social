@@ -49,12 +49,15 @@ export default class BackendService {
   }
 
   async createAccount(email: string, username: string, password: string) {
-    await axios.post(`${this.endpoint}/auth/register`, {
+    const response = await axios.post(`${this.endpoint}/auth/register`, {
       email: email,
       name: username,
       password: password,
     });
-    await this.login(email, password);
+    if (response.status !== 201) {
+      throw response.statusText;
+    }
+    this.setBearerToken(response.data.access_token);
   }
 
   async getAccountPrefs(): Promise<AccountPrefs> {
