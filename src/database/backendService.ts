@@ -112,10 +112,9 @@ export default class BackendService {
       if (response.status !== 200) {
         return null;
       }
-      return {
-        ...response.data,
-        createdAt: new Date(response.data.date),
-      } as Post;
+      response.data.createdAt = new Date(response.data.createdAt);
+
+      return response.data as Post;
     } catch (error) {}
     return null;
   }
