@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import BackendService from "../../database/backendService";
 import PostView from "../../components/PostView";
@@ -6,10 +6,15 @@ import { Post } from "../../database/data/post";
 import CreatePostView from "../../components/CreatePostView";
 import useAccount from "../../hooks/AccountHook";
 import Button from "../../components/Button";
+import { SocketContext } from "../../contexts/SocketContext";
 
 export default function HomePage(props: { backendService: BackendService }) {
   const [account] = useAccount(props.backendService);
   const [posts, setPosts] = useState<Post[] | undefined>(undefined);
+
+  const socket = useContext(SocketContext);
+
+  let navigate = useNavigate();
 
   useEffect(() => {
     if (account === null) {
@@ -20,10 +25,21 @@ export default function HomePage(props: { backendService: BackendService }) {
       setPosts(await props.backendService.getAllPosts());
     }
 
-    getPosts();
-  }, [account]);
+    if (posts === undefined) {
+      getPosts();
+    }
+  }, [account, navigate, posts, props.backendService, socket]);
 
-  let navigate = useNavigate();
+  useEffect(() => {
+    socket.on("posts", (post: Post) => {
+      const postsCopy = posts !== undefined ? [...posts] : [];
+      postsCopy.push(post);
+      setPosts(postsCopy);
+    });
+    return () => {
+      socket.off("posts");
+    };
+  });
 
   if (account == null || posts === undefined) {
     return <></>;
@@ -39,7 +55,10 @@ export default function HomePage(props: { backendService: BackendService }) {
           ></CreatePostView>
           <div className="flex flex-col">
             {posts
-              .sort((a: Post, b: Post) => b.date.valueOf() - a.date.valueOf())
+              .sort(
+                (a: Post, b: Post) =>
+                  b.createdAt.valueOf() - a.createdAt.valueOf()
+              )
               .map((post) => (
                 <PostView
                   backendService={props.backendService}

@@ -4,7 +4,7 @@ import { User } from "./user";
 export type Post = {
   id: string;
   message: string;
-  date: Date;
+  createdAt: Date;
   image?: MyFile;
   creator: User;
 };

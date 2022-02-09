@@ -14,7 +14,7 @@ export default function CreatePostView(props: {
     try {
       await props.backendService.createPost(message, image ?? undefined);
 
-      window.location.reload();
+      //window.location.reload();
     } catch (error) {
       alert(`Error ${error}`);
     }

@@ -7,13 +7,19 @@ export default class Websocket {
 
     this.socket.on("connect", () => {
       console.log(this.socket.connected); // x8WIv7-mJelg7on_ALbx
-      this.socket.emit("events", { test: "test" });
+      this.socket.emit("identity", { test: "test" });
+      this.socket.emit("createPost", { message: "test" });
     });
     this.socket.on("disconnect", () => {
       console.log(this.socket.connected); // undefined
     });
-    this.socket.on("data", () => {
-      console.log("data");
+    this.socket.on("posts", (data) => {
+      console.log("posts");
+      console.log(data)
+    });
+    this.socket.on("identity", (data) => {
+      console.log("identity");
+      console.log(data)
     });
   }
 }

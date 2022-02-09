@@ -96,7 +96,7 @@ export default class BackendService {
       }
 
       return (response.data as Array<Post>).map((post) => {
-        return { ...post, date: new Date(post.date) };
+        return { ...post, date: new Date(post.createdAt) };
       });
     } catch (error) {}
     return [];
@@ -111,7 +111,7 @@ export default class BackendService {
       if (response.status !== 200) {
         return null;
       }
-      return { ...response.data, date: new Date(response.data.date) } as Post;
+      return { ...response.data, createdAt: new Date(response.data.date) } as Post;
     } catch (error) {}
     return null;
   }
