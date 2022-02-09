@@ -14,26 +14,6 @@ export default function PostView(props: {
 }) {
   const [account] = useAccount(props.backendService);
 
-  const [profilePicture, setProfilePicture] = useState<
-    string | null | undefined
-  >(() => {
-    /*const user = props.post.creator;
-    if (user == null || user.picture == null) {
-      setProfilePicture(null);
-      return;
-    }
-    try {
-      const url = await props.backendService.getFileById(user.picture);
-      setProfilePicture(url.toString());
-    } catch (error) {
-      setProfilePicture(null);
-    }*/
-    return undefined;
-  });
-  const [postImage, setPostImage] = useState<MyFile | null | undefined>(
-    () => props.post.image
-  );
-
   let navigate = useNavigate();
 
   return (
@@ -41,7 +21,7 @@ export default function PostView(props: {
       <div className="relative h-12 border-b-2 border-gray-200 dark:border-gray-900">
         <div className="absolute left-0 m-2 flex flex-row">
           <ProfilePicture
-            image={profilePicture !== undefined ? profilePicture : null}
+            image={props.post.creator.image || null}
           ></ProfilePicture>
           <span
             className="m-1 ml-2 cursor-pointer"
@@ -69,8 +49,8 @@ export default function PostView(props: {
       >
         <div className="m-8 flex flex-col">
           <p className="mt-0 break-all">{props.post.message}</p>
-          {postImage != null && (
-            <PostViewImage image={postImage}></PostViewImage>
+          {props.post.image != null && (
+            <PostViewImage image={props.post.image}></PostViewImage>
           )}
         </div>
       </div>

@@ -168,10 +168,26 @@ export default class BackendService {
   }
 
   async setCurrentUserProfilePicture(picture: File) {
-    await this.uploadFile(picture);
+    const base64 = await new Promise<string>((resolve, reject) => {
+      const reader = new FileReader();
+      reader.readAsDataURL(picture);
+      reader.onload = () => resolve(reader.result?.toString() || "");
+      reader.onerror = (error) => reject(error);
+    });
+    return await axios.post(
+      `${this.endpoint}/users/image`,
+      {
+        name: picture.name,
+        data: base64,
+        mimeType: picture.type,
+      },
+      {
+        headers: this.authHeader(),
+      }
+    );
   }
 
-  async uploadFile(file: File): Promise<MyFile> {
+  /*async uploadFile(file: File): Promise<MyFile> {
     const base64 = await new Promise<string>((resolve, reject) => {
       const reader = new FileReader();
       reader.readAsDataURL(file);
@@ -190,7 +206,7 @@ export default class BackendService {
         headers: this.authHeader(),
       }
     );
-  }
+  }*/
 
   async getFileById(fileId: string): Promise<MyFile | null> {
     try {

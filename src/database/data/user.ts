@@ -1,5 +1,7 @@
+import { MyFile } from "./myFile";
+
 export type User = {
   id: string;
   name: string;
-  picture?: string;
+  image?: MyFile;
 };
