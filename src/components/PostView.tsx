@@ -1,7 +1,5 @@
-import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import BackendService from "../database/backendService";
-import { MyFile } from "../database/data/myFile";
 import { Post } from "../database/data/post";
 import useAccount from "../hooks/AccountHook";
 import PostViewDropdown from "./PostViewDropdown";

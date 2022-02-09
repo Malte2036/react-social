@@ -34,7 +34,7 @@ export default class BackendService {
 
   async getAccount(): Promise<Account | null> {
     try {
-      const response = await axios.get(`${this.endpoint}/users`, {
+      const response = await axios.get(`${this.endpoint}/users/account`, {
         headers: this.authHeader(),
       });
 
@@ -42,7 +42,7 @@ export default class BackendService {
         return null;
       }
 
-      return response.data[0];
+      return response.data;
     } catch (error) {}
     return null;
   }
