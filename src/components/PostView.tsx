@@ -52,7 +52,7 @@ export default function PostView(props: {
         </div>
         <div className="absolute right-3 m-3 flex flex-row">
           <span className="text-xs pt-0.5 opacity-50">
-            {new Date(props.post.createdAt).toDateString()}
+            {props.post.createdAt.toDateString()}
           </span>
           {account?.id === props.post.creator.id && (
             <PostViewDropdown

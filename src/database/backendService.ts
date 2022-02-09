@@ -1,4 +1,3 @@
-import { Models } from "appwrite";
 import axios, { AxiosRequestHeaders } from "axios";
 import { Account } from "./data/account";
 import { AccountPrefs } from "./data/accountPrefs";
@@ -95,9 +94,11 @@ export default class BackendService {
         return [];
       }
 
-      return (response.data as Array<Post>).map((post) => {
-        return { ...post, date: new Date(post.createdAt) };
+      response.data.map((data: any) => {
+        data.createdAt = new Date(data.createdAt);
+        return data;
       });
+      return response.data as Array<Post>;
     } catch (error) {}
     return [];
   }
@@ -111,7 +112,10 @@ export default class BackendService {
       if (response.status !== 200) {
         return null;
       }
-      return { ...response.data, createdAt: new Date(response.data.date) } as Post;
+      return {
+        ...response.data,
+        createdAt: new Date(response.data.date),
+      } as Post;
     } catch (error) {}
     return null;
   }

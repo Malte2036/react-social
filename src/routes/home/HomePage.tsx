@@ -32,6 +32,8 @@ export default function HomePage(props: { backendService: BackendService }) {
 
   useEffect(() => {
     socket.on("posts", (post: Post) => {
+      post.createdAt = new Date(post.createdAt);
+
       const postsCopy = posts !== undefined ? [...posts] : [];
       postsCopy.push(post);
       setPosts(postsCopy);
