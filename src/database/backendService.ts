@@ -42,7 +42,7 @@ export default class BackendService {
         return null;
       }
 
-      return response.data;
+      return response.data[0];
     } catch (error) {}
     return null;
   }
