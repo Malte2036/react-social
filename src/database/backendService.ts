@@ -148,7 +148,11 @@ export default class BackendService {
     );
   }
 
-  async deletePost(postId: string) {}
+  async deletePost(postId: string) {
+    await axios.delete(`${this.endpoint}/posts/${postId}`, {
+      headers: this.authHeader(),
+    });
+  }
 
   async getUserById(userId: string): Promise<User | null> {
     try {
