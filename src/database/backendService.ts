@@ -8,7 +8,7 @@ import { User } from "./data/user";
 export default class BackendService {
   endpoint: string;
   constructor(url: string, port: number) {
-    this.endpoint = `http://${url}:${port}`;
+    this.endpoint = `${url}:${port}`;
   }
 
   authHeader(): AxiosRequestHeaders | undefined {
