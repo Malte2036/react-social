@@ -13,8 +13,9 @@ export default function CreatePostView(props: {
     event.preventDefault();
     try {
       await props.backendService.createPost(message, image ?? undefined);
-
-      //window.location.reload();
+      setActive(false);
+      setMessage("");
+      setImage(null);
     } catch (error) {
       alert(`Error ${error}`);
     }
