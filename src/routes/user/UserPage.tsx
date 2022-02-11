@@ -20,12 +20,12 @@ export default function UserPage(props: { backendService: BackendService }) {
     }
 
     async function fetchUser() {
-      if (userId == null) {
+      if (userId == null || isNaN(Number(userId))) {
         navigate("/home");
         return;
       }
 
-      setUser(await props.backendService.getUserById(userId));
+      setUser(await props.backendService.getUserById(Number(userId)));
     }
 
     fetchUser();

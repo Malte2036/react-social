@@ -1,7 +1,5 @@
-import { MyFile } from "./myFile";
-
 export type User = {
-  id: string;
+  id: number;
   name: string;
-  image?: MyFile;
+  imageId: number | null;
 };

@@ -147,13 +147,13 @@ export default class BackendService {
     );
   }
 
-  async deletePost(postId: string) {
+  async deletePost(postId: number) {
     await axios.delete(`${this.endpoint}/posts/${postId}`, {
       headers: this.authHeader(),
     });
   }
 
-  async getUserById(userId: string): Promise<User | null> {
+  async getUserById(userId: number): Promise<User | null> {
     try {
       const response = await axios.get(`${this.endpoint}/users/${userId}`, {
         headers: this.authHeader(),
@@ -208,13 +208,11 @@ export default class BackendService {
     );
   }*/
 
-  async getFileById(fileId: string): Promise<MyFile | null> {
+  async getFileById(fileId: number): Promise<MyFile | null> {
     try {
-      const response = await axios.get(`${this.endpoint}/file/${fileId}`, {
+      const response = await axios.get(`${this.endpoint}/files/${fileId}`, {
         headers: this.authHeader(),
       });
-
-      console.log(response);
 
       if (response.status !== 200) {
         return null;

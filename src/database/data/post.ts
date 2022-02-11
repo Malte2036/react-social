@@ -1,10 +1,9 @@
-import { MyFile } from "./myFile";
 import { User } from "./user";
 
 export type Post = {
-  id: string;
+  id: number;
   message: string;
   createdAt: Date;
-  image?: MyFile;
-  creator: User;
+  imageId: number | null;
+  creatorId: number;
 };

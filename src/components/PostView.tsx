@@ -1,6 +1,8 @@
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import BackendService from "../database/backendService";
 import { Post } from "../database/data/post";
+import { User } from "../database/data/user";
 import useAccount from "../hooks/AccountHook";
 import PostViewDropdown from "./PostViewDropdown";
 import PostViewImage from "./PostViewImage";
@@ -11,6 +13,15 @@ export default function PostView(props: {
   post: Post;
 }) {
   const [account] = useAccount(props.backendService);
+  const [creator, setCreator] = useState<User | null | undefined>(undefined);
+
+  useEffect(() => {
+    if (creator === undefined) {
+      props.backendService
+        .getUserById(props.post.creatorId!)
+        .then((user) => setCreator(user));
+    }
+  });
 
   let navigate = useNavigate();
 
@@ -19,20 +30,21 @@ export default function PostView(props: {
       <div className="relative h-12 border-b-2 border-gray-200 dark:border-gray-900">
         <div className="absolute left-0 m-2 flex flex-row">
           <ProfilePicture
-            image={props.post.creator.image || null}
+            backendService={props.backendService}
+            imageId={creator?.imageId || null}
           ></ProfilePicture>
           <span
             className="m-1 ml-2 cursor-pointer"
-            onClick={() => navigate(`/user/${props.post.creator.id}`)}
+            onClick={() => navigate(`/user/${props.post.creatorId}`)}
           >
-            {props.post.creator.name}
+            {creator?.name}
           </span>
         </div>
         <div className="absolute right-3 m-3 flex flex-row">
           <span className="text-xs pt-0.5 opacity-50">
             {props.post.createdAt.toDateString()}
           </span>
-          {account?.id === props.post.creator.id && (
+          {account?.id === props.post.creatorId && (
             <PostViewDropdown
               backendService={props.backendService}
               post={props.post}
@@ -47,8 +59,11 @@ export default function PostView(props: {
       >
         <div className="m-8 flex flex-col">
           <p className="mt-0 break-all">{props.post.message}</p>
-          {props.post.image != null && (
-            <PostViewImage image={props.post.image}></PostViewImage>
+          {props.post.imageId != null && (
+            <PostViewImage
+              backendService={props.backendService}
+              imageId={props.post.imageId}
+            ></PostViewImage>
           )}
         </div>
       </div>
