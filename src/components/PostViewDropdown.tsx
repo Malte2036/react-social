@@ -37,7 +37,7 @@ export default function PostViewDropdown(props: {
                 <span
                   onClick={async () => {
                     await props.backendService.deletePost(props.post.id);
-                    navigate(`/home`);
+                    navigate(`/`);
                   }}
                   className={"block px-4 py-2 text-sm cursor-pointer ".concat(
                     active ? "bg-gray-200 text-gray-900" : "dark:text-gray-200"
