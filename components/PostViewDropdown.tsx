@@ -1,15 +1,15 @@
 import { Menu, Transition } from "@headlessui/react";
 import { ChevronDownIcon } from "@heroicons/react/solid";
 import { Fragment } from "react";
-import { useNavigate } from "react-router-dom";
-import BackendService from "../database/backendService";
-import { Post } from "../database/data/post";
+//import { useNavigate } from "react-router-dom";
+import BackendService from "../lib/database/backendService";
+import { Post } from "../lib/database/data/post";
 
 export default function PostViewDropdown(props: {
   backendService: BackendService;
   post: Post;
 }) {
-  let navigate = useNavigate();
+  //let navigate = useNavigate();
   return (
     <Menu as="div" className="relative inline-block text-left">
       <div>
@@ -37,7 +37,7 @@ export default function PostViewDropdown(props: {
                 <span
                   onClick={async () => {
                     await props.backendService.deletePost(props.post.id);
-                    navigate(`/`);
+                    //navigate(`/`);
                   }}
                   className={"block px-4 py-2 text-sm cursor-pointer ".concat(
                     active ? "bg-gray-200 text-gray-900" : "dark:text-gray-200"

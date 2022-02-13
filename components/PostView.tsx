@@ -1,12 +1,12 @@
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import BackendService from "../database/backendService";
-import { Post } from "../database/data/post";
-import { User } from "../database/data/user";
-import useAccount from "../hooks/AccountHook";
+import BackendService from "../lib/database/backendService";
+import { Post } from "../lib/database/data/post";
+import { User } from "../lib/database/data/user";
+import useAccount from "../lib/hooks/AccountHook";
 import PostViewDropdown from "./PostViewDropdown";
 import PostViewImage from "./PostViewImage";
 import ProfilePicture from "./ProfilePicture";
+import Link from "next/link";
 
 export default function PostView(props: {
   backendService: BackendService;
@@ -23,8 +23,6 @@ export default function PostView(props: {
     }
   });
 
-  let navigate = useNavigate();
-
   return (
     <div className="bg-white dark:bg-slate-800 rounded-lg my-3 shadow-xl">
       <div className="relative h-12 border-b-2 border-gray-200 dark:border-gray-900">
@@ -33,12 +31,9 @@ export default function PostView(props: {
             backendService={props.backendService}
             imageId={creator?.imageId || null}
           ></ProfilePicture>
-          <span
-            className="m-1 ml-2 cursor-pointer"
-            onClick={() => navigate(`/user/${props.post.creatorId}`)}
-          >
-            {creator?.name}
-          </span>
+          <Link href={`/user/${props.post.creatorId}`}>
+            <span className="m-1 ml-2 cursor-pointer">{creator?.name}</span>
+          </Link>
         </div>
         <div className="absolute right-3 m-3 flex flex-row">
           <span className="text-xs pt-0.5 opacity-50">
@@ -53,20 +48,19 @@ export default function PostView(props: {
         </div>
       </div>
 
-      <div
-        className="cursor-pointer"
-        onClick={() => navigate(`/post/${props.post.id}`)}
-      >
-        <div className="m-8 flex flex-col">
-          <p className="mt-0 break-all">{props.post.message}</p>
-          {props.post.imageId != null && (
-            <PostViewImage
-              backendService={props.backendService}
-              imageId={props.post.imageId}
-            ></PostViewImage>
-          )}
+      <Link href={`/post/${props.post.id}`}>
+        <div className="cursor-pointer">
+          <div className="m-8 flex flex-col">
+            <p className="mt-0 break-all">{props.post.message}</p>
+            {props.post.imageId != null && (
+              <PostViewImage
+                backendService={props.backendService}
+                imageId={props.post.imageId}
+              ></PostViewImage>
+            )}
+          </div>
         </div>
-      </div>
+      </Link>
     </div>
   );
 }
