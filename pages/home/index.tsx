@@ -9,18 +9,16 @@ import Button from "../../components/Button";
 import { SocketContext } from "../../lib/contexts/SocketContext";
 
 export async function getServerSideProps(context) {
-  const backendService = new BackendService("http://localhost", 8000);
-  const posts = await backendService.getAllPosts();
-  for(let i = 0; i < 10; i++){
+  const backendService = new BackendService(
+    process.env.NEXT_PUBLIC_REACT_APP_BACKEND_URL!,
+    Number.parseInt(process.env.NEXT_PUBLIC_REACT_APP_BACKEND_PORT!)
+  );
+  let posts = await backendService.getAllPosts();
 
-    posts.push({
-      id: i,
-      message: `test ${i}`,
-      createdAt: "test",
-      imageId: null,
-      creatorId: i,
-    });
-  }
+  posts = posts.map((post) => ({
+    ...post,
+    createdAt: post.createdAt.toString(),
+  }));
 
   return {
     props: { posts }, // will be passed to the page component as props
@@ -28,8 +26,10 @@ export async function getServerSideProps(context) {
 }
 
 export default function HomePage(props: { posts: Post[] }) {
-  //const [account] = useAccount(backendService);
-  const backendService = new BackendService("http://localhost", 8000);
+  const backendService = new BackendService(
+    process.env.NEXT_PUBLIC_REACT_APP_BACKEND_URL!,
+    Number.parseInt(process.env.NEXT_PUBLIC_REACT_APP_BACKEND_PORT!)
+  );
   const [posts, setPosts] = useState<Post[]>(() =>
     props.posts.map((post) => ({
       ...post,
@@ -37,7 +37,7 @@ export default function HomePage(props: { posts: Post[] }) {
     }))
   );
 
-  //const socket = useContext(SocketContext);
+  const socket = useContext(SocketContext);
 
   //let navigate = useNavigate();
 
@@ -57,7 +57,7 @@ export default function HomePage(props: { posts: Post[] }) {
     } [account, navigate, posts, backendService, socket]
   );*/
 
-  /*useEffect(() => {
+  useEffect(() => {
     socket.on("posts", (post: Post) => {
       post.createdAt = new Date(post.createdAt);
 
@@ -68,7 +68,7 @@ export default function HomePage(props: { posts: Post[] }) {
     return () => {
       socket.off("posts");
     };
-  });*/
+  });
 
   /*if (account == null || posts === undefined) {
     return <></>;

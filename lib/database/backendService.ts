@@ -21,6 +21,7 @@ export default class BackendService {
   }
 
   getBearerToken(): string | null {
+    return null
     return localStorage.getItem("bearerToken") ?? null;
   }
 
@@ -99,7 +100,9 @@ export default class BackendService {
         return data;
       });
       return response.data as Array<Post>;
-    } catch (error) {}
+    } catch (error) {
+      console.log(error)
+    }
     return [];
   }
 
