@@ -1,16 +1,42 @@
-import { useRouter } from "next/router";
 import React from "react";
 import LoginForm from "../../components/welcome/LoginForm";
 import RegisterForm from "../../components/welcome/RegisterForm";
 import BackendService from "../../lib/database/backendService";
 import { useCookies } from "react-cookie";
+import { parseCookies } from "../../helpers";
+import { Account } from "../../lib/database/data/account";
 
 enum welcomeStateType {
   login,
   register,
 }
 
-export default function WelcomePage(props: { backendService: BackendService }) {
+export async function getServerSideProps({ req }) {
+  const cookies = parseCookies(req);
+  const bearerToken = cookies.bearerToken;
+
+  const backendService = new BackendService(
+    process.env.NEXT_PUBLIC_REACT_APP_BACKEND_URL!,
+    Number.parseInt(process.env.NEXT_PUBLIC_REACT_APP_BACKEND_PORT!)
+  );
+
+  const account = await backendService.getAccount(bearerToken);
+  if (account) {
+    return {
+      redirect: {
+        permanent: false,
+        destination: "/home",
+      },
+      props: {},
+    };
+  }
+
+  return {
+    props: { account },
+  };
+}
+
+export default function WelcomePage(props: { account: Account }) {
   const [cookie] = useCookies(["bearerToken"]);
 
   const backendService = new BackendService(
@@ -18,24 +44,11 @@ export default function WelcomePage(props: { backendService: BackendService }) {
     Number.parseInt(process.env.NEXT_PUBLIC_REACT_APP_BACKEND_PORT!)
   );
   const [welcomeState, setWelcomeState] =
-    React.useState<welcomeStateType | null>(() => {
-      backendService
-        .getAccount(cookie.bearerToken)
-        .then(async (loggedinAccount) => {
-          if (loggedinAccount == null) {
-            setWelcomeState(welcomeStateType.login);
-            return;
-          }
-          router.push("/home");
-        });
-      return null;
-    });
+    React.useState<welcomeStateType | null>(() => welcomeStateType.login);
 
   const [username, setUsername] = React.useState("");
   const [email, setEmail] = React.useState("");
   const [password, setPassword] = React.useState("");
-
-  let router = useRouter();
 
   return (
     <div className="min-h-screen flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
