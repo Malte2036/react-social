@@ -3,6 +3,7 @@ import { LockClosedIcon } from "@heroicons/react/solid";
 import InputField from "../../components/form/InputField";
 import BackendService from "../../lib/database/backendService";
 import { useRouter } from "next/router";
+import { useCookies } from "react-cookie";
 
 export default function LoginForm(props: {
   backendService: BackendService;
@@ -11,13 +12,17 @@ export default function LoginForm(props: {
   password: string;
   setPassword: Dispatch<SetStateAction<string>>;
 }) {
-    let router = useRouter()
+  let router = useRouter();
+  const [cookie, setCookie] = useCookies(["bearerToken"]);
 
   async function onSubmitHandler(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
     try {
-      await props.backendService.login(props.email, props.password);
-
+      const bearerToken = await props.backendService.login(
+        props.email,
+        props.password
+      );
+      setCookie("bearerToken", bearerToken);
       router.push("/home");
     } catch (error) {
       alert(`Error ${error}`);

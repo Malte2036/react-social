@@ -3,6 +3,7 @@ import { useRouter } from "next/router";
 import React, { Dispatch, SetStateAction } from "react";
 import InputField from "../../components/form/InputField";
 import BackendService from "../../lib/database/backendService";
+import { useCookies } from "react-cookie";
 
 export default function RegisterForm(props: {
   backendService: BackendService;
@@ -14,15 +15,17 @@ export default function RegisterForm(props: {
   setPassword: Dispatch<SetStateAction<string>>;
 }) {
   let router = useRouter();
+  const [cookie, setCookie] = useCookies(["bearerToken"]);
 
   async function onSubmitHandler(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
     try {
-      await props.backendService.createAccount(
+      const bearerToken = await props.backendService.createAccount(
         props.email,
         props.username,
         props.password
       );
+      setCookie("bearerToken", bearerToken);
 
       router.push("/home");
     } catch (error) {

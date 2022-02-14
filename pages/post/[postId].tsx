@@ -5,15 +5,19 @@ import PostView from "../../components/PostView";
 import BackendService from "../../lib/database/backendService";
 import { Post } from "../../lib/database/data/post";
 import { User } from "../../lib/database/data/user";
+import { parseCookies } from "../../helpers";
 
-export async function getServerSideProps(context) {
-  const { postId } = context.query;
+export async function getServerSideProps({ req, query }) {
+  const cookies = parseCookies(req);
+  const bearerToken = cookies.bearerToken;
+
+  const { postId } = query;
 
   const backendService = new BackendService(
     process.env.NEXT_PUBLIC_REACT_APP_BACKEND_URL!,
     Number.parseInt(process.env.NEXT_PUBLIC_REACT_APP_BACKEND_PORT!)
   );
-  let post = await backendService.getPostById(postId.toString());
+  let post = await backendService.getPostById(postId.toString(), bearerToken);
   if (post === null) {
     return {
       redirect: {
@@ -26,7 +30,7 @@ export async function getServerSideProps(context) {
 
   post.createdAt = post.createdAt.toString();
 
-  const creator = await backendService.getUserById(post.creatorId);
+  const creator = await backendService.getUserById(post.creatorId, bearerToken);
 
   return {
     props: { post, creator }, // will be passed to the page component as props

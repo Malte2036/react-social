@@ -1,18 +1,20 @@
 import { useEffect, useState } from "react";
-import BackendService from "../database/backendService";
-import { MyFile } from "../database/data/myFile";
+import { useCookies } from "react-cookie";
+import BackendService from "../lib/database/backendService";
+import { MyFile } from "../lib/database/data/myFile";
 
 export default function ProfilePicture(props: {
   backendService: BackendService;
   imageId: number | null;
 }) {
+  const [cookie] = useCookies(["bearerToken"]);
   const [image, setImage] = useState<MyFile | null | undefined>(
     props.imageId === null ? null : undefined
   );
   useEffect(() => {
     if (image === undefined) {
       props.backendService
-        .getFileById(props.imageId!)
+        .getFileById(props.imageId!, cookie.bearerToken)
         .then((myFile) => setImage(myFile));
     }
   }, [image, props.backendService, props.imageId]);

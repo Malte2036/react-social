@@ -1,6 +1,7 @@
 import type { AppProps } from "next/app";
 import BackendService from "../lib/database/backendService";
 import useDarkmode from "../lib/hooks/DarkmodeHook";
+import { CookiesProvider } from "react-cookie";
 import "./styles/globals.css";
 
 export default function MyApp({ Component, pageProps }: AppProps) {
@@ -11,10 +12,12 @@ export default function MyApp({ Component, pageProps }: AppProps) {
 
   const [darkmode, setDarkmode] = useDarkmode(backendService);
   return (
-    <div className={darkmode ? "dark" : ""}>
-      <div className="min-h-screen dark:text-white bg-gray-200 dark:bg-slate-900">
-        <Component {...pageProps} />
+    <CookiesProvider>
+      <div className={darkmode ? "dark" : ""}>
+        <div className="min-h-screen dark:text-white bg-gray-200 dark:bg-slate-900">
+          <Component {...pageProps} />
+        </div>
       </div>
-    </div>
+    </CookiesProvider>
   );
 }

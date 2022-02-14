@@ -4,6 +4,7 @@ import { AccountPrefs } from "./data/accountPrefs";
 import { MyFile } from "./data/myFile";
 import { Post } from "./data/post";
 import { User } from "./data/user";
+import { useCookies } from "react-cookie";
 
 export default class BackendService {
   endpoint: string;
@@ -11,8 +12,7 @@ export default class BackendService {
     this.endpoint = `${url}:${port}`;
   }
 
-  authHeader(): AxiosRequestHeaders | undefined {
-    const bearerToken = this.getBearerToken();
+  authHeader(bearerToken: string): AxiosRequestHeaders | undefined {
     if (bearerToken) {
       return { Authorization: `Bearer ${bearerToken}` };
     } else {
@@ -20,23 +20,24 @@ export default class BackendService {
     }
   }
 
-  getBearerToken(): string | null {
-    return null
+  /*getBearerToken(): string | null {
+    return null;
     return localStorage.getItem("bearerToken") ?? null;
   }
 
   setBearerToken(bearerToken: string | null) {
+    const [cookie, setCookie] = useCookies(["user"]);
     if (bearerToken) {
       localStorage.setItem("bearerToken", bearerToken);
     } else {
       localStorage.removeItem("bearerToken");
     }
-  }
+  }*/
 
-  async getAccount(): Promise<Account | null> {
+  async getAccount(bearerToken: string): Promise<Account | null> {
     try {
       const response = await axios.get(`${this.endpoint}/users/account`, {
-        headers: this.authHeader(),
+        headers: this.authHeader(bearerToken),
       });
 
       if (response.status !== 200) {
@@ -48,7 +49,11 @@ export default class BackendService {
     return null;
   }
 
-  async createAccount(email: string, username: string, password: string) {
+  async createAccount(
+    email: string,
+    username: string,
+    password: string
+  ): Promise<string> {
     const response = await axios.post(`${this.endpoint}/auth/register`, {
       email: email,
       name: username,
@@ -57,11 +62,11 @@ export default class BackendService {
     if (response.status !== 201) {
       throw response.statusText;
     }
-    this.setBearerToken(response.data.access_token);
+    return response.data.access_token;
   }
 
   async getAccountPrefs(): Promise<AccountPrefs> {
-    return  { darkmode: true };
+    return { darkmode: true };
     /*const prefs = localStorage.getItem("accountPrefs");
     return prefs ? JSON.parse(prefs) : { darkmode: true };*/
   }
@@ -70,7 +75,7 @@ export default class BackendService {
     localStorage.setItem("accountPrefs", JSON.stringify(accountPrefs));
   }
 
-  async login(email: string, password: string) {
+  async login(email: string, password: string): Promise<string> {
     const response = await axios.post(`${this.endpoint}/auth/login`, {
       email: email,
       password: password,
@@ -79,17 +84,17 @@ export default class BackendService {
       throw response.statusText;
     }
     console.log("Logged in!");
-    this.setBearerToken(response.data.access_token);
+    return response.data.access_token;
   }
 
   async logout() {
-    this.setBearerToken(null);
+    //this.setBearerToken(null);
   }
 
-  async getAllPosts(): Promise<Post[]> {
+  async getAllPosts(bearerToken: string): Promise<Post[]> {
     try {
       const response = await axios.get(`${this.endpoint}/posts`, {
-        headers: this.authHeader(),
+        headers: this.authHeader(bearerToken),
       });
 
       if (response.status !== 200) {
@@ -102,15 +107,15 @@ export default class BackendService {
       });
       return response.data as Array<Post>;
     } catch (error) {
-      console.log(error)
+      console.log(error);
     }
     return [];
   }
 
-  async getPostById(postId: string): Promise<Post | null> {
+  async getPostById(postId: string, bearerToken: string): Promise<Post | null> {
     try {
       const response = await axios.get(`${this.endpoint}/posts/${postId}`, {
-        headers: this.authHeader(),
+        headers: this.authHeader(bearerToken),
       });
 
       if (response.status !== 200) {
@@ -123,7 +128,7 @@ export default class BackendService {
     return null;
   }
 
-  async createPost(message: string, image?: File) {
+  async createPost(message: string, image?: File, bearerToken: string) {
     let imageData = undefined;
     if (image) {
       const base64 = await new Promise<string>((resolve, reject) => {
@@ -146,21 +151,21 @@ export default class BackendService {
         image: imageData,
       },
       {
-        headers: this.authHeader(),
+        headers: this.authHeader(bearerToken),
       }
     );
   }
 
-  async deletePost(postId: number) {
+  async deletePost(postId: number, bearerToken: string) {
     await axios.delete(`${this.endpoint}/posts/${postId}`, {
-      headers: this.authHeader(),
+      headers: this.authHeader(bearerToken),
     });
   }
 
-  async getUserById(userId: number): Promise<User | null> {
+  async getUserById(userId: number, bearerToken: string): Promise<User | null> {
     try {
       const response = await axios.get(`${this.endpoint}/users/${userId}`, {
-        headers: this.authHeader(),
+        headers: this.authHeader(bearerToken),
       });
 
       if (response.status !== 200) {
@@ -171,7 +176,7 @@ export default class BackendService {
     return null;
   }
 
-  async setCurrentUserProfilePicture(picture: File) {
+  async setCurrentUserProfilePicture(picture: File, bearerToken: string) {
     const base64 = await new Promise<string>((resolve, reject) => {
       const reader = new FileReader();
       reader.readAsDataURL(picture);
@@ -186,7 +191,7 @@ export default class BackendService {
         mimeType: picture.type,
       },
       {
-        headers: this.authHeader(),
+        headers: this.authHeader(bearerToken),
       }
     );
   }
@@ -212,10 +217,13 @@ export default class BackendService {
     );
   }*/
 
-  async getFileById(fileId: number): Promise<MyFile | null> {
+  async getFileById(
+    fileId: number,
+    bearerToken: string
+  ): Promise<MyFile | null> {
     try {
       const response = await axios.get(`${this.endpoint}/files/${fileId}`, {
-        headers: this.authHeader(),
+        headers: this.authHeader(bearerToken),
       });
 
       if (response.status !== 200) {

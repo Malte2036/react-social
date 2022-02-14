@@ -3,6 +3,7 @@ import React from "react";
 import LoginForm from "../../components/welcome/LoginForm";
 import RegisterForm from "../../components/welcome/RegisterForm";
 import BackendService from "../../lib/database/backendService";
+import { useCookies } from "react-cookie";
 
 enum welcomeStateType {
   login,
@@ -10,19 +11,23 @@ enum welcomeStateType {
 }
 
 export default function WelcomePage(props: { backendService: BackendService }) {
+  const [cookie] = useCookies(["bearerToken"]);
+
   const backendService = new BackendService(
     process.env.NEXT_PUBLIC_REACT_APP_BACKEND_URL!,
     Number.parseInt(process.env.NEXT_PUBLIC_REACT_APP_BACKEND_PORT!)
   );
   const [welcomeState, setWelcomeState] =
     React.useState<welcomeStateType | null>(() => {
-      backendService.getAccount().then(async (loggedinAccount) => {
-        if (loggedinAccount == null) {
-          setWelcomeState(welcomeStateType.login);
-          return;
-        }
-        router.push("/home");
-      });
+      backendService
+        .getAccount(cookie.bearerToken)
+        .then(async (loggedinAccount) => {
+          if (loggedinAccount == null) {
+            setWelcomeState(welcomeStateType.login);
+            return;
+          }
+          router.push("/home");
+        });
       return null;
     });
 

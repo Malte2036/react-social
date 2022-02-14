@@ -3,18 +3,21 @@ import BackendService from "../../lib/database/backendService";
 import PostView from "../../components/PostView";
 import { Post } from "../../lib/database/data/post";
 import CreatePostView from "../../components/CreatePostView";
-import useAccount from "../../lib/hooks/AccountHook";
 import Button from "../../components/Button";
 import { SocketContext } from "../../lib/contexts/SocketContext";
 import { User } from "../../lib/database/data/user";
 import { useRouter } from "next/router";
+import { parseCookies } from "../../helpers";
 
-export async function getServerSideProps(context) {
+export async function getServerSideProps({ req }) {
+  const cookies = parseCookies(req);
+  const bearerToken = cookies.bearerToken;
+
   const backendService = new BackendService(
     process.env.NEXT_PUBLIC_REACT_APP_BACKEND_URL!,
     Number.parseInt(process.env.NEXT_PUBLIC_REACT_APP_BACKEND_PORT!)
   );
-  let posts = await backendService.getAllPosts();
+  let posts = await backendService.getAllPosts(bearerToken);
 
   posts = posts.map((post) => ({
     ...post,
@@ -26,7 +29,10 @@ export async function getServerSideProps(context) {
   const creators: Record<number, User> = {};
   await Promise.all(
     creatorIds.map(async (creatorId) => {
-      creators[creatorId] = await backendService.getUserById(creatorId);
+      creators[creatorId] = await backendService.getUserById(
+        creatorId,
+        bearerToken
+      );
     })
   );
 
@@ -48,7 +54,7 @@ export default function HomePage(props: { posts: Post[]; creators: User[] }) {
   );
 
   const socket = useContext(SocketContext);
-  
+
   let router = useRouter();
 
   /*useEffect(
