@@ -11,17 +11,9 @@ import Link from "next/link";
 export default function PostView(props: {
   backendService: BackendService;
   post: Post;
+  creator: User;
 }) {
   const [account] = useAccount(props.backendService);
-  const [creator, setCreator] = useState<User | null | undefined>(undefined);
-
-  useEffect(() => {
-    if (creator === undefined) {
-      props.backendService
-        .getUserById(props.post.creatorId!)
-        .then((user) => setCreator(user));
-    }
-  });
 
   return (
     <div className="bg-white dark:bg-slate-800 rounded-lg my-3 shadow-xl">
@@ -29,17 +21,17 @@ export default function PostView(props: {
         <div className="absolute left-0 m-2 flex flex-row">
           <ProfilePicture
             backendService={props.backendService}
-            imageId={creator?.imageId || null}
+            imageId={props.creator.imageId || null}
           ></ProfilePicture>
           <Link href={`/user/${props.post.creatorId}`}>
-            <span className="m-1 ml-2 cursor-pointer">{creator?.name}</span>
+            <span className="m-1 ml-2 cursor-pointer">{props.creator.name}</span>
           </Link>
         </div>
         <div className="absolute right-3 m-3 flex flex-row">
           <span className="text-xs pt-0.5 opacity-50">
             {props.post.createdAt.toDateString()}
           </span>
-          {account?.id === props.post.creatorId && (
+          {account?.id === props.creator.id && (
             <PostViewDropdown
               backendService={props.backendService}
               post={props.post}

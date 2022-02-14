@@ -7,6 +7,7 @@ import CreatePostView from "../../components/CreatePostView";
 import useAccount from "../../lib/hooks/AccountHook";
 import Button from "../../components/Button";
 import { SocketContext } from "../../lib/contexts/SocketContext";
+import { User } from "../../lib/database/data/user";
 
 export async function getServerSideProps(context) {
   const backendService = new BackendService(
@@ -20,12 +21,21 @@ export async function getServerSideProps(context) {
     createdAt: post.createdAt.toString(),
   }));
 
+  const creatorIds = [...new Set(posts.map((post) => post.creatorId))];
+
+  const creators: Record<number, User> = {};
+  await Promise.all(
+    creatorIds.map(async (creatorId) => {
+      creators[creatorId] = await backendService.getUserById(creatorId);
+    })
+  );
+
   return {
-    props: { posts }, // will be passed to the page component as props
+    props: { posts, creators }, // will be passed to the page component as props
   };
 }
 
-export default function HomePage(props: { posts: Post[] }) {
+export default function HomePage(props: { posts: Post[]; creators: User[] }) {
   const backendService = new BackendService(
     process.env.NEXT_PUBLIC_REACT_APP_BACKEND_URL!,
     Number.parseInt(process.env.NEXT_PUBLIC_REACT_APP_BACKEND_PORT!)
@@ -90,6 +100,7 @@ export default function HomePage(props: { posts: Post[] }) {
                 <PostView
                   backendService={backendService}
                   post={post}
+                  creator={props.creators[post.creatorId]}
                   key={post.id}
                 ></PostView>
               ))}
