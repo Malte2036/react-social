@@ -1,5 +1,4 @@
 import { useContext, useEffect, useState } from "react";
-//import { useNavigate } from "react-router-dom";
 import BackendService from "../../lib/database/backendService";
 import PostView from "../../components/PostView";
 import { Post } from "../../lib/database/data/post";
@@ -8,6 +7,7 @@ import useAccount from "../../lib/hooks/AccountHook";
 import Button from "../../components/Button";
 import { SocketContext } from "../../lib/contexts/SocketContext";
 import { User } from "../../lib/database/data/user";
+import { useRouter } from "next/router";
 
 export async function getServerSideProps(context) {
   const backendService = new BackendService(
@@ -48,13 +48,13 @@ export default function HomePage(props: { posts: Post[]; creators: User[] }) {
   );
 
   const socket = useContext(SocketContext);
-
-  //let navigate = useNavigate();
+  
+  let router = useRouter();
 
   /*useEffect(
     () => {
       if (account === null) {
-        //navigate("/login");
+        router.push("/login");
         return;
       }
       async function getPosts() {
@@ -110,7 +110,7 @@ export default function HomePage(props: { posts: Post[]; creators: User[] }) {
           children={"Logout"}
           onClickHandler={async () => {
             await backendService.logout();
-            //navigate("/login");
+            router.push("/login");
           }}
         ></Button>
       </div>
