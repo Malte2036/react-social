@@ -61,8 +61,9 @@ export default class BackendService {
   }
 
   async getAccountPrefs(): Promise<AccountPrefs> {
-    const prefs = localStorage.getItem("accountPrefs");
-    return prefs ? JSON.parse(prefs) : { darkmode: true };
+    return  { darkmode: true };
+    /*const prefs = localStorage.getItem("accountPrefs");
+    return prefs ? JSON.parse(prefs) : { darkmode: true };*/
   }
 
   async updateAccountPrefs(accountPrefs: AccountPrefs) {

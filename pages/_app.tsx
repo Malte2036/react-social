@@ -1,6 +1,20 @@
 import type { AppProps } from "next/app";
-import "./styles/globals.css" 
+import BackendService from "../lib/database/backendService";
+import useDarkmode from "../lib/hooks/DarkmodeHook";
+import "./styles/globals.css";
 
 export default function MyApp({ Component, pageProps }: AppProps) {
-  return <Component {...pageProps} />;
+  const backendService = new BackendService(
+    process.env.NEXT_PUBLIC_REACT_APP_BACKEND_URL!,
+    Number.parseInt(process.env.NEXT_PUBLIC_REACT_APP_BACKEND_PORT!)
+  );
+
+  const [darkmode, setDarkmode] = useDarkmode(backendService);
+  return (
+    <div className={darkmode ? "dark" : ""}>
+      <div className="min-h-screen dark:text-white bg-gray-200 dark:bg-slate-900">
+        <Component {...pageProps} />
+      </div>
+    </div>
+  );
 }
