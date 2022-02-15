@@ -2,6 +2,7 @@ import { Menu, Transition } from "@headlessui/react";
 import { ChevronDownIcon } from "@heroicons/react/solid";
 import { useRouter } from "next/router";
 import { Fragment } from "react";
+import { useCookies } from "react-cookie";
 import BackendService from "../lib/database/backendService";
 import { Post } from "../lib/database/data/post";
 
@@ -9,7 +10,9 @@ export default function PostViewDropdown(props: {
   backendService: BackendService;
   post: Post;
 }) {
-  let router = useRouter()
+  let router = useRouter();
+
+  const [cookie] = useCookies(["bearerToken"]);
   return (
     <Menu as="div" className="relative inline-block text-left">
       <div>
@@ -36,8 +39,11 @@ export default function PostViewDropdown(props: {
               {({ active }) => (
                 <span
                   onClick={async () => {
-                    await props.backendService.deletePost(props.post.id);
-                    router.push("/")
+                    await props.backendService.deletePost(
+                      props.post.id,
+                      cookie.bearerToken
+                    );
+                    router.reload();
                   }}
                   className={"block px-4 py-2 text-sm cursor-pointer ".concat(
                     active ? "bg-gray-200 text-gray-900" : "dark:text-gray-200"
