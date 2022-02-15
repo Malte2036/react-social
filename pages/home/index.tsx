@@ -8,6 +8,7 @@ import { SocketContext } from "../../lib/contexts/SocketContext";
 import { User } from "../../lib/database/data/user";
 import { useRouter } from "next/router";
 import { parseCookies } from "../../helpers";
+import { Account } from "../../lib/database/data/account";
 
 export async function getServerSideProps({ req }) {
   const cookies = parseCookies(req);
@@ -48,11 +49,15 @@ export async function getServerSideProps({ req }) {
   );
 
   return {
-    props: { posts, creators }, // will be passed to the page component as props
+    props: { posts, creators, account }, // will be passed to the page component as props
   };
 }
 
-export default function HomePage(props: { posts: Post[]; creators: User[] }) {
+export default function HomePage(props: {
+  posts: Post[];
+  creators: User[];
+  account: Account;
+}) {
   const backendService = new BackendService(
     process.env.NEXT_PUBLIC_REACT_APP_BACKEND_URL!,
     Number.parseInt(process.env.NEXT_PUBLIC_REACT_APP_BACKEND_PORT!)
@@ -68,22 +73,6 @@ export default function HomePage(props: { posts: Post[]; creators: User[] }) {
 
   let router = useRouter();
 
-  /*useEffect(
-    () => {
-      if (account === null) {
-        router.push("/login");
-        return;
-      }
-      async function getPosts() {
-        setPosts(await backendService.getAllPosts());
-      }
-
-      if (posts === undefined) {
-        getPosts();
-      }
-    } [account, navigate, posts, backendService, socket]
-  );*/
-
   useEffect(() => {
     socket.on("posts", (post: Post) => {
       post.createdAt = new Date(post.createdAt);
@@ -96,10 +85,6 @@ export default function HomePage(props: { posts: Post[]; creators: User[] }) {
       socket.off("posts");
     };
   });
-
-  /*if (account == null || posts === undefined) {
-    return <></>;
-  }*/
 
   return (
     <div className="flex justify-center min-h-screen">
@@ -118,6 +103,7 @@ export default function HomePage(props: { posts: Post[]; creators: User[] }) {
                   backendService={backendService}
                   post={post}
                   creator={props.creators[post.creatorId]}
+                  account={props.account}
                   key={post.id}
                 ></PostView>
               ))}

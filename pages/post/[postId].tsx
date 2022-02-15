@@ -6,6 +6,7 @@ import BackendService from "../../lib/database/backendService";
 import { Post } from "../../lib/database/data/post";
 import { User } from "../../lib/database/data/user";
 import { parseCookies } from "../../helpers";
+import { Account } from "../../lib/database/data/account";
 
 export async function getServerSideProps({ req, query }) {
   const cookies = parseCookies(req);
@@ -17,6 +18,17 @@ export async function getServerSideProps({ req, query }) {
     process.env.NEXT_PUBLIC_REACT_APP_BACKEND_URL!,
     Number.parseInt(process.env.NEXT_PUBLIC_REACT_APP_BACKEND_PORT!)
   );
+
+  const account = await backendService.getAccount(bearerToken);
+  if (!account) {
+    return {
+      redirect: {
+        permanent: false,
+        destination: "/login",
+      },
+    };
+  }
+
   let post = await backendService.getPostById(postId.toString(), bearerToken);
   if (post === null) {
     return {
@@ -33,11 +45,15 @@ export async function getServerSideProps({ req, query }) {
   const creator = await backendService.getUserById(post.creatorId, bearerToken);
 
   return {
-    props: { post, creator }, // will be passed to the page component as props
+    props: { post, creator, account },
   };
 }
 
-export default function SinglePostPage(props: { post: Post; creator: User }) {
+export default function SinglePostPage(props: {
+  post: Post;
+  creator: User;
+  account: Account;
+}) {
   const backendService = new BackendService(
     process.env.NEXT_PUBLIC_REACT_APP_BACKEND_URL!,
     Number.parseInt(process.env.NEXT_PUBLIC_REACT_APP_BACKEND_PORT!)
@@ -55,6 +71,7 @@ export default function SinglePostPage(props: { post: Post; creator: User }) {
           backendService={backendService}
           post={props.post}
           creator={props.creator}
+          account={props.account}
         ></PostView>
       </div>
     </div>
