@@ -22,7 +22,7 @@ export default function LoginForm(props: {
         props.email,
         props.password
       );
-      setCookie("bearerToken", bearerToken);
+      setCookie("bearerToken", bearerToken, { secure: true });
       router.push("/home");
     } catch (error) {
       alert(`Error ${error}`);

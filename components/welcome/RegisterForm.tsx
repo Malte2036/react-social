@@ -25,7 +25,7 @@ export default function RegisterForm(props: {
         props.username,
         props.password
       );
-      setCookie("bearerToken", bearerToken);
+      setCookie("bearerToken", bearerToken, { secure: true });
 
       router.push("/home");
     } catch (error) {
