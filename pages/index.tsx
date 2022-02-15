@@ -1,3 +1,12 @@
-export default function Blog() {
-  return <h1>All Blog Posts</h1>;
+export async function getServerSideProps(context) {
+  return {
+    redirect: {
+      destination: "/home",
+      permanent: true,
+    },
+  };
+}
+
+export default function Main() {
+  return <></>;
 }
