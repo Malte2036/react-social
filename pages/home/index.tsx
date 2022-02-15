@@ -9,6 +9,7 @@ import { User } from "../../lib/database/data/user";
 import { useRouter } from "next/router";
 import { parseCookies } from "../../helpers";
 import { Account } from "../../lib/database/data/account";
+import { useCookies } from "react-cookie";
 
 export async function getServerSideProps({ req }) {
   const cookies = parseCookies(req);
@@ -58,6 +59,8 @@ export default function HomePage(props: {
   creators: User[];
   account: Account;
 }) {
+  const [cookie, setCookie] = useCookies(["bearerToken"]);
+
   const backendService = new BackendService(
     process.env.NEXT_PUBLIC_REACT_APP_BACKEND_URL!,
     Number.parseInt(process.env.NEXT_PUBLIC_REACT_APP_BACKEND_PORT!)
@@ -112,7 +115,7 @@ export default function HomePage(props: {
         <Button
           children={"Logout"}
           onClickHandler={async () => {
-            await backendService.logout();
+            setCookie("bearerToken", null);
             router.push("/login");
           }}
         ></Button>
