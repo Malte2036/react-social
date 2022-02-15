@@ -17,6 +17,17 @@ export async function getServerSideProps({ req }) {
     process.env.NEXT_PUBLIC_REACT_APP_BACKEND_URL!,
     Number.parseInt(process.env.NEXT_PUBLIC_REACT_APP_BACKEND_PORT!)
   );
+
+  const account = await backendService.getAccount(bearerToken);
+  if (!account) {
+    return {
+      redirect: {
+        permanent: false,
+        destination: "/login",
+      },
+    };
+  }
+
   let posts = await backendService.getAllPosts(bearerToken);
 
   posts = posts.map((post) => ({
