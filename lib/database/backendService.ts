@@ -181,6 +181,9 @@ export default class BackendService {
     fileId: number,
     bearerToken: string
   ): Promise<MyFile | null> {
+    if (!fileId) {
+      return null;
+    }
     try {
       const response = await axios.get(`${this.endpoint}/files/${fileId}`, {
         headers: this.authHeader(bearerToken),
