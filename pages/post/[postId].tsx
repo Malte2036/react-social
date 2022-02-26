@@ -64,7 +64,7 @@ export default function SinglePostPage(props: {
   return (
     <div className="flex justify-center min-h-screen">
       <div className="m-5 mt-3 max-w-4xl w-full flex flex-col">
-        <Link href={"/home"}>
+        <Link href={"/home"} passHref>
           <ArrowLeftIcon className="h-6 w-6 md:h-8 md:w-8 ml-0.5 cursor-pointer"></ArrowLeftIcon>
         </Link>
         <PostView

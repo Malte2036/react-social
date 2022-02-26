@@ -59,7 +59,7 @@ export default function HomePage(props: {
   creators: User[];
   account: Account;
 }) {
-  const [cookie, setCookie] = useCookies(["bearerToken"]);
+  const [_, setCookie] = useCookies(["bearerToken"]);
 
   const backendService = new BackendService(
     process.env.NEXT_PUBLIC_REACT_APP_BACKEND_URL!,

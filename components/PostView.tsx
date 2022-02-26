@@ -23,7 +23,7 @@ export default function PostView(props: {
             backendService={props.backendService}
             imageId={props.creator.imageId || null}
           ></ProfilePicture>
-          <Link href={`/user/${props.post.creatorId}`}>
+          <Link href={`/user/${props.post.creatorId}`} passHref>
             <span className="m-1 ml-2 cursor-pointer">
               {props.creator.name}
             </span>
@@ -42,7 +42,7 @@ export default function PostView(props: {
         </div>
       </div>
 
-      <Link href={`/post/${props.post.id}`}>
+      <Link href={`/post/${props.post.id}`} passHref>
         <div className="cursor-pointer">
           <div className="m-8 flex flex-col">
             <p className="mt-0 break-all">{props.post.message}</p>

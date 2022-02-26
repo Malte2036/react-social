@@ -24,6 +24,7 @@ export default function ProfilePicture(props: {
         <Image
           className="rounded-full object-cover border-2 border-gray-200 dark:border-gray-900"
           src={image.data}
+          alt=""
           layout="responsive"
           width="32px"
           height="32px"
