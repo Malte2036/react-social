@@ -1,3 +1,4 @@
+import Image from "next/image";
 import { useEffect, useState } from "react";
 import { useCookies } from "react-cookie";
 import BackendService from "../lib/database/backendService";
@@ -16,11 +17,20 @@ export default function ProfilePicture(props: {
       .getFileById(props.imageId!, cookie.bearerToken)
       .then((myFile) => setImage(myFile));
   }, []);
+
   return (
-    <img
-      className="h-8 w-8 rounded-full object-cover border-2 border-gray-200 dark:border-gray-900"
-      src={image?.data}
-      alt=""
-    />
+    <div className="h-8 w-8">
+      {image ? (
+        <Image
+          className="rounded-full object-cover border-2 border-gray-200 dark:border-gray-900"
+          src={image.data}
+          layout="responsive"
+          width="32px"
+          height="32px"
+        />
+      ) : (
+        <></>
+      )}
+    </div>
   );
 }
