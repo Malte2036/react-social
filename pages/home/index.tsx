@@ -59,7 +59,7 @@ export default function HomePage(props: {
   creators: User[];
   account: Account;
 }) {
-  const [_, setCookie] = useCookies(["bearerToken"]);
+  const [cookie, setCookie, removeCookie] = useCookies(["bearerToken"]);
 
   const backendService = new BackendService(
     process.env.NEXT_PUBLIC_REACT_APP_BACKEND_URL!,
@@ -114,7 +114,7 @@ export default function HomePage(props: {
         </div>
         <Button
           onClickHandler={async () => {
-            setCookie("bearerToken", null, { secure: true });
+            removeCookie("bearerToken");
             router.push("/login");
           }}
         >
