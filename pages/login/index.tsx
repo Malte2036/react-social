@@ -2,43 +2,13 @@ import React from "react";
 import LoginForm from "../../components/welcome/LoginForm";
 import RegisterForm from "../../components/welcome/RegisterForm";
 import BackendService from "../../lib/database/backendService";
-import { useCookies } from "react-cookie";
-import { parseCookies } from "../../helpers";
-import { Account } from "../../lib/database/data/account";
 
 enum welcomeStateType {
   login,
   register,
 }
 
-export async function getServerSideProps({ req }) {
-  const cookies = parseCookies(req);
-  const bearerToken = cookies.bearerToken;
-
-  const backendService = new BackendService(
-    process.env.NEXT_PUBLIC_REACT_APP_BACKEND_URL!,
-    Number.parseInt(process.env.NEXT_PUBLIC_REACT_APP_BACKEND_PORT!)
-  );
-
-  const account = await backendService.getAccount(bearerToken);
-  if (account) {
-    return {
-      redirect: {
-        permanent: false,
-        destination: "/home",
-      },
-      props: {},
-    };
-  }
-
-  return {
-    props: { account },
-  };
-}
-
-export default function WelcomePage(props: { account: Account }) {
-  const [cookie] = useCookies(["bearerToken"]);
-
+export default function WelcomePage() {
   const backendService = new BackendService(
     process.env.NEXT_PUBLIC_REACT_APP_BACKEND_URL!,
     Number.parseInt(process.env.NEXT_PUBLIC_REACT_APP_BACKEND_PORT!)
