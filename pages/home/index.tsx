@@ -113,12 +113,13 @@ export default function HomePage(props: {
           </div>
         </div>
         <Button
-          children={"Logout"}
           onClickHandler={async () => {
             setCookie("bearerToken", null, { secure: true });
             router.push("/login");
           }}
-        ></Button>
+        >
+          Logout
+        </Button>
       </div>
     </div>
   );
