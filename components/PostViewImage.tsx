@@ -12,12 +12,10 @@ export default function PostViewImage(props: {
     props.imageId === null ? null : undefined
   );
   useEffect(() => {
-    if (image === undefined) {
-      props.backendService
-        .getFileById(props.imageId!, cookie.bearerToken)
-        .then((myFile) => setImage(myFile));
-    }
-  });
+    props.backendService
+      .getFileById(props.imageId!, cookie.bearerToken)
+      .then((myFile) => setImage(myFile));
+  }, []);
   return (
     <img
       className="w-full mt-3 rounded-lg border-1 border-gray-200 dark:border-gray-900"

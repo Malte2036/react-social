@@ -87,7 +87,7 @@ export default function HomePage(props: {
     return () => {
       socket.off("posts");
     };
-  });
+  }, []);
 
   return (
     <div className="flex justify-center min-h-screen">

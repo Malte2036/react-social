@@ -13,7 +13,7 @@ export default function useDarkmode(
 
   useEffect(() => {
     backendService.updateAccountPrefs({ darkmode: darkmode });
-  });
+  }, [darkmode]);
 
   return [darkmode, setDarkmode];
 }
