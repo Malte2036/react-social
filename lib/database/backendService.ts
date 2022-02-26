@@ -4,7 +4,6 @@ import { AccountPrefs } from "./data/accountPrefs";
 import { MyFile } from "./data/myFile";
 import { Post } from "./data/post";
 import { User } from "./data/user";
-import { useCookies } from "react-cookie";
 
 export default class BackendService {
   endpoint: string;
@@ -19,20 +18,6 @@ export default class BackendService {
       return {};
     }
   }
-
-  /*getBearerToken(): string | null {
-    return null;
-    return localStorage.getItem("bearerToken") ?? null;
-  }
-
-  setBearerToken(bearerToken: string | null) {
-    const [cookie, setCookie] = useCookies(["user"]);
-    if (bearerToken) {
-      localStorage.setItem("bearerToken", bearerToken);
-    } else {
-      localStorage.removeItem("bearerToken");
-    }
-  }*/
 
   async getAccount(bearerToken: string): Promise<Account | null> {
     try {
@@ -85,10 +70,6 @@ export default class BackendService {
     }
     console.log("Logged in!");
     return response.data.access_token;
-  }
-
-  async logout() {
-    //this.setBearerToken(null);
   }
 
   async getAllPosts(bearerToken: string): Promise<Post[]> {
@@ -195,27 +176,6 @@ export default class BackendService {
       }
     );
   }
-
-  /*async uploadFile(file: File): Promise<MyFile> {
-    const base64 = await new Promise<string>((resolve, reject) => {
-      const reader = new FileReader();
-      reader.readAsDataURL(file);
-      reader.onload = () => resolve(reader.result?.toString() || "");
-      reader.onerror = (error) => reject(error);
-    });
-
-    return await axios.post(
-      `${this.endpoint}/file`,
-      {
-        name: file.name,
-        data: base64,
-        mimeType: file.type,
-      },
-      {
-        headers: this.authHeader(),
-      }
-    );
-  }*/
 
   async getFileById(
     fileId: number,
