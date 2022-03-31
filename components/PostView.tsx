@@ -8,6 +8,7 @@ import PostViewImage from "./PostViewImage";
 import ProfilePicture from "./ProfilePicture";
 import Link from "next/link";
 import { Account } from "../lib/database/data/account";
+import PostLike from "./PostLike";
 
 export default function PostView(props: {
   backendService: BackendService;
@@ -55,6 +56,12 @@ export default function PostView(props: {
           </div>
         </div>
       </Link>
+
+      <div className="relative h-12 border-t-2 border-gray-200 dark:border-gray-900">
+        <div className="absolute left-0 m-2 ml-4 flex flex-row">
+          <PostLike backendService={props.backendService} post={props.post} />
+        </div>
+      </div>
     </div>
   );
 }
