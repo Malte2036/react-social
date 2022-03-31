@@ -109,6 +109,53 @@ export default class BackendService {
     return null;
   }
 
+  async getLikesCountByPostId(
+    postId: number,
+    bearerToken: string
+  ): Promise<number> {
+    try {
+      const response = await axios.get(
+        `${this.endpoint}/posts/${postId}/likes/count`,
+        {
+          headers: this.authHeader(bearerToken),
+        }
+      );
+
+      if (response.status !== 200) {
+        return 0;
+      }
+      return response.data as number;
+    } catch (error) {}
+    return null;
+  }
+
+  async createLikeByPostId(postId: number, bearerToken: string) {
+    await axios.post(
+      `${this.endpoint}/posts/${postId}/likes`,
+      {},
+      {
+        headers: this.authHeader(bearerToken),
+      }
+    );
+  }
+
+  async isPostLikedByMe(postId: number, bearerToken: string): Promise<boolean> {
+    try {
+      const response = await axios.get(
+        `${this.endpoint}/posts/${postId}/likes/me`,
+        {
+          headers: this.authHeader(bearerToken),
+        }
+      );
+
+      if (response.status !== 200) {
+        return false;
+      }
+      return response.data as boolean;
+    } catch (error) {}
+    return false;
+  }
+
   async createPost(message: string, image?: File, bearerToken: string) {
     let imageData = undefined;
     if (image) {
