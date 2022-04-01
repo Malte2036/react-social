@@ -16,7 +16,7 @@ export default function ProfilePicture(props: {
     props.backendService
       .getFileById(props.imageId!, cookie.bearerToken)
       .then((myFile) => setImage(myFile));
-  }, []);
+  }, [cookie.bearerToken, props.backendService, props.imageId]);
 
   return (
     <div className="h-8 w-8">
