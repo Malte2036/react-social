@@ -6,5 +6,4 @@ export type Post = {
   createdAt: Date | string;
   imageId: number | null;
   creatorId: number;
-  likeCount: number;
 };

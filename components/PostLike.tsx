@@ -9,8 +9,8 @@ export default function PostLike(props: {
   post: Post;
 }) {
   const [cookie] = useCookies(["bearerToken"]);
-  const [active, setActive] = useState<boolean>(true);
-  const [count, setCount] = useState<number>(props.post.likeCount || 0);
+  const [active, setActive] = useState<boolean>(false);
+  const [count, setCount] = useState<number | undefined>(undefined);
 
   useEffect(() => {
     props.backendService
