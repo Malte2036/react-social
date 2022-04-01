@@ -139,6 +139,15 @@ export default class BackendService {
     );
   }
 
+  async deleteLikeByPostId(postId: number, bearerToken: string) {
+    await axios.delete(
+      `${this.endpoint}/posts/${postId}/likes`,
+      {
+        headers: this.authHeader(bearerToken),
+      }
+    );
+  }
+
   async isPostLikedByMe(postId: number, bearerToken: string): Promise<boolean> {
     try {
       const response = await axios.get(

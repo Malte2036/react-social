@@ -39,6 +39,10 @@ export default function PostLike(props: {
             );
             setCount(count + 1);
           } else {
+            await props.backendService.deleteLikeByPostId(
+              props.post.id,
+              cookie.bearerToken
+            );
             setCount(count - 1);
           }
         }}
