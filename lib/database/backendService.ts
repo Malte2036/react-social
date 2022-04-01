@@ -165,7 +165,7 @@ export default class BackendService {
     return false;
   }
 
-  async createPost(message: string, image?: File, bearerToken: string) {
+  async createPost(message: string, image: File | undefined, bearerToken: string) {
     let imageData = undefined;
     if (image) {
       const base64 = await new Promise<string>((resolve, reject) => {
