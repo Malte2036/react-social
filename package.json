@@ -16,6 +16,7 @@
     "cookie": "^0.4.2",
     "eslint-config-next": "^12.1.0",
     "iron-session": "^6.0.5",
+    "lottie-web": "^5.9.1",
     "next": "^12.1.0",
     "react": "^17.0.2",
     "react-cookie": "^4.1.1",

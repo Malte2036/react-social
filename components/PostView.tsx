@@ -58,7 +58,7 @@ export default function PostView(props: {
       </Link>
 
       <div className="relative h-12 border-t-2 border-gray-200 dark:border-gray-900">
-        <div className="absolute left-0 m-2 ml-4 flex flex-row">
+        <div className=" m-2 ml-4 flex flex-row">
           <PostLike backendService={props.backendService} post={props.post} />
         </div>
       </div>
