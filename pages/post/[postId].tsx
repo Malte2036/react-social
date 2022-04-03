@@ -4,7 +4,6 @@ import { useRouter } from "next/router";
 import PostView from "../../components/PostView";
 import BackendService from "../../lib/database/backendService";
 import { Post } from "../../lib/database/data/post";
-import { User } from "../../lib/database/data/user";
 import { parseCookies } from "../../helpers";
 import { Account } from "../../lib/database/data/account";
 import { useEffect, useState } from "react";
@@ -42,9 +41,12 @@ export default function SinglePostPage(props: {
 }) {
   const [cookie, setCookie, removeCookie] = useCookies(["bearerToken"]);
 
-  const backendService = new BackendService(
-    process.env.NEXT_PUBLIC_REACT_APP_BACKEND_URL!,
-    Number.parseInt(process.env.NEXT_PUBLIC_REACT_APP_BACKEND_PORT!)
+  const [backendService] = useState(
+    () =>
+      new BackendService(
+        process.env.NEXT_PUBLIC_REACT_APP_BACKEND_URL!,
+        Number.parseInt(process.env.NEXT_PUBLIC_REACT_APP_BACKEND_PORT!)
+      )
   );
 
   const [post, setPost] = useState<Post | undefined>(undefined);
@@ -61,7 +63,7 @@ export default function SinglePostPage(props: {
           router.push("/home");
         }
       });
-  }, [cookie.bearerToken]);
+  }, [backendService, cookie.bearerToken, props.postId, router]);
 
   return (
     <div className="flex justify-center min-h-screen">

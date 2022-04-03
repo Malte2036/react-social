@@ -38,9 +38,12 @@ export async function getServerSideProps({ req }) {
 export default function HomePage(props: { account: Account }) {
   const [cookie, setCookie, removeCookie] = useCookies(["bearerToken"]);
 
-  const backendService = new BackendService(
-    process.env.NEXT_PUBLIC_REACT_APP_BACKEND_URL!,
-    Number.parseInt(process.env.NEXT_PUBLIC_REACT_APP_BACKEND_PORT!)
+  const [backendService] = useState(
+    () =>
+      new BackendService(
+        process.env.NEXT_PUBLIC_REACT_APP_BACKEND_URL!,
+        Number.parseInt(process.env.NEXT_PUBLIC_REACT_APP_BACKEND_PORT!)
+      )
   );
 
   const [posts, setPosts] = useState<Post[]>([]);
@@ -53,7 +56,7 @@ export default function HomePage(props: { account: Account }) {
     backendService
       .getAllPosts(cookie.bearerToken)
       .then((posts) => setPosts(posts));
-  }, [cookie.bearerToken]);
+  }, [backendService, cookie.bearerToken]);
 
   useEffect(() => {
     socket.on("posts", (post: Post) => {

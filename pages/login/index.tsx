@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import LoginForm from "../../components/welcome/LoginForm";
 import RegisterForm from "../../components/welcome/RegisterForm";
 import BackendService from "../../lib/database/backendService";
@@ -9,9 +9,12 @@ enum welcomeStateType {
 }
 
 export default function WelcomePage() {
-  const backendService = new BackendService(
-    process.env.NEXT_PUBLIC_REACT_APP_BACKEND_URL!,
-    Number.parseInt(process.env.NEXT_PUBLIC_REACT_APP_BACKEND_PORT!)
+  const [backendService] = useState(
+    () =>
+      new BackendService(
+        process.env.NEXT_PUBLIC_REACT_APP_BACKEND_URL!,
+        Number.parseInt(process.env.NEXT_PUBLIC_REACT_APP_BACKEND_PORT!)
+      )
   );
   const [welcomeState, setWelcomeState] =
     React.useState<welcomeStateType | null>(() => welcomeStateType.login);

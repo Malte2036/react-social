@@ -9,6 +9,7 @@ import { parseCookies } from "../../helpers";
 import { Account } from "../../lib/database/data/account";
 import { useCookies } from "react-cookie";
 import ProfilePicture from "../../components/ProfilePicture";
+import { useState } from "react";
 
 export async function getServerSideProps({ req, query }) {
   const cookies = parseCookies(req);
@@ -55,10 +56,12 @@ export async function getServerSideProps({ req, query }) {
 }
 export default function UserPage(props: { user: User | Account }) {
   const [cookie] = useCookies(["bearerToken"]);
-
-  const backendService = new BackendService(
-    process.env.NEXT_PUBLIC_REACT_APP_BACKEND_URL!,
-    Number.parseInt(process.env.NEXT_PUBLIC_REACT_APP_BACKEND_PORT!)
+  const [backendService] = useState(
+    () =>
+      new BackendService(
+        process.env.NEXT_PUBLIC_REACT_APP_BACKEND_URL!,
+        Number.parseInt(process.env.NEXT_PUBLIC_REACT_APP_BACKEND_PORT!)
+      )
   );
   return (
     <div className="flex justify-center min-h-screen">
@@ -79,4 +82,4 @@ export default function UserPage(props: { user: User | Account }) {
       </div>
     </div>
   );
-  }
+}
