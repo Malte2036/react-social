@@ -8,6 +8,7 @@ import { User } from "../../lib/database/data/user";
 import { parseCookies } from "../../helpers";
 import { Account } from "../../lib/database/data/account";
 import { useCookies } from "react-cookie";
+import ProfilePicture from "../../components/ProfilePicture";
 
 export async function getServerSideProps({ req, query }) {
   const cookies = parseCookies(req);
@@ -54,41 +55,28 @@ export async function getServerSideProps({ req, query }) {
 }
 export default function UserPage(props: { user: User | Account }) {
   const [cookie] = useCookies(["bearerToken"]);
-  return (
-    <>
-      <h1 className="pt-6 text-center text-5xl font-extrabold ">
-        User: {props.user.id}
-      </h1>
-      {(props.user as Account).email != undefined && (
-        <>
-          <h4 className="mt-6 text-center text-3xl">
-            <br />
-            Email: {props.user.email}
-          </h4>
-          <div>
-            <h4 className="mt-6 text-center text-3xl">
-              Upload ProfilePicture:
-            </h4>
-            <input
-              type="file"
-              onChange={(event) => {
-                if (event.target.files != null) {
-                  const backendService = new BackendService(
-                    process.env.NEXT_PUBLIC_REACT_APP_BACKEND_URL!,
-                    Number.parseInt(
-                      process.env.NEXT_PUBLIC_REACT_APP_BACKEND_PORT!
-                    )
-                  );
-                  backendService.setCurrentUserProfilePicture(
-                    event.target.files[0],
-                    cookie.bearerToken
-                  );
-                }
-              }}
-            />
-          </div>
-        </>
-      )}
-    </>
+
+  const backendService = new BackendService(
+    process.env.NEXT_PUBLIC_REACT_APP_BACKEND_URL!,
+    Number.parseInt(process.env.NEXT_PUBLIC_REACT_APP_BACKEND_PORT!)
   );
-}
+  return (
+    <div className="flex justify-center min-h-screen">
+      <div className="m-5 mt-3 max-w-4xl w-full flex flex-col">
+        <Link href={"/home"} passHref>
+          <ArrowLeftIcon className="h-6 w-6 md:h-8 md:w-8 ml-0.5 cursor-pointer"></ArrowLeftIcon>
+        </Link>
+        <div className="relative top-4 h-14 left-0 m-2 flex flex-row">
+          <ProfilePicture
+            backendService={backendService}
+            imageId={props.user.imageId || null}
+            size={14}
+          />
+          <div className="m-1 ml-2 h-14 text-3xl">
+            <span className="align-middle">{props.user.name}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+  }
