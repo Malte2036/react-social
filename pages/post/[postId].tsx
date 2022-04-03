@@ -7,6 +7,8 @@ import { Post } from "../../lib/database/data/post";
 import { User } from "../../lib/database/data/user";
 import { parseCookies } from "../../helpers";
 import { Account } from "../../lib/database/data/account";
+import { useEffect, useState } from "react";
+import { useCookies } from "react-cookie";
 
 export async function getServerSideProps({ req, query }) {
   const cookies = parseCookies(req);
@@ -29,50 +31,55 @@ export async function getServerSideProps({ req, query }) {
     };
   }
 
-  let post = await backendService.getPostById(postId.toString(), bearerToken);
-  if (post === null) {
-    return {
-      redirect: {
-        permanent: false,
-        destination: "/home",
-      },
-      props: {},
-    };
-  }
-
-  post.createdAt = post.createdAt.toString();
-
-  const creator = await backendService.getUserById(post.creatorId, bearerToken);
-
   return {
-    props: { post, creator, account },
+    props: { postId, account },
   };
 }
 
 export default function SinglePostPage(props: {
-  post: Post;
-  creator: User;
+  postId: string;
   account: Account;
 }) {
+  const [cookie, setCookie, removeCookie] = useCookies(["bearerToken"]);
+
   const backendService = new BackendService(
     process.env.NEXT_PUBLIC_REACT_APP_BACKEND_URL!,
     Number.parseInt(process.env.NEXT_PUBLIC_REACT_APP_BACKEND_PORT!)
   );
-  props.post.createdAt = new Date(props.post.createdAt);
 
-  const router = useRouter();
+  const [post, setPost] = useState<Post | undefined>(undefined);
+
+  let router = useRouter();
+
+  useEffect(() => {
+    backendService
+      .getPostById(props.postId, cookie.bearerToken)
+      .then((post) => {
+        if (post) {
+          setPost(post);
+        } else {
+          router.push("/home");
+        }
+      });
+  }, [cookie.bearerToken]);
+
   return (
     <div className="flex justify-center min-h-screen">
       <div className="m-5 mt-3 max-w-4xl w-full flex flex-col">
-        <Link href={"/home"} passHref>
-          <ArrowLeftIcon className="h-6 w-6 md:h-8 md:w-8 ml-0.5 cursor-pointer"></ArrowLeftIcon>
-        </Link>
-        <PostView
-          backendService={backendService}
-          post={props.post}
-          creator={props.creator}
-          account={props.account}
-        ></PostView>
+        {post ? (
+          <>
+            <Link href={"/home"} passHref>
+              <ArrowLeftIcon className="h-6 w-6 md:h-8 md:w-8 ml-0.5 cursor-pointer"></ArrowLeftIcon>
+            </Link>
+            <PostView
+              backendService={backendService}
+              post={post}
+              account={props.account}
+            ></PostView>
+          </>
+        ) : (
+          <></>
+        )}
       </div>
     </div>
   );
