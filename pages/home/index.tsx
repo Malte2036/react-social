@@ -30,51 +30,30 @@ export async function getServerSideProps({ req }) {
     };
   }
 
-  let posts = await backendService.getAllPosts(bearerToken);
-
-  posts = posts.map((post) => ({
-    ...post,
-    createdAt: post.createdAt.toString(),
-  }));
-
-  const creatorIds = [...new Set(posts.map((post) => post.creatorId))];
-
-  const creators: Record<number, User> = {};
-  await Promise.all(
-    creatorIds.map(async (creatorId) => {
-      creators[creatorId] = await backendService.getUserById(
-        creatorId,
-        bearerToken
-      );
-    })
-  );
-
   return {
-    props: { posts, creators, account }, // will be passed to the page component as props
+    props: { account },
   };
 }
 
-export default function HomePage(props: {
-  posts: Post[];
-  creators: User[];
-  account: Account;
-}) {
+export default function HomePage(props: { account: Account }) {
   const [cookie, setCookie, removeCookie] = useCookies(["bearerToken"]);
 
   const backendService = new BackendService(
     process.env.NEXT_PUBLIC_REACT_APP_BACKEND_URL!,
     Number.parseInt(process.env.NEXT_PUBLIC_REACT_APP_BACKEND_PORT!)
   );
-  const [posts, setPosts] = useState<Post[]>(() =>
-    props.posts.map((post) => ({
-      ...post,
-      createdAt: new Date(post.createdAt.toString()),
-    }))
-  );
+
+  const [posts, setPosts] = useState<Post[]>([]);
 
   const socket = useContext(SocketContext);
 
   let router = useRouter();
+
+  useEffect(() => {
+    backendService
+      .getAllPosts(cookie.bearerToken)
+      .then((posts) => setPosts(posts));
+  }, [cookie.bearerToken]);
 
   useEffect(() => {
     socket.on("posts", (post: Post) => {
@@ -105,7 +84,6 @@ export default function HomePage(props: {
                 <PostView
                   backendService={backendService}
                   post={post}
-                  creator={props.creators[post.creatorId]}
                   account={props.account}
                   key={post.id}
                 ></PostView>
