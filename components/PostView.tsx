@@ -2,19 +2,17 @@ import { useEffect, useState } from "react";
 import BackendService from "../lib/database/backendService";
 import { Post } from "../lib/database/data/post";
 import { User } from "../lib/database/data/user";
-import useAccount from "../lib/hooks/AccountHook";
 import PostViewDropdown from "./PostViewDropdown";
 import PostViewImage from "./PostViewImage";
 import ProfilePicture from "./ProfilePicture";
 import Link from "next/link";
-import { Account } from "../lib/database/data/account";
 import PostLike from "./PostLike";
 import { useCookies } from "react-cookie";
 
 export default function PostView(props: {
   backendService: BackendService;
   post: Post;
-  account: Account;
+  account: User;
 }) {
   const [cookie, setCookie, removeCookie] = useCookies(["bearerToken"]);
   const [creator, setCreator] = useState<User | undefined>(undefined);
