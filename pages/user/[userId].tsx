@@ -70,11 +70,13 @@ export default function UserPage(props: { user: User | Account }) {
           <ArrowLeftIcon className="h-6 w-6 md:h-8 md:w-8 ml-0.5 cursor-pointer"></ArrowLeftIcon>
         </Link>
         <div className="relative top-4 h-14 left-0 m-2 flex flex-row">
-          <ProfilePicture
-            backendService={backendService}
-            imageId={props.user.imageId || null}
-            size={14}
-          />
+          <div className="relative top-1">
+            <ProfilePicture
+              backendService={backendService}
+              imageId={props.user.imageId || null}
+              size={40}
+            />
+          </div>
           <div className="m-1 ml-2 h-14 text-3xl">
             <span className="align-middle">{props.user.name}</span>
           </div>

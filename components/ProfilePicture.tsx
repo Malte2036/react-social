@@ -22,23 +22,16 @@ export default function ProfilePicture(props: {
     }
   }, [cookie.bearerToken, props.backendService, props.imageId]);
 
-  let imageComponent: JSX.Element | undefined;
-  if (image !== undefined) {
-    imageComponent = (
-      <Image
-        className="rounded-full object-cover border-2 border-gray-200 dark:border-gray-900"
-        src={image === null ? defaultProfilePicture : image.data}
-        alt=""
-        layout="responsive"
-        width="64px"
-        height="64px"
-      />
-    );
-  }
-
-  return (
-    <div className={`h-${props.size ?? 8} w-${props.size ?? 8}`}>
-      {imageComponent ?? <></>}
-    </div>
+  return image !== undefined ? (
+    <Image
+      className="rounded-full object-cover border-2 border-gray-200 dark:border-gray-900"
+      src={image === null ? defaultProfilePicture : image.data}
+      alt=""
+      layout="fixed"
+      width={`${props.size ?? 32}px`}
+      height={`${props.size ?? 32}px`}
+    />
+  ) : (
+    <></>
   );
 }
