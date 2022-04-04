@@ -1,24 +1,24 @@
-import React, { Dispatch, SetStateAction } from "react";
+import React, { Dispatch, SetStateAction, useContext } from "react";
 import { LockClosedIcon } from "@heroicons/react/solid";
 import InputField from "../../components/form/InputField";
-import BackendService from "../../lib/database/backendService";
 import { useRouter } from "next/router";
 import { useCookies } from "react-cookie";
+import { BackendServiceContext } from "../../lib/contexts/BackendServiceContext";
 
 export default function LoginForm(props: {
-  backendService: BackendService;
   email: string;
   setEmail: Dispatch<SetStateAction<string>>;
   password: string;
   setPassword: Dispatch<SetStateAction<string>>;
 }) {
   let router = useRouter();
+  const backendService = useContext(BackendServiceContext);
   const [cookie, setCookie] = useCookies(["bearerToken"]);
 
   async function onSubmitHandler(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
     try {
-      const bearerToken = await props.backendService.login(
+      const bearerToken = await backendService.login(
         props.email,
         props.password
       );

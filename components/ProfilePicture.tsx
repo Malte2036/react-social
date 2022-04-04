@@ -1,26 +1,26 @@
 import Image from "next/image";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useCookies } from "react-cookie";
-import BackendService from "../lib/database/backendService";
+import { BackendServiceContext } from "../lib/contexts/BackendServiceContext";
 import { MyFile } from "../lib/database/data/myFile";
 import defaultProfilePicture from "../public/default_profile_picture.png";
 
 export default function ProfilePicture(props: {
-  backendService: BackendService;
   imageId: string | null;
   size?: number;
 }) {
   const [cookie] = useCookies(["bearerToken"]);
+  const backendService = useContext(BackendServiceContext);
   const [image, setImage] = useState<MyFile | null | undefined>(
     props.imageId === null ? null : undefined
   );
   useEffect(() => {
     if (props.imageId != null) {
-      props.backendService
+      backendService
         .getFileById(props.imageId!, cookie.bearerToken)
         .then((myFile) => setImage(myFile));
     }
-  }, [cookie.bearerToken, props.backendService, props.imageId]);
+  }, [cookie.bearerToken, backendService, props.imageId]);
 
   return image !== undefined ? (
     <Image

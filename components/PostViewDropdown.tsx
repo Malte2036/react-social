@@ -1,18 +1,16 @@
 import { Menu, Transition } from "@headlessui/react";
 import { ChevronDownIcon } from "@heroicons/react/solid";
 import { useRouter } from "next/router";
-import { Fragment } from "react";
+import { Fragment, useContext } from "react";
 import { useCookies } from "react-cookie";
-import BackendService from "../lib/database/backendService";
+import { BackendServiceContext } from "../lib/contexts/BackendServiceContext";
 import { Post } from "../lib/database/data/post";
 
-export default function PostViewDropdown(props: {
-  backendService: BackendService;
-  post: Post;
-}) {
+export default function PostViewDropdown(props: { post: Post }) {
   let router = useRouter();
-
+  const backendService = useContext(BackendServiceContext);
   const [cookie] = useCookies(["bearerToken"]);
+
   return (
     <Menu as="div" className="relative inline-block text-left">
       <div>
@@ -39,7 +37,7 @@ export default function PostViewDropdown(props: {
               {({ active }) => (
                 <span
                   onClick={async () => {
-                    await props.backendService.deletePost(
+                    await backendService.deletePost(
                       props.post.id,
                       cookie.bearerToken
                     );

@@ -1,7 +1,6 @@
 import React, { useContext } from "react";
 import LoginForm from "../../components/welcome/LoginForm";
 import RegisterForm from "../../components/welcome/RegisterForm";
-import { BackendServiceContext } from "../../lib/contexts/BackendServiceContext";
 
 enum welcomeStateType {
   login,
@@ -9,7 +8,6 @@ enum welcomeStateType {
 }
 
 export default function WelcomePage() {
-  const backendService = useContext(BackendServiceContext);
   const [welcomeState, setWelcomeState] =
     React.useState<welcomeStateType | null>(() => welcomeStateType.login);
 
@@ -46,7 +44,7 @@ export default function WelcomePage() {
           </p>
           {welcomeState === welcomeStateType.register ? (
             <RegisterForm
-              backendService={backendService}
+             
               username={username}
               setUsername={setUsername}
               email={email}
@@ -56,7 +54,7 @@ export default function WelcomePage() {
             ></RegisterForm>
           ) : (
             <LoginForm
-              backendService={backendService}
+             
               email={email}
               setEmail={setEmail}
               password={password}

@@ -70,12 +70,8 @@ export default function HomePage(props: { account: Account }) {
       <div className="m-5 mt-10 max-w-4xl w-full flex flex-col justify-between">
         <div>
           <h1 className="text-center text-5xl font-extrabold">Feed</h1>
-          <CreatePostView backendService={backendService}></CreatePostView>
-          <PostFeed
-            backendService={backendService}
-            account={props.account}
-            posts={posts}
-          />
+          <CreatePostView></CreatePostView>
+          <PostFeed account={props.account} posts={posts} />
         </div>
         <Button
           onClickHandler={async () => {

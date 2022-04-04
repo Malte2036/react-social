@@ -1,16 +1,14 @@
-import { HeartIcon } from "@heroicons/react/solid";
-import { useEffect, useRef, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import { useCookies } from "react-cookie";
-import BackendService from "../lib/database/backendService";
 import { Post } from "../lib/database/data/post";
 import lottie, { AnimationItem } from "lottie-web";
 import hearthLottie from "../public/lottie/hearth.json";
+import { BackendServiceContext } from "../lib/contexts/BackendServiceContext";
 
-export default function PostLike(props: {
-  backendService: BackendService;
-  post: Post;
-}) {
+export default function PostLike(props: { post: Post }) {
   const [cookie] = useCookies(["bearerToken"]);
+  const backendService = useContext(BackendServiceContext);
+
   const [active, setActive] = useState<boolean>(false);
   const [count, setCount] = useState<number | undefined>(undefined);
 
@@ -18,16 +16,16 @@ export default function PostLike(props: {
   const anim = useRef<AnimationItem | null>(null);
 
   useEffect(() => {
-    props.backendService
+    backendService
       .getLikesCountByPostId(props.post.id, cookie.bearerToken)
       .then((c) => setCount(c));
-    props.backendService
+    backendService
       .isPostLikedByMe(props.post.id, cookie.bearerToken)
       .then((a) => {
         setActive(a);
         anim.current?.goToAndStop(a ? 66 : 19, true);
       });
-  }, [cookie.bearerToken, props.backendService, props.post.id]);
+  }, [backendService, cookie.bearerToken, props.post.id]);
 
   useEffect(() => {
     if (animationContainer.current) {
@@ -55,14 +53,14 @@ export default function PostLike(props: {
           setActive(!active);
           if (!active) {
             anim.current?.playSegments([19, 50], true);
-            await props.backendService.createLikeByPostId(
+            await backendService.createLikeByPostId(
               props.post.id,
               cookie.bearerToken
             );
             setCount(count + 1);
           } else {
             anim.current?.playSegments([0, 19], true);
-            await props.backendService.deleteLikeByPostId(
+            await backendService.deleteLikeByPostId(
               props.post.id,
               cookie.bearerToken
             );

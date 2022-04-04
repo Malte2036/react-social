@@ -4,7 +4,7 @@ import { User } from "../lib/database/data/user";
 import PostView from "./PostView";
 
 export default function PostFeed(props: {
-  backendService: BackendService;
+  
   posts: Post[];
   account: User;
 }) {

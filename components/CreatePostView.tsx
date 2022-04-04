@@ -1,11 +1,11 @@
-import { ChangeEvent, FormEvent, useState } from "react";
+import { ChangeEvent, FormEvent, useContext, useState } from "react";
 import { useCookies } from "react-cookie";
-import BackendService from "../lib/database/backendService";
+import { BackendServiceContext } from "../lib/contexts/BackendServiceContext";
 import Button from "./Button";
 
-export default function CreatePostView(props: {
-  backendService: BackendService;
-}) {
+export default function CreatePostView(props: {}) {
+  const backendService = useContext(BackendServiceContext);
+
   const [message, setMessage] = useState("");
   const [active, setActive] = useState<Boolean>(false);
   const [image, setImage] = useState<File | null>(null);
@@ -15,7 +15,7 @@ export default function CreatePostView(props: {
   async function onSubmitHandler(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     try {
-      await props.backendService.createPost(
+      await backendService.createPost(
         message,
         image ?? undefined,
         cookie.bearerToken

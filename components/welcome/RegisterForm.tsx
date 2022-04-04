@@ -1,12 +1,11 @@
 import { LockClosedIcon } from "@heroicons/react/solid";
 import { useRouter } from "next/router";
-import React, { Dispatch, SetStateAction } from "react";
+import React, { Dispatch, SetStateAction, useContext } from "react";
 import InputField from "../../components/form/InputField";
-import BackendService from "../../lib/database/backendService";
 import { useCookies } from "react-cookie";
+import { BackendServiceContext } from "../../lib/contexts/BackendServiceContext";
 
 export default function RegisterForm(props: {
-  backendService: BackendService;
   username: string;
   setUsername: Dispatch<SetStateAction<string>>;
   email: string;
@@ -15,12 +14,13 @@ export default function RegisterForm(props: {
   setPassword: Dispatch<SetStateAction<string>>;
 }) {
   let router = useRouter();
+  const backendService = useContext(BackendServiceContext);
   const [cookie, setCookie] = useCookies(["bearerToken"]);
 
   async function onSubmitHandler(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
     try {
-      const bearerToken = await props.backendService.createAccount(
+      const bearerToken = await backendService.createAccount(
         props.email,
         props.username,
         props.password
