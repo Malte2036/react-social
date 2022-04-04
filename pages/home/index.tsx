@@ -10,6 +10,7 @@ import { useRouter } from "next/router";
 import { parseCookies } from "../../helpers";
 import { Account } from "../../lib/database/data/account";
 import { useCookies } from "react-cookie";
+import PostFeed from "../../components/PostFeed";
 
 export async function getServerSideProps({ req }) {
   const cookies = parseCookies(req);
@@ -77,21 +78,11 @@ export default function HomePage(props: { account: Account }) {
         <div>
           <h1 className="text-center text-5xl font-extrabold">Feed</h1>
           <CreatePostView backendService={backendService}></CreatePostView>
-          <div className="flex flex-col">
-            {posts
-              .sort(
-                (a: Post, b: Post) =>
-                  b.createdAt.valueOf() - a.createdAt.valueOf()
-              )
-              .map((post) => (
-                <PostView
-                  backendService={backendService}
-                  post={post}
-                  account={props.account}
-                  key={post.id}
-                ></PostView>
-              ))}
-          </div>
+          <PostFeed
+            backendService={backendService}
+            account={props.account}
+            posts={posts}
+          />
         </div>
         <Button
           onClickHandler={async () => {

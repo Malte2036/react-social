@@ -10,6 +10,7 @@ import { Account } from "../../lib/database/data/account";
 import { useCookies } from "react-cookie";
 import ProfilePicture from "../../components/ProfilePicture";
 import { useEffect, useState } from "react";
+import PostFeed from "../../components/PostFeed";
 
 export async function getServerSideProps({ req, query }) {
   const cookies = parseCookies(req);
@@ -91,21 +92,11 @@ export default function UserPage(props: { user: User | Account }) {
           </div>
         </div>
 
-        <div className="flex flex-col mt-6">
-          {posts
-            .sort(
-              (a: Post, b: Post) =>
-                b.createdAt.valueOf() - a.createdAt.valueOf()
-            )
-            .map((post) => (
-              <PostView
-                backendService={backendService}
-                post={post}
-                account={props.user}
-                key={post.id}
-              ></PostView>
-            ))}
-        </div>
+        <PostFeed
+          backendService={backendService}
+          account={props.user}
+          posts={posts}
+        />
       </div>
     </div>
   );
