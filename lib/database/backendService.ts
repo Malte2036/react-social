@@ -93,6 +93,33 @@ export default class BackendService {
     return [];
   }
 
+  async getAllPostsByCreatorId(
+    creatorId: string,
+    bearerToken: string
+  ): Promise<Post[]> {
+    try {
+      const response = await axios.get(
+        `${this.endpoint}/posts/byCreatorId/${creatorId}`,
+        {
+          headers: this.authHeader(bearerToken),
+        }
+      );
+
+      if (response.status !== 200) {
+        return [];
+      }
+
+      response.data.map((data: any) => {
+        data.createdAt = new Date(data.createdAt);
+        return data;
+      });
+      return response.data as Array<Post>;
+    } catch (error) {
+      console.log(error);
+    }
+    return [];
+  }
+
   async getPostById(postId: string, bearerToken: string): Promise<Post | null> {
     try {
       const response = await axios.get(`${this.endpoint}/posts/${postId}`, {
@@ -140,12 +167,9 @@ export default class BackendService {
   }
 
   async deleteLikeByPostId(postId: number, bearerToken: string) {
-    await axios.delete(
-      `${this.endpoint}/posts/${postId}/likes`,
-      {
-        headers: this.authHeader(bearerToken),
-      }
-    );
+    await axios.delete(`${this.endpoint}/posts/${postId}/likes`, {
+      headers: this.authHeader(bearerToken),
+    });
   }
 
   async isPostLikedByMe(postId: number, bearerToken: string): Promise<boolean> {
@@ -165,7 +189,11 @@ export default class BackendService {
     return false;
   }
 
-  async createPost(message: string, image: File | undefined, bearerToken: string) {
+  async createPost(
+    message: string,
+    image: File | undefined,
+    bearerToken: string
+  ) {
     let imageData = undefined;
     if (image) {
       const base64 = await new Promise<string>((resolve, reject) => {

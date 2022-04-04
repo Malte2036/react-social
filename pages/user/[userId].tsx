@@ -9,7 +9,7 @@ import { parseCookies } from "../../helpers";
 import { Account } from "../../lib/database/data/account";
 import { useCookies } from "react-cookie";
 import ProfilePicture from "../../components/ProfilePicture";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 export async function getServerSideProps({ req, query }) {
   const cookies = parseCookies(req);
@@ -63,6 +63,15 @@ export default function UserPage(props: { user: User | Account }) {
         Number.parseInt(process.env.NEXT_PUBLIC_REACT_APP_BACKEND_PORT!)
       )
   );
+
+  const [posts, setPosts] = useState<Post[]>([]);
+
+  useEffect(() => {
+    backendService
+      .getAllPostsByCreatorId(props.user.id.toString(), cookie.bearerToken)
+      .then((posts) => setPosts(posts));
+  }, [backendService, cookie.bearerToken, props.user.id]);
+
   return (
     <div className="flex justify-center min-h-screen">
       <div className="m-5 mt-3 max-w-4xl w-full flex flex-col">
@@ -80,6 +89,22 @@ export default function UserPage(props: { user: User | Account }) {
           <div className="m-1 ml-2 h-14 text-3xl">
             <span className="align-middle">{props.user.name}</span>
           </div>
+        </div>
+
+        <div className="flex flex-col mt-6">
+          {posts
+            .sort(
+              (a: Post, b: Post) =>
+                b.createdAt.valueOf() - a.createdAt.valueOf()
+            )
+            .map((post) => (
+              <PostView
+                backendService={backendService}
+                post={post}
+                account={props.user}
+                key={post.id}
+              ></PostView>
+            ))}
         </div>
       </div>
     </div>
