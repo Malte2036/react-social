@@ -21,7 +21,6 @@ export default function PostView(props: {
       .getUserById(props.post.creatorId, cookie.bearerToken)
       .then((creator) => setCreator(creator));
   }, [cookie.bearerToken, props.backendService, props.post.creatorId]);
-
   return (
     <div className="bg-white dark:bg-slate-800 rounded-lg my-3 shadow-xl">
       <div className="relative h-12 border-b-2 border-gray-200 dark:border-gray-900">

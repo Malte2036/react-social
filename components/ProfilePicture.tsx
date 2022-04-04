@@ -7,7 +7,7 @@ import defaultProfilePicture from "../public/default_profile_picture.png";
 
 export default function ProfilePicture(props: {
   backendService: BackendService;
-  imageId: number | null;
+  imageId: string | null;
   size?: number;
 }) {
   const [cookie] = useCookies(["bearerToken"]);

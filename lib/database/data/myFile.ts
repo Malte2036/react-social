@@ -1,5 +1,5 @@
 export type MyFile = {
-  id: number;
+  id: string;
   name: string;
   data: string;
   mimeType: string;

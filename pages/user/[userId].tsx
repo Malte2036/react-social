@@ -16,7 +16,6 @@ export async function getServerSideProps({ req, query }) {
   const bearerToken = cookies.bearerToken;
 
   let { userId } = query;
-  userId = Number(userId);
 
   const backendService = new BackendService(
     process.env.NEXT_PUBLIC_REACT_APP_BACKEND_URL!,
@@ -62,7 +61,7 @@ export default function UserPage(props: { user: User | Account }) {
 
   useEffect(() => {
     backendService
-      .getAllPostsByCreatorId(props.user.id.toString(), cookie.bearerToken)
+      .getAllPostsByCreatorId(props.user.id, cookie.bearerToken)
       .then((posts) => setPosts(posts));
   }, [backendService, cookie.bearerToken, props.user.id]);
 

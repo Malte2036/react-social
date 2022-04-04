@@ -137,7 +137,7 @@ export default class BackendService {
   }
 
   async getLikesCountByPostId(
-    postId: number,
+    postId: string,
     bearerToken: string
   ): Promise<number> {
     try {
@@ -156,7 +156,7 @@ export default class BackendService {
     return null;
   }
 
-  async createLikeByPostId(postId: number, bearerToken: string) {
+  async createLikeByPostId(postId: string, bearerToken: string) {
     await axios.post(
       `${this.endpoint}/posts/${postId}/likes`,
       {},
@@ -166,13 +166,13 @@ export default class BackendService {
     );
   }
 
-  async deleteLikeByPostId(postId: number, bearerToken: string) {
+  async deleteLikeByPostId(postId: string, bearerToken: string) {
     await axios.delete(`${this.endpoint}/posts/${postId}/likes`, {
       headers: this.authHeader(bearerToken),
     });
   }
 
-  async isPostLikedByMe(postId: number, bearerToken: string): Promise<boolean> {
+  async isPostLikedByMe(postId: string, bearerToken: string): Promise<boolean> {
     try {
       const response = await axios.get(
         `${this.endpoint}/posts/${postId}/likes/me`,
@@ -221,13 +221,13 @@ export default class BackendService {
     );
   }
 
-  async deletePost(postId: number, bearerToken: string) {
+  async deletePost(postId: string, bearerToken: string) {
     await axios.delete(`${this.endpoint}/posts/${postId}`, {
       headers: this.authHeader(bearerToken),
     });
   }
 
-  async getUserById(userId: number, bearerToken: string): Promise<User | null> {
+  async getUserById(userId: string, bearerToken: string): Promise<User | null> {
     try {
       const response = await axios.get(`${this.endpoint}/users/${userId}`, {
         headers: this.authHeader(bearerToken),
@@ -262,7 +262,7 @@ export default class BackendService {
   }
 
   async getFileById(
-    fileId: number,
+    fileId: string,
     bearerToken: string
   ): Promise<MyFile | null> {
     if (!fileId) {

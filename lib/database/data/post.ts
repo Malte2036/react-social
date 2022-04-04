@@ -1,7 +1,7 @@
 export type Post = {
-  id: number;
+  id: string;
   message: string;
   createdAt: Date | string;
-  imageId: number | null;
-  creatorId: number;
+  imageId: string | null;
+  creatorId: string;
 };

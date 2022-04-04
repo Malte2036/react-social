@@ -5,7 +5,7 @@ import { useCookies } from "react-cookie";
 
 export default function PostViewImage(props: {
   backendService: BackendService;
-  imageId: number | null;
+  imageId: string | null;
 }) {
   const [cookie] = useCookies(["bearerToken"]);
   const [image, setImage] = useState<MyFile | null | undefined>(
