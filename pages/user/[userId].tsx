@@ -1,7 +1,5 @@
 import { ArrowLeftIcon } from "@heroicons/react/solid";
 import Link from "next/link";
-import { useRouter } from "next/router";
-import PostView from "../../components/PostView";
 import BackendService from "../../lib/database/backendService";
 import { Post } from "../../lib/database/data/post";
 import { User } from "../../lib/database/data/user";
@@ -9,8 +7,9 @@ import { parseCookies } from "../../helpers";
 import { Account } from "../../lib/database/data/account";
 import { useCookies } from "react-cookie";
 import ProfilePicture from "../../components/ProfilePicture";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import PostFeed from "../../components/PostFeed";
+import { BackendServiceContext } from "../../lib/contexts/BackendServiceContext";
 
 export async function getServerSideProps({ req, query }) {
   const cookies = parseCookies(req);
@@ -57,13 +56,7 @@ export async function getServerSideProps({ req, query }) {
 }
 export default function UserPage(props: { user: User | Account }) {
   const [cookie] = useCookies(["bearerToken"]);
-  const [backendService] = useState(
-    () =>
-      new BackendService(
-        process.env.NEXT_PUBLIC_REACT_APP_BACKEND_URL!,
-        Number.parseInt(process.env.NEXT_PUBLIC_REACT_APP_BACKEND_PORT!)
-      )
-  );
+  const backendService = useContext(BackendServiceContext);
 
   const [posts, setPosts] = useState<Post[]>([]);
 

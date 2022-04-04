@@ -1,16 +1,15 @@
 import { useContext, useEffect, useState } from "react";
 import BackendService from "../../lib/database/backendService";
-import PostView from "../../components/PostView";
 import { Post } from "../../lib/database/data/post";
 import CreatePostView from "../../components/CreatePostView";
 import Button from "../../components/Button";
 import { SocketContext } from "../../lib/contexts/SocketContext";
-import { User } from "../../lib/database/data/user";
 import { useRouter } from "next/router";
 import { parseCookies } from "../../helpers";
 import { Account } from "../../lib/database/data/account";
 import { useCookies } from "react-cookie";
 import PostFeed from "../../components/PostFeed";
+import { BackendServiceContext } from "../../lib/contexts/BackendServiceContext";
 
 export async function getServerSideProps({ req }) {
   const cookies = parseCookies(req);
@@ -39,13 +38,7 @@ export async function getServerSideProps({ req }) {
 export default function HomePage(props: { account: Account }) {
   const [cookie, setCookie, removeCookie] = useCookies(["bearerToken"]);
 
-  const [backendService] = useState(
-    () =>
-      new BackendService(
-        process.env.NEXT_PUBLIC_REACT_APP_BACKEND_URL!,
-        Number.parseInt(process.env.NEXT_PUBLIC_REACT_APP_BACKEND_PORT!)
-      )
-  );
+  const backendService = useContext(BackendServiceContext);
 
   const [posts, setPosts] = useState<Post[]>([]);
 

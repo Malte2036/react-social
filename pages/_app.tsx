@@ -1,18 +1,12 @@
 import type { AppProps } from "next/app";
-import BackendService from "../lib/database/backendService";
 import useDarkmode from "../lib/hooks/DarkmodeHook";
 import { CookiesProvider } from "react-cookie";
 import "./styles/globals.css";
-import { useState } from "react";
+import { useContext } from "react";
+import { BackendServiceContext } from "../lib/contexts/BackendServiceContext";
 
 export default function MyApp({ Component, pageProps }: AppProps) {
-  const [backendService] = useState(
-    () =>
-      new BackendService(
-        process.env.NEXT_PUBLIC_REACT_APP_BACKEND_URL!,
-        Number.parseInt(process.env.NEXT_PUBLIC_REACT_APP_BACKEND_PORT!)
-      )
-  );
+  const backendService = useContext(BackendServiceContext);
 
   const [darkmode, setDarkmode] = useDarkmode(backendService);
   return (

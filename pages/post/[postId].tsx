@@ -6,8 +6,9 @@ import BackendService from "../../lib/database/backendService";
 import { Post } from "../../lib/database/data/post";
 import { parseCookies } from "../../helpers";
 import { Account } from "../../lib/database/data/account";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useCookies } from "react-cookie";
+import { BackendServiceContext } from "../../lib/contexts/BackendServiceContext";
 
 export async function getServerSideProps({ req, query }) {
   const cookies = parseCookies(req);
@@ -41,13 +42,7 @@ export default function SinglePostPage(props: {
 }) {
   const [cookie, setCookie, removeCookie] = useCookies(["bearerToken"]);
 
-  const [backendService] = useState(
-    () =>
-      new BackendService(
-        process.env.NEXT_PUBLIC_REACT_APP_BACKEND_URL!,
-        Number.parseInt(process.env.NEXT_PUBLIC_REACT_APP_BACKEND_PORT!)
-      )
-  );
+  const backendService = useContext(BackendServiceContext);
 
   const [post, setPost] = useState<Post | undefined>(undefined);
 
