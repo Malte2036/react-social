@@ -1,13 +1,10 @@
-import BackendService from "../lib/database/backendService";
+import { useContext } from "react";
+import { BackendServiceContext } from "../lib/contexts/BackendServiceContext";
 import { Post } from "../lib/database/data/post";
-import { User } from "../lib/database/data/user";
 import PostView from "./PostView";
 
-export default function PostFeed(props: {
-  
-  posts: Post[];
-  account: User;
-}) {
+export default function PostFeed(props: { posts: Post[] }) {
+  const backendService = useContext(BackendServiceContext);
   return (
     <div className="flex flex-col">
       {props.posts
@@ -16,9 +13,7 @@ export default function PostFeed(props: {
         )
         .map((post) => (
           <PostView
-            backendService={props.backendService}
             post={post}
-            account={props.account}
             key={post.id}
           />
         ))}

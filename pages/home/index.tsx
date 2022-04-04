@@ -71,7 +71,7 @@ export default function HomePage(props: { account: Account }) {
         <div>
           <h1 className="text-center text-5xl font-extrabold">Feed</h1>
           <CreatePostView></CreatePostView>
-          <PostFeed account={props.account} posts={posts} />
+          <PostFeed posts={posts} />
         </div>
         <Button
           onClickHandler={async () => {

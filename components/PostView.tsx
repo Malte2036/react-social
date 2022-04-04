@@ -8,10 +8,13 @@ import Link from "next/link";
 import PostLike from "./PostLike";
 import { useCookies } from "react-cookie";
 import { BackendServiceContext } from "../lib/contexts/BackendServiceContext";
+import { useAccount } from "../lib/contexts/AccountContext";
 
-export default function PostView(props: { post: Post; account: User }) {
-  const [cookie, setCookie, removeCookie] = useCookies(["bearerToken"]);
+export default function PostView(props: { post: Post }) {
+  const [cookie] = useCookies(["bearerToken"]);
   const backendService = useContext(BackendServiceContext);
+
+  const [account] = useAccount();
 
   const [creator, setCreator] = useState<User | undefined>(undefined);
   useEffect(() => {
@@ -40,7 +43,7 @@ export default function PostView(props: { post: Post; account: User }) {
           <span className="text-xs pt-0.5 opacity-50">
             {(props.post.createdAt as Date).toDateString()}
           </span>
-          {props.account.id === props.post.creatorId && (
+          {account.id === props.post.creatorId && (
             <PostViewDropdown post={props.post} />
           )}
         </div>

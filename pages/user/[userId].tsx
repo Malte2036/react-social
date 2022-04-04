@@ -73,22 +73,14 @@ export default function UserPage(props: { user: User | Account }) {
         </Link>
         <div className="relative top-4 h-14 left-0 m-2 flex flex-row">
           <div className="relative top-1">
-            <ProfilePicture
-             
-              imageId={props.user.imageId || null}
-              size={40}
-            />
+            <ProfilePicture imageId={props.user.imageId || null} size={40} />
           </div>
           <div className="m-1 ml-2 h-14 text-3xl">
             <span className="align-middle">{props.user.name}</span>
           </div>
         </div>
 
-        <PostFeed
-         
-          account={props.user}
-          posts={posts}
-        />
+        <PostFeed posts={posts} />
       </div>
     </div>
   );
