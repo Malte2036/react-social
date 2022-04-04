@@ -45,7 +45,7 @@ export default function PostLike(props: {
   return (
     <>
       <div
-        className={`h-20 w-20    align-middle ${
+        className={`h-16 w-16 relative bottom-5 ${
           active
             ? "text-gray-900 dark:text-red-500"
             : "text-gray-200 dark:text-white"
@@ -70,7 +70,7 @@ export default function PostLike(props: {
           }
         }}
       />
-      {count}
+      <span className="relative right-3">{count}</span>
     </>
   );
 }
