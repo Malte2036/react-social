@@ -34,7 +34,10 @@ export default function PostFeed(props: { posts: Post[] }) {
   }, [backendService, cookie.bearerToken, creators, props.posts]);
 
   const postViews = props.posts
-    .sort((a: Post, b: Post) => b.createdAt.valueOf() - a.createdAt.valueOf())
+    .sort(
+      (a: Post, b: Post) =>
+        (b.createdAt as Date).valueOf() - (a.createdAt as Date).valueOf()
+    )
     .map((post) => (
       <PostView
         post={post}
