@@ -10,18 +10,35 @@ import { useCookies } from "react-cookie";
 import { BackendServiceContext } from "../lib/contexts/BackendServiceContext";
 import { useAccount } from "../lib/contexts/AccountContext";
 
-export default function PostView(props: { post: Post }) {
+export default function PostView(props: {
+  post: Post;
+  creator?: User;
+  doNotFetchCreator?: boolean;
+}) {
   const [cookie] = useCookies(["bearerToken"]);
   const backendService = useContext(BackendServiceContext);
 
   const [account] = useAccount();
 
   const [creator, setCreator] = useState<User | undefined>(undefined);
+
   useEffect(() => {
-    backendService
-      .getUserById(props.post.creatorId, cookie.bearerToken)
-      .then((creator) => setCreator(creator));
-  }, [backendService, cookie.bearerToken, props.post.creatorId]);
+    setCreator(props.creator);
+  }, [props.creator]);
+
+  useEffect(() => {
+    if (!props.doNotFetchCreator) {
+      backendService
+        .getUserById(props.post.creatorId, cookie.bearerToken)
+        .then((creator) => setCreator(creator));
+    }
+  }, [
+    backendService,
+    cookie.bearerToken,
+    props.doNotFetchCreator,
+    props.post.creatorId,
+  ]);
+
   return (
     <div className="bg-white dark:bg-slate-800 rounded-lg my-3 shadow-xl">
       <div className="relative h-12 border-b-2 border-gray-200 dark:border-gray-900">

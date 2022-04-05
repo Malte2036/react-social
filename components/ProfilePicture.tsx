@@ -21,6 +21,7 @@ export default function ProfilePicture(props: {
         .getFileById(props.imageId!, cookie.bearerToken)
         .then((myFile) => setImage(myFile));
     }
+    return () => setImage(undefined);
   }, [cookie.bearerToken, backendService, props.imageId]);
 
   return image !== undefined ? (
