@@ -10,6 +10,7 @@ import ProfilePicture from "../../components/ProfilePicture";
 import { useContext, useEffect, useState } from "react";
 import PostFeed from "../../components/PostFeed";
 import { BackendServiceContext } from "../../lib/contexts/BackendServiceContext";
+import { useAccount } from "../../lib/contexts/AccountContext";
 
 export async function getServerSideProps({ req, query }) {
   const cookies = parseCookies(req);
@@ -56,6 +57,7 @@ export async function getServerSideProps({ req, query }) {
 export default function UserPage(props: { user: User | Account }) {
   const [cookie] = useCookies(["bearerToken"]);
   const backendService = useContext(BackendServiceContext);
+  const [account] = useAccount();
 
   const [posts, setPosts] = useState<Post[]>([]);
 
@@ -79,6 +81,24 @@ export default function UserPage(props: { user: User | Account }) {
             <span className="align-middle">{props.user.name}</span>
           </div>
         </div>
+        {account.id === props.user.id ? (
+          <div className="flex flex-col">
+            <span className="mt-6">Upload ProfilePicture:</span>
+            <input
+              type="file"
+              onChange={(event) => {
+                if (event.target.files != null) {
+                  backendService.setCurrentUserProfilePicture(
+                    event.target.files[0],
+                    cookie.bearerToken
+                  );
+                }
+              }}
+            />
+          </div>
+        ) : (
+          <></>
+        )}
 
         <PostFeed posts={posts} />
       </div>
