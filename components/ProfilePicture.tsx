@@ -8,6 +8,7 @@ import defaultProfilePicture from "../public/default_profile_picture.png";
 export default function ProfilePicture(props: {
   imageId: string | null;
   size?: number;
+  borderColorClass?: string;
 }) {
   const [cookie] = useCookies(["bearerToken"]);
   const backendService = useContext(BackendServiceContext);
@@ -24,7 +25,9 @@ export default function ProfilePicture(props: {
 
   return image !== undefined ? (
     <Image
-      className="rounded-full object-cover border-2 border-gray-200 dark:border-gray-900"
+      className={`rounded-full object-cover border-2 ${
+        props.borderColorClass ?? "border-gray-200 dark:border-gray-900"
+      }`}
       src={image === null ? defaultProfilePicture : image.data}
       alt=""
       layout="fixed"
@@ -32,6 +35,14 @@ export default function ProfilePicture(props: {
       height={`${props.size ?? 32}px`}
     />
   ) : (
-    <div className="rounded-full w-8 h-8 border-2 border-gray-200 dark:border-gray-900" />
+    <div
+      className={`rounded-full border-2 ${
+        props.borderColorClass ?? "border-gray-200 dark:border-gray-900"
+      }`}
+      style={{
+        width: `${props.size ?? 32}px`,
+        height: `${props.size ?? 32}px`,
+      }}
+    />
   );
 }
