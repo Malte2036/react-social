@@ -32,6 +32,6 @@ export default function ProfilePicture(props: {
       height={`${props.size ?? 32}px`}
     />
   ) : (
-    <></>
+    <div className="rounded-full w-8 h-8 border-2 border-gray-200 dark:border-gray-900" />
   );
 }
