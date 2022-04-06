@@ -9,20 +9,35 @@ export default function ProfilePicture(props: {
   imageId: string | null;
   size?: number;
   borderColorClass?: string;
+  picture?: MyFile;
+  doNotFetchPicture?: boolean;
 }) {
   const [cookie] = useCookies(["bearerToken"]);
   const backendService = useContext(BackendServiceContext);
+
   const [image, setImage] = useState<MyFile | null | undefined>(
     props.imageId === null ? null : undefined
   );
+
   useEffect(() => {
-    if (props.imageId != null) {
+    setImage(props.picture);
+    return () => setImage(undefined);
+  }, [props.picture]);
+
+  useEffect(() => {
+    if (!props.doNotFetchPicture && props.imageId != null) {
+      console.log("fetch")
       backendService
         .getFileById(props.imageId!, cookie.bearerToken)
         .then((myFile) => setImage(myFile));
     }
     return () => setImage(undefined);
-  }, [cookie.bearerToken, backendService, props.imageId]);
+  }, [
+    cookie.bearerToken,
+    backendService,
+    props.imageId,
+    props.doNotFetchPicture,
+  ]);
 
   return image !== undefined ? (
     <Image

@@ -9,11 +9,14 @@ import PostLike from "./PostLike";
 import { useCookies } from "react-cookie";
 import { BackendServiceContext } from "../lib/contexts/BackendServiceContext";
 import { useAccount } from "../lib/contexts/AccountContext";
+import { MyFile } from "../lib/database/data/myFile";
 
 export default function PostView(props: {
   post: Post;
   creator?: User;
   doNotFetchCreator?: boolean;
+  profilePicture?: MyFile;
+  doNotFetchProfilePicture?: boolean;
 }) {
   const [cookie] = useCookies(["bearerToken"]);
   const backendService = useContext(BackendServiceContext);
@@ -21,23 +24,17 @@ export default function PostView(props: {
   const [account] = useAccount();
 
   const [creator, setCreator] = useState<User | undefined>(undefined);
+  const [profilePicture, setProfilePicture] = useState<MyFile | undefined>(
+    undefined
+  );
 
   useEffect(() => {
     setCreator(props.creator);
   }, [props.creator]);
 
   useEffect(() => {
-    if (!props.doNotFetchCreator) {
-      backendService
-        .getUserById(props.post.creatorId, cookie.bearerToken)
-        .then((creator) => setCreator(creator));
-    }
-  }, [
-    backendService,
-    cookie.bearerToken,
-    props.doNotFetchCreator,
-    props.post.creatorId,
-  ]);
+    setProfilePicture(props.profilePicture);
+  }, [props.profilePicture]);
 
   return (
     <div className="bg-white dark:bg-slate-800 rounded-lg my-3 shadow-xl">
@@ -47,6 +44,8 @@ export default function PostView(props: {
             <>
               <ProfilePicture
                 imageId={creator.imageId || null}
+                picture={profilePicture}
+                doNotFetchPicture={true}
               ></ProfilePicture>
               <Link href={`/user/${props.post.creatorId}`} passHref>
                 <span className="m-1 ml-2 cursor-pointer">{creator.name}</span>
