@@ -39,12 +39,16 @@ export default function ProfilePicture(props: {
     props.doNotFetchPicture,
   ]);
 
-  return image !== undefined ? (
+  return image !== undefined || props.imageId == null ? (
     <Image
       className={`rounded-full object-cover border-2 ${
         props.borderColorClass ?? "border-gray-200 dark:border-gray-900"
       }`}
-      src={image === null ? defaultProfilePicture : image.data}
+      src={
+        image === null || props.imageId == null
+          ? defaultProfilePicture
+          : image.data
+      }
       alt=""
       layout="fixed"
       width={`${props.size ?? 32}px`}
