@@ -1,37 +1,25 @@
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect } from "react";
 import { useCookies } from "react-cookie";
 import { BackendServiceContext } from "../lib/contexts/BackendServiceContext";
 import { Post } from "../lib/database/data/post";
 import { User } from "../lib/database/data/user";
+import useOnlyFetchOncePerIdHook from "../lib/hooks/OnlyFetchOncePerIdHook";
 import PostView from "./PostView";
 
 export default function PostFeed(props: { posts: Post[] }) {
   const backendService = useContext(BackendServiceContext);
   const [cookie] = useCookies(["bearerToken"]);
 
-  const [creators, setCreators] = useState<Map<string, User> | undefined>(
-    undefined
+  const [creators, setCreatorIds] = useOnlyFetchOncePerIdHook<User>(
+    new Set(props.posts.map((post) => post.creatorId)),
+    async (valueId) => {
+      return await backendService.getUserById(valueId, cookie.bearerToken);
+    }
   );
 
   useEffect(() => {
-    if (!creators) {
-      const creatorIds = [
-        ...new Set(props.posts.map((post) => post.creatorId)),
-      ];
-
-      const creatorsTemp = new Map<string, User>();
-      creatorIds.map(async (creatorId) => {
-        const user = await backendService.getUserById(
-          creatorId,
-          cookie.bearerToken
-        );
-        setCreators(() => {
-          creatorsTemp.set(creatorId, user);
-          return new Map(creatorsTemp);
-        });
-      });
-    }
-  }, [backendService, cookie.bearerToken, creators, props.posts]);
+    setCreatorIds(new Set(props.posts.map((post) => post.creatorId)));
+  }, [props.posts, setCreatorIds]);
 
   const postViews = props.posts
     .sort(
