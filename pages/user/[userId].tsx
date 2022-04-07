@@ -11,6 +11,7 @@ import { useContext, useEffect, useState } from "react";
 import PostFeed from "../../components/PostFeed";
 import { BackendServiceContext } from "../../lib/contexts/BackendServiceContext";
 import { useAccount } from "../../lib/contexts/AccountContext";
+import { useRouter } from "next/router";
 
 export async function getServerSideProps({ req, query }) {
   const cookies = parseCookies(req);
@@ -59,7 +60,19 @@ export default function UserPage(props: { user: User | Account }) {
   const backendService = useContext(BackendServiceContext);
   const [account] = useAccount();
 
+  const router = useRouter()
+
   const [posts, setPosts] = useState<Post[]>([]);
+
+  async function changeProfilePicture(event): Promise<void> {
+    if (event.target.files != null) {
+      await backendService.setCurrentUserProfilePicture(
+        event.target.files[0],
+        cookie.bearerToken
+      );
+      router.reload();
+    }
+  }
 
   useEffect(() => {
     backendService
@@ -86,14 +99,7 @@ export default function UserPage(props: { user: User | Account }) {
             <span className="mt-6">Upload ProfilePicture:</span>
             <input
               type="file"
-              onChange={(event) => {
-                if (event.target.files != null) {
-                  backendService.setCurrentUserProfilePicture(
-                    event.target.files[0],
-                    cookie.bearerToken
-                  );
-                }
-              }}
+              onChange={changeProfilePicture}
             />
           </div>
         ) : (
