@@ -6,7 +6,6 @@ import Button from "../../components/Button";
 import { SocketContext } from "../../lib/contexts/SocketContext";
 import { useRouter } from "next/router";
 import { parseCookies } from "../../helpers";
-import { Account } from "../../lib/database/data/account";
 import { useCookies } from "react-cookie";
 import PostFeed from "../../components/PostFeed";
 import { BackendServiceContext } from "../../lib/contexts/BackendServiceContext";
@@ -31,11 +30,11 @@ export async function getServerSideProps({ req }) {
   }
 
   return {
-    props: { account },
+    props: {},
   };
 }
 
-export default function HomePage(props: { account: Account }) {
+export default function HomePage() {
   const [cookie, setCookie, removeCookie] = useCookies(["bearerToken"]);
 
   const backendService = useContext(BackendServiceContext);
