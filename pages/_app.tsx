@@ -26,7 +26,6 @@ export default function MyApp({ Component, pageProps }: AppProps) {
           router.push("/login");
         } else {
           const account = await backendService.getAccount(cookie.bearerToken);
-          console.log(account);
           if (account) {
             setInitAccount(account);
           } else {

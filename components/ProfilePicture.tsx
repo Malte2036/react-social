@@ -26,7 +26,6 @@ export default function ProfilePicture(props: {
 
   useEffect(() => {
     if (!props.doNotFetchPicture && props.imageId != null) {
-      console.log("fetch")
       backendService
         .getFileById(props.imageId!, cookie.bearerToken)
         .then((myFile) => setImage(myFile));
