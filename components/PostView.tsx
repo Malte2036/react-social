@@ -36,6 +36,26 @@ export default function PostView(props: {
     setProfilePicture(props.profilePicture);
   }, [props.profilePicture]);
 
+  useEffect(() => {
+    if (!props.doNotFetchCreator) {
+      const fetchCreator = async () => {
+        const fetchedCreator = await backendService.getUserById(props.post.creatorId, cookie.bearerToken)
+        setCreator(fetchedCreator)
+      }
+      fetchCreator();
+    }
+  }, [backendService, cookie.bearerToken, props.doNotFetchCreator, props.post.creatorId])
+
+  useEffect(() => {
+    if (!props.doNotFetchProfilePicture && creator) {
+      const fetchProfilePicture = async () => {
+        const fetchedFile = await backendService.getFileById(creator.imageId, cookie.bearerToken)
+        setProfilePicture(fetchedFile)
+      }
+      fetchProfilePicture();
+    }
+  }, [backendService, cookie.bearerToken, creator, props.doNotFetchProfilePicture])
+
   return (
     <div className="bg-white dark:bg-slate-800 rounded-lg my-3 shadow-xl">
       <div className="relative h-12 border-b-2 border-gray-200 dark:border-gray-900">
