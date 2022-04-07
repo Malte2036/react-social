@@ -1,6 +1,7 @@
 import axios, { AxiosRequestHeaders } from "axios";
 import { Account } from "./data/account";
 import { AccountPrefs } from "./data/accountPrefs";
+import { Comment } from "./data/comment";
 import { MyFile } from "./data/myFile";
 import { Post } from "./data/post";
 import { User } from "./data/user";
@@ -187,6 +188,26 @@ export default class BackendService {
       return response.data as boolean;
     } catch (error) {}
     return false;
+  }
+
+  async getCommentsByPostId(
+    postId: string,
+    bearerToken: string
+  ): Promise<Comment[]> {
+    try {
+      const response = await axios.get(
+        `${this.endpoint}/posts/${postId}/comments`,
+        {
+          headers: this.authHeader(bearerToken),
+        }
+      );
+
+      if (response.status !== 200) {
+        return [];
+      }
+      return response.data as Comment[];
+    } catch (error) {}
+    return null;
   }
 
   async createPost(

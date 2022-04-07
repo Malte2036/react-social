@@ -68,7 +68,7 @@ export default function SinglePostPage(props: {
             <Link href={"/home"} passHref>
               <ArrowLeftIcon className="h-6 w-6 md:h-8 md:w-8 ml-0.5 cursor-pointer"></ArrowLeftIcon>
             </Link>
-            <PostView post={post}></PostView>
+            <PostView post={post} showComments={true}></PostView>
           </>
         ) : (
           <></>
