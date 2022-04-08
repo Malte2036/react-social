@@ -8,16 +8,11 @@ import { useRouter } from "next/router";
 import { parseCookies } from "../../helpers";
 import { useCookies } from "react-cookie";
 import PostFeed from "../../components/PostFeed";
-import { BackendServiceContext } from "../../lib/contexts/BackendServiceContext";
+import { backendService, BackendServiceContext } from "../../lib/contexts/BackendServiceContext";
 
 export async function getServerSideProps({ req }) {
   const cookies = parseCookies(req);
   const bearerToken = cookies.bearerToken;
-
-  const backendService = new BackendService(
-    process.env.NEXT_PUBLIC_REACT_APP_BACKEND_URL!,
-    Number.parseInt(process.env.NEXT_PUBLIC_REACT_APP_BACKEND_PORT!)
-  );
 
   const account = await backendService.getAccount(bearerToken);
   if (!account) {

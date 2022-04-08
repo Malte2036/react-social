@@ -2,24 +2,18 @@ import { ArrowLeftIcon } from "@heroicons/react/solid";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import PostView from "../../components/PostView";
-import BackendService from "../../lib/database/backendService";
 import { Post } from "../../lib/database/data/post";
 import { parseCookies } from "../../helpers";
 import { Account } from "../../lib/database/data/account";
 import { useContext, useEffect, useState } from "react";
 import { useCookies } from "react-cookie";
-import { BackendServiceContext } from "../../lib/contexts/BackendServiceContext";
+import { backendService, BackendServiceContext } from "../../lib/contexts/BackendServiceContext";
 
 export async function getServerSideProps({ req, query }) {
   const cookies = parseCookies(req);
   const bearerToken = cookies.bearerToken;
 
   const { postId } = query;
-
-  const backendService = new BackendService(
-    process.env.NEXT_PUBLIC_REACT_APP_BACKEND_URL!,
-    Number.parseInt(process.env.NEXT_PUBLIC_REACT_APP_BACKEND_PORT!)
-  );
 
   const account = await backendService.getAccount(bearerToken);
   if (!account) {
