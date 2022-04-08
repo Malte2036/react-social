@@ -43,7 +43,7 @@ export default function PostViewDropdown(props: { post: Post }) {
                     );
                     router.reload();
                   }}
-                  className={"block px-4 py-2 text-sm cursor-pointer ".concat(
+                  className={"block px-4 py-2 text-sm cursor-pointer umami--click--delete-post-button ".concat(
                     active ? "bg-gray-200 text-gray-900" : "dark:text-gray-200"
                   )}
                 >

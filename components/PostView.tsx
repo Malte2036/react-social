@@ -100,9 +100,10 @@ export default function PostView(props: {
                 picture={profilePicture}
                 doNotFetchPicture={true}
               ></ProfilePicture>
-              <Link href={`/user/${props.post.creatorId}`} passHref>
-                <span className="m-1 ml-2 cursor-pointer">{creator.name}</span>
-              </Link>
+              <div className="umami--click--visit-user-button">
+                <Link href={`/user/${props.post.creatorId}`} passHref>
+                  <span className="m-1 ml-2 cursor-pointer">{creator.name}</span>
+                </Link></div>
             </>
           ) : (
             <></>

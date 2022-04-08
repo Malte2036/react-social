@@ -7,6 +7,7 @@ import { BackendServiceContext } from "../lib/contexts/BackendServiceContext";
 import { AccountProvider } from "../lib/contexts/AccountContext";
 import { Account } from "../lib/database/data/account";
 import { Router, useRouter } from "next/router";
+import Script from "next/script";
 
 export default function MyApp({ Component, pageProps }: AppProps) {
   const backendService = useContext(BackendServiceContext);
@@ -50,14 +51,16 @@ export default function MyApp({ Component, pageProps }: AppProps) {
   }
 
   return (
-    <CookiesProvider>
-      <AccountProvider account={initAccount}>
-        <div className={darkmode ? "dark" : ""}>
-          <div className="min-h-screen dark:text-white bg-gray-200 dark:bg-slate-900">
-            <Component {...pageProps} />
+    <>
+      <Script async defer data-website-id={process.env.NEXT_PUBLIC_REACT_APP_UMAMI_ID} src={process.env.NEXT_PUBLIC_REACT_APP_UMAMI_URL ? `${process.env.NEXT_PUBLIC_REACT_APP_UMAMI_URL}/umami.js` : ""} />
+      <CookiesProvider>
+        <AccountProvider account={initAccount}>
+          <div className={darkmode ? "dark" : ""}>
+            <div className="min-h-screen dark:text-white bg-gray-200 dark:bg-slate-900">
+              <Component {...pageProps} />
+            </div>
           </div>
-        </div>
-      </AccountProvider>
-    </CookiesProvider>
+        </AccountProvider>
+      </CookiesProvider></>
   );
 }

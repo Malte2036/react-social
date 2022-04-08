@@ -77,6 +77,7 @@ export default function HomePage() {
             removeCookie("bearerToken");
             router.push("/login");
           }}
+          className="umami--click--logout-button"
         >
           Logout
         </Button>
