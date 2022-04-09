@@ -16,7 +16,7 @@ export default function PostLike(props: { post: Post }) {
       await backendService.isPostLikedByMe(props.post.id, cookie.bearerToken),
     {
       onSuccess: (data) => {
-        if (active === undefined || anim.current?.currentFrame === 0) {
+        if (active === undefined) {
           anim.current?.goToAndStop(data ? 66 : 19, true);
         } else if (active != data) {
           if (data) {
@@ -26,7 +26,6 @@ export default function PostLike(props: { post: Post }) {
           }
         }
       },
-      fallbackData: false,
     }
   );
   const { data: count } = useSWR(
@@ -49,6 +48,7 @@ export default function PostLike(props: { post: Post }) {
         loop: false,
         autoplay: false,
         animationData: hearthLottie,
+        initialSegment: [10, 10],
       });
       return () => anim.current?.destroy();
     }
