@@ -2,12 +2,12 @@ import type { AppProps } from "next/app";
 import useDarkmode from "../lib/hooks/DarkmodeHook";
 import { CookiesProvider, useCookies } from "react-cookie";
 import "./styles/globals.css";
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect } from "react";
 import { BackendServiceContext } from "../lib/contexts/BackendServiceContext";
 import { AccountProvider } from "../lib/contexts/AccountContext";
-import { Account } from "../lib/database/data/account";
-import { Router, useRouter } from "next/router";
 import Script from "next/script";
+import useSWR from "swr";
+import { useRouter } from "next/router";
 
 export default function MyApp({ Component, pageProps }: AppProps) {
   const backendService = useContext(BackendServiceContext);
@@ -16,27 +16,18 @@ export default function MyApp({ Component, pageProps }: AppProps) {
   const [cookie] = useCookies(["bearerToken"]);
   let router = useRouter();
 
-  const [initAccount, setInitAccount] = useState<Account | undefined>(
-    undefined
+  const { data: initAccount } = useSWR(
+    "/auth/account",
+    async () => await backendService.getAccount(cookie.bearerToken)
   );
 
   useEffect(() => {
     if (router.pathname != "/login") {
-      const fetchAccount = async () => {
-        if (!cookie.bearerToken) {
-          router.push("/login");
-        } else {
-          const account = await backendService.getAccount(cookie.bearerToken);
-          if (account) {
-            setInitAccount(account);
-          } else {
-            router.push("/login");
-          }
-        }
-      };
-      fetchAccount();
+      if (!cookie.bearerToken) {
+        router.push("/login");
+      }
     }
-  }, [backendService, cookie.bearerToken, router, router.pathname]);
+  }, [cookie.bearerToken, router]);
 
   if (router.pathname != "/login") {
     if (!initAccount) {
@@ -52,7 +43,16 @@ export default function MyApp({ Component, pageProps }: AppProps) {
 
   return (
     <>
-      <Script async defer data-website-id={process.env.NEXT_PUBLIC_REACT_APP_UMAMI_ID} src={process.env.NEXT_PUBLIC_REACT_APP_UMAMI_URL ? `${process.env.NEXT_PUBLIC_REACT_APP_UMAMI_URL}/umami.js` : ""} />
+      <Script
+        async
+        defer
+        data-website-id={process.env.NEXT_PUBLIC_REACT_APP_UMAMI_ID}
+        src={
+          process.env.NEXT_PUBLIC_REACT_APP_UMAMI_URL
+            ? `${process.env.NEXT_PUBLIC_REACT_APP_UMAMI_URL}/umami.js`
+            : ""
+        }
+      />
       <CookiesProvider>
         <AccountProvider account={initAccount}>
           <div className={darkmode ? "dark" : ""}>
@@ -61,6 +61,7 @@ export default function MyApp({ Component, pageProps }: AppProps) {
             </div>
           </div>
         </AccountProvider>
-      </CookiesProvider></>
+      </CookiesProvider>
+    </>
   );
 }
