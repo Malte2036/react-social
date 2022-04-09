@@ -1,33 +1,12 @@
 import { useContext, useEffect, useState } from "react";
-import BackendService from "../../lib/database/backendService";
 import { Post } from "../../lib/database/data/post";
 import CreatePostView from "../../components/CreatePostView";
 import Button from "../../components/Button";
 import { SocketContext } from "../../lib/contexts/SocketContext";
 import { useRouter } from "next/router";
-import { parseCookies } from "../../helpers";
 import { useCookies } from "react-cookie";
 import PostFeed from "../../components/PostFeed";
-import { backendService, BackendServiceContext } from "../../lib/contexts/BackendServiceContext";
-
-export async function getServerSideProps({ req }) {
-  const cookies = parseCookies(req);
-  const bearerToken = cookies.bearerToken;
-
-  const account = await backendService.getAccount(bearerToken);
-  if (!account) {
-    return {
-      redirect: {
-        permanent: false,
-        destination: "/login",
-      },
-    };
-  }
-
-  return {
-    props: {},
-  };
-}
+import { BackendServiceContext } from "../../lib/contexts/BackendServiceContext";
 
 export default function HomePage() {
   const [cookie, setCookie, removeCookie] = useCookies(["bearerToken"]);

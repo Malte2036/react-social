@@ -13,30 +13,12 @@ import {
 import useSWR from "swr";
 
 export async function getServerSideProps({ req, query }) {
-  const cookies = parseCookies(req);
-  const bearerToken = cookies.bearerToken;
-
-  const { postId } = query;
-
-  const account = await backendService.getAccount(bearerToken);
-  if (!account) {
-    return {
-      redirect: {
-        permanent: false,
-        destination: "/login",
-      },
-    };
-  }
-
   return {
-    props: { postId, account },
+    props: { postId: query.postId },
   };
 }
 
-export default function SinglePostPage(props: {
-  postId: string;
-  account: Account;
-}) {
+export default function SinglePostPage(props: { postId: string }) {
   const [cookie] = useCookies(["bearerToken"]);
 
   const backendService = useContext(BackendServiceContext);

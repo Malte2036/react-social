@@ -2,7 +2,6 @@ import { ArrowLeftIcon } from "@heroicons/react/solid";
 import Link from "next/link";
 import { User } from "../../lib/database/data/user";
 import { parseCookies } from "../../helpers";
-import { Account } from "../../lib/database/data/account";
 import { useCookies } from "react-cookie";
 import ProfilePicture from "../../components/ProfilePicture";
 import { useContext } from "react";
@@ -21,22 +20,6 @@ export async function getServerSideProps({ req, query }) {
 
   let { userId } = query;
 
-  const account = await backendService.getAccount(bearerToken);
-  if (!account) {
-    return {
-      redirect: {
-        permanent: false,
-        destination: "/login",
-      },
-    };
-  }
-
-  if (account.id === userId) {
-    return {
-      props: { user: account },
-    };
-  }
-
   const user = await backendService.getUserById(userId, bearerToken);
   if (user === null) {
     return {
@@ -52,7 +35,7 @@ export async function getServerSideProps({ req, query }) {
     props: { user },
   };
 }
-export default function UserPage(props: { user: User | Account }) {
+export default function UserPage(props: { user: User }) {
   const [cookie] = useCookies(["bearerToken"]);
   const backendService = useContext(BackendServiceContext);
   const [account] = useAccount();
