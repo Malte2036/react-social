@@ -1,16 +1,11 @@
 import { ArrowLeftIcon } from "@heroicons/react/solid";
 import Link from "next/link";
-import { useRouter } from "next/router";
 import PostView from "../../components/PostView";
-import { parseCookies } from "../../helpers";
-import { Account } from "../../lib/database/data/account";
-import { useContext, useEffect, useState } from "react";
+import { useContext } from "react";
 import { useCookies } from "react-cookie";
-import {
-  backendService,
-  BackendServiceContext,
-} from "../../lib/contexts/BackendServiceContext";
+import { BackendServiceContext } from "../../lib/contexts/BackendServiceContext";
 import useSWR from "swr";
+import Error from "next/error";
 
 export async function getServerSideProps({ req, query }) {
   return {
@@ -23,19 +18,13 @@ export default function SinglePostPage(props: { postId: string }) {
 
   const backendService = useContext(BackendServiceContext);
 
-  const { data: post } = useSWR(
+  const { data: post, error: postError } = useSWR(
     "/posts/" + props.postId,
     async () =>
       await backendService.getPostById(props.postId, cookie.bearerToken)
   );
 
-  let router = useRouter();
-
-  useEffect(() => {
-    if (!post) {
-      router.push("/home");
-    }
-  }, [post, router]);
+  if (postError) return <Error statusCode={404} title="Post not found" />;
 
   return (
     <div className="flex justify-center min-h-screen">

@@ -122,19 +122,16 @@ export default class BackendService {
   }
 
   async getPostById(postId: string, bearerToken: string): Promise<Post | null> {
-    try {
-      const response = await axios.get(`${this.endpoint}/posts/${postId}`, {
-        headers: this.authHeader(bearerToken),
-      });
+    const response = await axios.get(`${this.endpoint}/posts/${postId}`, {
+      headers: this.authHeader(bearerToken),
+    });
 
-      if (response.status !== 200) {
-        return null;
-      }
-      response.data.createdAt = new Date(response.data.createdAt);
+    if (response.status !== 200) {
+      return null;
+    }
+    response.data.createdAt = new Date(response.data.createdAt);
 
-      return response.data as Post;
-    } catch (error) {}
-    return null;
+    return response.data as Post;
   }
 
   async getLikesCountByPostId(
