@@ -1,16 +1,19 @@
 import { ArrowLeftIcon } from "@heroicons/react/solid";
 import Link from "next/link";
-import { Post } from "../../lib/database/data/post";
 import { User } from "../../lib/database/data/user";
 import { parseCookies } from "../../helpers";
 import { Account } from "../../lib/database/data/account";
 import { useCookies } from "react-cookie";
 import ProfilePicture from "../../components/ProfilePicture";
-import { useContext, useEffect, useState } from "react";
+import { useContext } from "react";
 import PostFeed from "../../components/PostFeed";
-import { backendService, BackendServiceContext } from "../../lib/contexts/BackendServiceContext";
+import {
+  backendService,
+  BackendServiceContext,
+} from "../../lib/contexts/BackendServiceContext";
 import { useAccount } from "../../lib/contexts/AccountContext";
 import { useRouter } from "next/router";
+import useSWR from "swr";
 
 export async function getServerSideProps({ req, query }) {
   const cookies = parseCookies(req);
@@ -54,9 +57,16 @@ export default function UserPage(props: { user: User | Account }) {
   const backendService = useContext(BackendServiceContext);
   const [account] = useAccount();
 
-  const router = useRouter()
+  const router = useRouter();
 
-  const [posts, setPosts] = useState<Post[]>([]);
+  const { data: posts } = useSWR(
+    `/posts/byCreatorId/${props.user.id}`,
+    async () =>
+      await backendService.getAllPostsByCreatorId(
+        props.user.id,
+        cookie.bearerToken
+      )
+  );
 
   async function changeProfilePicture(event): Promise<void> {
     if (event.target.files != null) {
@@ -68,12 +78,6 @@ export default function UserPage(props: { user: User | Account }) {
     }
   }
 
-  useEffect(() => {
-    backendService
-      .getAllPostsByCreatorId(props.user.id, cookie.bearerToken)
-      .then((posts) => setPosts(posts));
-  }, [backendService, cookie.bearerToken, props.user.id]);
-
   return (
     <div className="flex justify-center min-h-screen">
       <div className="m-5 mt-3 max-w-4xl w-full flex flex-col">
@@ -82,7 +86,11 @@ export default function UserPage(props: { user: User | Account }) {
         </Link>
         <div className="relative top-4 h-14 left-0 m-2 flex flex-row">
           <div className="relative top-1">
-            <ProfilePicture imageId={props.user.imageId || null} size={40} borderColorClass="border-white dark:border-slate-800" />
+            <ProfilePicture
+              imageId={props.user.imageId || null}
+              size={40}
+              borderColorClass="border-white dark:border-slate-800"
+            />
           </div>
           <div className="m-1 ml-2 h-14 text-3xl">
             <span className="align-middle">{props.user.name}</span>
@@ -91,10 +99,7 @@ export default function UserPage(props: { user: User | Account }) {
         {account.id === props.user.id ? (
           <div className="flex flex-col">
             <span className="mt-6">Upload ProfilePicture:</span>
-            <input
-              type="file"
-              onChange={changeProfilePicture}
-            />
+            <input type="file" onChange={changeProfilePicture} />
           </div>
         ) : (
           <></>

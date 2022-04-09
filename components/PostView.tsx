@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from "react";
+import { useContext } from "react";
 import { Post } from "../lib/database/data/post";
 import { User } from "../lib/database/data/user";
 import PostViewDropdown from "./PostViewDropdown";
@@ -10,7 +10,7 @@ import { useCookies } from "react-cookie";
 import { BackendServiceContext } from "../lib/contexts/BackendServiceContext";
 import { useAccount } from "../lib/contexts/AccountContext";
 import { MyFile } from "../lib/database/data/myFile";
-import { Comment } from "../lib/database/data/comment";
+import useSWR from "swr";
 
 export default function PostView(props: {
   post: Post;
@@ -25,69 +25,20 @@ export default function PostView(props: {
 
   const [account] = useAccount();
 
-  const [creator, setCreator] = useState<User | undefined>(undefined);
-  const [profilePicture, setProfilePicture] = useState<MyFile | undefined>(
-    undefined
+  const { data: creator } = useSWR(
+    `/users/${props.post.creatorId}`,
+    async () =>
+      await backendService.getUserById(props.post.creatorId, cookie.bearerToken)
   );
 
-  const [comments, setComments] = useState<Comment[]>([]);
-
-  useEffect(() => {
-    if (props.showComments) {
-      const fetchComments = async () => {
-        const fetchedComments = await backendService.getCommentsByPostId(
-          props.post.id,
-          cookie.bearerToken
-        );
-        setComments(fetchedComments);
-      };
-      fetchComments();
-    }
-  }, [backendService, cookie.bearerToken, props.post.id, props.showComments]);
-
-  useEffect(() => {
-    setCreator(props.creator);
-  }, [props.creator]);
-
-  useEffect(() => {
-    setProfilePicture(props.profilePicture);
-  }, [props.profilePicture]);
-
-  useEffect(() => {
-    if (!props.doNotFetchCreator) {
-      const fetchCreator = async () => {
-        const fetchedCreator = await backendService.getUserById(
-          props.post.creatorId,
-          cookie.bearerToken
-        );
-        setCreator(fetchedCreator);
-      };
-      fetchCreator();
-    }
-  }, [
-    backendService,
-    cookie.bearerToken,
-    props.doNotFetchCreator,
-    props.post.creatorId,
-  ]);
-
-  useEffect(() => {
-    if (!props.doNotFetchProfilePicture && creator) {
-      const fetchProfilePicture = async () => {
-        const fetchedFile = await backendService.getFileById(
-          creator.imageId,
-          cookie.bearerToken
-        );
-        setProfilePicture(fetchedFile);
-      };
-      fetchProfilePicture();
-    }
-  }, [
-    backendService,
-    cookie.bearerToken,
-    creator,
-    props.doNotFetchProfilePicture,
-  ]);
+  const { data: comments } = useSWR(
+    props.showComments ? "/posts/" + props.post.id + "/comments" : null,
+    async () =>
+      await backendService.getCommentsByPostId(
+        props.post.id,
+        cookie.bearerToken
+      )
+  );
 
   return (
     <div className="bg-white dark:bg-slate-800 rounded-lg my-3 shadow-xl">
@@ -97,13 +48,14 @@ export default function PostView(props: {
             <>
               <ProfilePicture
                 imageId={creator.imageId || null}
-                picture={profilePicture}
-                doNotFetchPicture={true}
               ></ProfilePicture>
               <div className="umami--click--visit-user-button">
                 <Link href={`/user/${props.post.creatorId}`} passHref>
-                  <span className="m-1 ml-2 cursor-pointer">{creator.name}</span>
-                </Link></div>
+                  <span className="m-1 ml-2 cursor-pointer">
+                    {creator.name}
+                  </span>
+                </Link>
+              </div>
             </>
           ) : (
             <></>
@@ -135,7 +87,7 @@ export default function PostView(props: {
           <PostLike post={props.post} />
         </div>
       </div>
-      {props.showComments ? (
+      {props.showComments && comments ? (
         <div className="bg-gray-200 dark:bg-slate-900 rounded-b-3xl">
           {comments.map((comment) => {
             return (

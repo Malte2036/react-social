@@ -1,42 +1,23 @@
 import Image from "next/image";
-import { useContext, useEffect, useState } from "react";
+import { useContext } from "react";
 import { useCookies } from "react-cookie";
+import useSWR from "swr";
 import { BackendServiceContext } from "../lib/contexts/BackendServiceContext";
-import { MyFile } from "../lib/database/data/myFile";
 import defaultProfilePicture from "../public/default_profile_picture.png";
 
 export default function ProfilePicture(props: {
   imageId: string | null;
   size?: number;
   borderColorClass?: string;
-  picture?: MyFile;
-  doNotFetchPicture?: boolean;
 }) {
   const [cookie] = useCookies(["bearerToken"]);
   const backendService = useContext(BackendServiceContext);
 
-  const [image, setImage] = useState<MyFile | null | undefined>(
-    props.imageId === null ? null : undefined
+  const { data: image } = useSWR(
+    props.imageId ? `/files/${props.imageId}` : null,
+    async () =>
+      await backendService.getFileById(props.imageId!, cookie.bearerToken)
   );
-
-  useEffect(() => {
-    setImage(props.picture);
-    return () => setImage(undefined);
-  }, [props.picture]);
-
-  useEffect(() => {
-    if (!props.doNotFetchPicture && props.imageId != null) {
-      backendService
-        .getFileById(props.imageId!, cookie.bearerToken)
-        .then((myFile) => setImage(myFile));
-    }
-    return () => setImage(undefined);
-  }, [
-    cookie.bearerToken,
-    backendService,
-    props.imageId,
-    props.doNotFetchPicture,
-  ]);
 
   return image !== undefined || props.imageId == null ? (
     <Image

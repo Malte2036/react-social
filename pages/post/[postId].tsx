@@ -2,12 +2,15 @@ import { ArrowLeftIcon } from "@heroicons/react/solid";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import PostView from "../../components/PostView";
-import { Post } from "../../lib/database/data/post";
 import { parseCookies } from "../../helpers";
 import { Account } from "../../lib/database/data/account";
 import { useContext, useEffect, useState } from "react";
 import { useCookies } from "react-cookie";
-import { backendService, BackendServiceContext } from "../../lib/contexts/BackendServiceContext";
+import {
+  backendService,
+  BackendServiceContext,
+} from "../../lib/contexts/BackendServiceContext";
+import useSWR from "swr";
 
 export async function getServerSideProps({ req, query }) {
   const cookies = parseCookies(req);
@@ -34,25 +37,23 @@ export default function SinglePostPage(props: {
   postId: string;
   account: Account;
 }) {
-  const [cookie, setCookie, removeCookie] = useCookies(["bearerToken"]);
+  const [cookie] = useCookies(["bearerToken"]);
 
   const backendService = useContext(BackendServiceContext);
 
-  const [post, setPost] = useState<Post | undefined>(undefined);
+  const { data: post } = useSWR(
+    "/posts/" + props.postId,
+    async () =>
+      await backendService.getPostById(props.postId, cookie.bearerToken)
+  );
 
   let router = useRouter();
 
   useEffect(() => {
-    backendService
-      .getPostById(props.postId, cookie.bearerToken)
-      .then((post) => {
-        if (post) {
-          setPost(post);
-        } else {
-          router.push("/home");
-        }
-      });
-  }, [backendService, cookie.bearerToken, props.postId, router]);
+    if (!post) {
+      router.push("/home");
+    }
+  }, [post, router]);
 
   return (
     <div className="flex justify-center min-h-screen">
