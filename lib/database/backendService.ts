@@ -246,17 +246,14 @@ export default class BackendService {
   }
 
   async getUserById(userId: string, bearerToken: string): Promise<User | null> {
-    try {
-      const response = await axios.get(`${this.endpoint}/users/${userId}`, {
-        headers: this.authHeader(bearerToken),
-      });
+    const response = await axios.get(`${this.endpoint}/users/${userId}`, {
+      headers: this.authHeader(bearerToken),
+    });
 
-      if (response.status !== 200) {
-        return null;
-      }
-      return response.data as User;
-    } catch (error) {}
-    return null;
+    if (response.status !== 200) {
+      return null;
+    }
+    return response.data as User;
   }
 
   async setCurrentUserProfilePicture(picture: File, bearerToken: string) {

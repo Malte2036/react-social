@@ -13,42 +13,32 @@ import {
 import { useAccount } from "../../lib/contexts/AccountContext";
 import { useRouter } from "next/router";
 import useSWR from "swr";
+import Error from "next/error";
 
 export async function getServerSideProps({ req, query }) {
-  const cookies = parseCookies(req);
-  const bearerToken = cookies.bearerToken;
-
-  let { userId } = query;
-
-  const user = await backendService.getUserById(userId, bearerToken);
-  if (user === null) {
-    return {
-      redirect: {
-        permanent: false,
-        destination: "/home",
-      },
-      props: {},
-    };
-  }
-
   return {
-    props: { user },
+    props: {
+      userId: query.userId,
+    },
   };
 }
-export default function UserPage(props: { user: User }) {
-  const [cookie] = useCookies(["bearerToken"]);
+export default function UserPage(props: { userId: string }) {
   const backendService = useContext(BackendServiceContext);
+  const [cookie] = useCookies(["bearerToken"]);
   const [account] = useAccount();
 
   const router = useRouter();
 
-  const { data: posts } = useSWR(
-    `/posts/byCreatorId/${props.user.id}`,
+  const { data: user, error: userError } = useSWR(
+    `/user/${props.userId}`,
     async () =>
-      await backendService.getAllPostsByCreatorId(
-        props.user.id,
-        cookie.bearerToken
-      )
+      await backendService.getUserById(props.userId, cookie.bearerToken)
+  );
+
+  const { data: posts } = useSWR(
+    user ? `/posts/byCreatorId/${user.id}` : null,
+    async () =>
+      await backendService.getAllPostsByCreatorId(user.id, cookie.bearerToken)
   );
 
   async function changeProfilePicture(event): Promise<void> {
@@ -61,6 +51,8 @@ export default function UserPage(props: { user: User }) {
     }
   }
 
+  if (userError) return <Error statusCode={404} title="User not found" />;
+
   return (
     <div className="flex justify-center min-h-screen">
       <div className="m-5 mt-3 max-w-4xl w-full flex flex-col">
@@ -70,16 +62,16 @@ export default function UserPage(props: { user: User }) {
         <div className="relative top-4 h-14 left-0 m-2 flex flex-row">
           <div className="relative top-1">
             <ProfilePicture
-              imageId={props.user.imageId || null}
+              imageId={user?.imageId}
               size={40}
               borderColorClass="border-white dark:border-slate-800"
             />
           </div>
           <div className="m-1 ml-2 h-14 text-3xl">
-            <span className="align-middle">{props.user.name}</span>
+            <span className="align-middle">{user?.name}</span>
           </div>
         </div>
-        {account.id === props.user.id ? (
+        {account.id === user?.id ? (
           <div className="flex flex-col">
             <span className="mt-6">Upload ProfilePicture:</span>
             <input type="file" onChange={changeProfilePicture} />
