@@ -21,14 +21,6 @@ export default function MyApp({ Component, pageProps }: AppProps) {
     async () => await backendService.getAccount(cookie.bearerToken)
   );
 
-  useEffect(() => {
-    if (router.pathname != "/login") {
-      if (!cookie.bearerToken) {
-        router.push("/login");
-      }
-    }
-  }, [cookie.bearerToken, router]);
-
   if (router.pathname != "/login") {
     if (!initAccount) {
       return (
@@ -44,14 +36,13 @@ export default function MyApp({ Component, pageProps }: AppProps) {
   return (
     <>
       <Script
-        async
-        defer
         data-website-id={process.env.NEXT_PUBLIC_REACT_APP_UMAMI_ID}
         src={
           process.env.NEXT_PUBLIC_REACT_APP_UMAMI_URL
             ? `${process.env.NEXT_PUBLIC_REACT_APP_UMAMI_URL}/umami.js`
             : ""
         }
+        strategy="lazyOnload"
       />
       <CookiesProvider>
         <AccountProvider account={initAccount}>
