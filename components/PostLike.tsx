@@ -10,24 +10,16 @@ export default function PostLike(props: { post: Post }) {
   const [cookie] = useCookies(["bearerToken"]);
   const backendService = useContext(BackendServiceContext);
 
-  const { data: active } = useSWR(
+  const { data: activeData } = useSWR(
     `/posts/${props.post.id}/likes/me`,
     async () =>
       await backendService.isPostLikedByMe(props.post.id, cookie.bearerToken),
     {
-      onSuccess: (data) => {
-        if (active === undefined) {
-          anim.current?.goToAndStop(data ? 66 : 19, true);
-        } else if (active != data) {
-          if (data) {
-            anim.current?.playSegments([19, 50], true);
-          } else {
-            anim.current?.playSegments([0, 19], true);
-          }
-        }
-      },
+      onSuccess: (data) => setActive(data),
     }
   );
+  const [active, setActive] = useState<boolean>(false);
+
   const { data: count } = useSWR(
     "/posts/" + props.post.id + "/likes",
     async () =>
@@ -54,6 +46,14 @@ export default function PostLike(props: { post: Post }) {
     }
   }, []);
 
+  useEffect(() => {
+    if (active) {
+      anim.current?.playSegments([19, 50], true);
+    } else {
+      anim.current?.playSegments([0, 19], true);
+    }
+  }, [active]);
+
   return (
     <>
       <div
@@ -64,7 +64,8 @@ export default function PostLike(props: { post: Post }) {
         }`}
         ref={animationContainer}
         onClick={async () => {
-          if (!active) {
+          setActive(!active);
+          if (!activeData) {
             await backendService.createLikeByPostId(
               props.post.id,
               cookie.bearerToken
