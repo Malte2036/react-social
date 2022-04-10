@@ -14,10 +14,6 @@ import useSWR from "swr";
 
 export default function PostView(props: {
   post: Post;
-  creator?: User;
-  doNotFetchCreator?: boolean;
-  profilePicture?: MyFile;
-  doNotFetchProfilePicture?: boolean;
   showComments?: boolean;
 }) {
   const [cookie] = useCookies(["bearerToken"]);
@@ -65,7 +61,7 @@ export default function PostView(props: {
           <span className="text-xs pt-0.5 opacity-50">
             {(props.post.createdAt as Date).toDateString()}
           </span>
-          {account.id === props.post.creatorId && (
+          {account?.id === props.post.creatorId && (
             <PostViewDropdown post={props.post} />
           )}
         </div>

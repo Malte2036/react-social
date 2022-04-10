@@ -74,51 +74,41 @@ export default class BackendService {
   }
 
   async getAllPosts(bearerToken: string): Promise<Post[]> {
-    try {
-      const response = await axios.get(`${this.endpoint}/posts`, {
-        headers: this.authHeader(bearerToken),
-      });
+    const response = await axios.get(`${this.endpoint}/posts`, {
+      headers: this.authHeader(bearerToken),
+    });
 
-      if (response.status !== 200) {
-        return [];
-      }
-
-      response.data.map((data: any) => {
-        data.createdAt = new Date(data.createdAt);
-        return data;
-      });
-      return response.data as Array<Post>;
-    } catch (error) {
-      console.log(error);
+    if (response.status !== 200) {
+      return [];
     }
-    return [];
+
+    response.data.map((data: any) => {
+      data.createdAt = new Date(data.createdAt);
+      return data;
+    });
+    return response.data as Array<Post>;
   }
 
   async getAllPostsByCreatorId(
     creatorId: string,
     bearerToken: string
   ): Promise<Post[]> {
-    try {
-      const response = await axios.get(
-        `${this.endpoint}/posts/byCreatorId/${creatorId}`,
-        {
-          headers: this.authHeader(bearerToken),
-        }
-      );
-
-      if (response.status !== 200) {
-        return [];
+    const response = await axios.get(
+      `${this.endpoint}/posts/byCreatorId/${creatorId}`,
+      {
+        headers: this.authHeader(bearerToken),
       }
+    );
 
-      response.data.map((data: any) => {
-        data.createdAt = new Date(data.createdAt);
-        return data;
-      });
-      return response.data as Array<Post>;
-    } catch (error) {
-      console.log(error);
+    if (response.status !== 200) {
+      return [];
     }
-    return [];
+
+    response.data.map((data: any) => {
+      data.createdAt = new Date(data.createdAt);
+      return data;
+    });
+    return response.data as Array<Post>;
   }
 
   async getPostById(postId: string, bearerToken: string): Promise<Post | null> {
@@ -138,20 +128,17 @@ export default class BackendService {
     postId: string,
     bearerToken: string
   ): Promise<number> {
-    try {
-      const response = await axios.get(
-        `${this.endpoint}/posts/${postId}/likes/count`,
-        {
-          headers: this.authHeader(bearerToken),
-        }
-      );
-
-      if (response.status !== 200) {
-        return 0;
+    const response = await axios.get(
+      `${this.endpoint}/posts/${postId}/likes/count`,
+      {
+        headers: this.authHeader(bearerToken),
       }
-      return response.data as number;
-    } catch (error) {}
-    return null;
+    );
+
+    if (response.status !== 200) {
+      return 0;
+    }
+    return response.data as number;
   }
 
   async createLikeByPostId(postId: string, bearerToken: string) {
@@ -171,40 +158,34 @@ export default class BackendService {
   }
 
   async isPostLikedByMe(postId: string, bearerToken: string): Promise<boolean> {
-    try {
-      const response = await axios.get(
-        `${this.endpoint}/posts/${postId}/likes/me`,
-        {
-          headers: this.authHeader(bearerToken),
-        }
-      );
-
-      if (response.status !== 200) {
-        return false;
+    const response = await axios.get(
+      `${this.endpoint}/posts/${postId}/likes/me`,
+      {
+        headers: this.authHeader(bearerToken),
       }
-      return response.data as boolean;
-    } catch (error) {}
-    return false;
+    );
+
+    if (response.status !== 200) {
+      return false;
+    }
+    return response.data as boolean;
   }
 
   async getCommentsByPostId(
     postId: string,
     bearerToken: string
   ): Promise<Comment[]> {
-    try {
-      const response = await axios.get(
-        `${this.endpoint}/posts/${postId}/comments`,
-        {
-          headers: this.authHeader(bearerToken),
-        }
-      );
-
-      if (response.status !== 200) {
-        return [];
+    const response = await axios.get(
+      `${this.endpoint}/posts/${postId}/comments`,
+      {
+        headers: this.authHeader(bearerToken),
       }
-      return response.data as Comment[];
-    } catch (error) {}
-    return null;
+    );
+
+    if (response.status !== 200) {
+      return [];
+    }
+    return response.data as Comment[];
   }
 
   async createPost(
@@ -283,16 +264,13 @@ export default class BackendService {
     if (!fileId) {
       return null;
     }
-    try {
-      const response = await axios.get(`${this.endpoint}/files/${fileId}`, {
-        headers: this.authHeader(bearerToken),
-      });
+    const response = await axios.get(`${this.endpoint}/files/${fileId}`, {
+      headers: this.authHeader(bearerToken),
+    });
 
-      if (response.status !== 200) {
-        return null;
-      }
-      return response.data as MyFile;
-    } catch (error) {}
-    return null;
+    if (response.status !== 200) {
+      return null;
+    }
+    return response.data as MyFile;
   }
 }

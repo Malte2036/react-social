@@ -6,7 +6,7 @@ import { BackendServiceContext } from "@/lib/contexts/BackendServiceContext";
 import defaultProfilePicture from "@/public/default_profile_picture.png";
 
 export default function ProfilePicture(props: {
-  imageId: string | null;
+  imageId: string | null | undefined;
   size?: number;
   borderColorClass?: string;
 }) {
@@ -24,11 +24,7 @@ export default function ProfilePicture(props: {
       className={`rounded-full object-cover border-2 ${
         props.borderColorClass ?? "border-gray-200 dark:border-gray-900"
       }`}
-      src={
-        image === null || props.imageId == null
-          ? defaultProfilePicture
-          : image.data
-      }
+      src={!image || props.imageId == null ? defaultProfilePicture : image.data}
       alt=""
       layout="fixed"
       width={`${props.size ?? 32}px`}

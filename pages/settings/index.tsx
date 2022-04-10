@@ -1,7 +1,8 @@
-import ToogleSwitch from "@/components/form/ToogleSwitch";
+//import ToogleSwitch from "@/components/form/ToogleSwitch";
 
-export default function SettingsPage(props: {}) {
-  return (
+export default function SettingsPage(props: { }) {
+  return <>ToDo</>
+  /*return (
     <div>
       <h1 className="pt-6 text-center text-5xl font-extrabold ">Settings</h1>
       <br />
@@ -13,5 +14,5 @@ export default function SettingsPage(props: {}) {
         ></ToogleSwitch>
       </div>
     </div>
-  );
+  );*/
 }

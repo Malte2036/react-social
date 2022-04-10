@@ -1,17 +1,22 @@
 import { createContext, useContext, useState } from "react";
 import { Account } from "../database/data/account";
 
-const AccountContext = createContext(null);
+const AccountContext = createContext<[Account | null | undefined, any]>([
+  undefined,
+  undefined,
+]);
 
-export const AccountProvider = ({ account, children }) => {
-  const [currentAccount, setCurrentAccount] = useState(account);
+export function AccountProvider(props: {
+  account: Account | null | undefined;
+  children: any;
+}) {
+  const [currentAccount, setCurrentAccount] = useState(props.account);
 
   return (
     <AccountContext.Provider value={[currentAccount, setCurrentAccount]}>
-      {children}
+      {props.children}
     </AccountContext.Provider>
   );
-};
+}
 
-export const useAccount: () => [Account | undefined] = () =>
-  useContext(AccountContext);
+export const useAccount: () => [any, any] = () => useContext(AccountContext);

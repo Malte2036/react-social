@@ -7,9 +7,9 @@ import { BackendServiceContext } from "@/lib/contexts/BackendServiceContext";
 import useSWR from "swr";
 import Error from "next/error";
 
-export async function getServerSideProps({ req, query }) {
+export async function getServerSideProps(props: { query: any }) {
   return {
-    props: { postId: query.postId },
+    props: { postId: props.query.postId },
   };
 }
 

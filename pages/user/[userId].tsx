@@ -1,21 +1,19 @@
 import { ArrowLeftIcon } from "@heroicons/react/solid";
 import Link from "next/link";
-import { User } from "@/lib/database/data/user";
-import { parseCookies } from "@/helpers";
 import { useCookies } from "react-cookie";
 import ProfilePicture from "@/components/ProfilePicture";
 import { useContext } from "react";
 import PostFeed from "@/components/PostFeed";
-import { backendService, BackendServiceContext } from "@/lib/contexts/BackendServiceContext";
+import { BackendServiceContext } from "@/lib/contexts/BackendServiceContext";
 import { useAccount } from "@/lib/contexts/AccountContext";
 import { useRouter } from "next/router";
 import useSWR from "swr";
 import Error from "next/error";
 
-export async function getServerSideProps({ req, query }) {
+export async function getServerSideProps(props: { query: any }) {
   return {
     props: {
-      userId: query.userId,
+      userId: props.query.userId,
     },
   };
 }
@@ -35,10 +33,10 @@ export default function UserPage(props: { userId: string }) {
   const { data: posts } = useSWR(
     user ? `/posts/byCreatorId/${user.id}` : null,
     async () =>
-      await backendService.getAllPostsByCreatorId(user.id, cookie.bearerToken)
+      await backendService.getAllPostsByCreatorId(user!.id, cookie.bearerToken)
   );
 
-  async function changeProfilePicture(event): Promise<void> {
+  async function changeProfilePicture(event:any): Promise<void> {
     if (event.target.files != null) {
       await backendService.setCurrentUserProfilePicture(
         event.target.files[0],
@@ -77,7 +75,7 @@ export default function UserPage(props: { userId: string }) {
           <></>
         )}
 
-        <PostFeed posts={posts} />
+        <PostFeed posts={posts ?? []} />
       </div>
     </div>
   );
