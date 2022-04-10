@@ -57,7 +57,7 @@ export default function PostLike(props: { post: Post }) {
   return (
     <>
       <div
-        className={`h-16 w-16 relative bottom-5 cursor-pointer umami--click--like-button ${
+        className={`h-16 w-16 relative bottom-5 cursor-pointer select-none umami--click--like-button ${
           active
             ? "text-gray-900 dark:text-red-500"
             : "text-gray-200 dark:text-white"
