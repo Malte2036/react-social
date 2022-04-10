@@ -3,7 +3,7 @@ import { useRouter } from "next/router";
 import React, { Dispatch, SetStateAction, useContext } from "react";
 import InputField from "../../components/form/InputField";
 import { useCookies } from "react-cookie";
-import { BackendServiceContext } from "../../lib/contexts/BackendServiceContext";
+import { BackendServiceContext } from "@/lib/contexts/BackendServiceContext";
 
 export default function RegisterForm(props: {
   username: string;

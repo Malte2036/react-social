@@ -1,16 +1,13 @@
 import { ArrowLeftIcon } from "@heroicons/react/solid";
 import Link from "next/link";
-import { User } from "../../lib/database/data/user";
-import { parseCookies } from "../../helpers";
+import { User } from "@/lib/database/data/user";
+import { parseCookies } from "@/helpers";
 import { useCookies } from "react-cookie";
-import ProfilePicture from "../../components/ProfilePicture";
+import ProfilePicture from "@/components/ProfilePicture";
 import { useContext } from "react";
-import PostFeed from "../../components/PostFeed";
-import {
-  backendService,
-  BackendServiceContext,
-} from "../../lib/contexts/BackendServiceContext";
-import { useAccount } from "../../lib/contexts/AccountContext";
+import PostFeed from "@/components/PostFeed";
+import { backendService, BackendServiceContext } from "@/lib/contexts/BackendServiceContext";
+import { useAccount } from "@/lib/contexts/AccountContext";
 import { useRouter } from "next/router";
 import useSWR from "swr";
 import Error from "next/error";

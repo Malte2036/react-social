@@ -1,12 +1,12 @@
 import { useContext, useEffect, useState } from "react";
-import { Post } from "../../lib/database/data/post";
-import CreatePostView from "../../components/CreatePostView";
-import Button from "../../components/Button";
-import { SocketContext } from "../../lib/contexts/SocketContext";
+import { Post } from "@/lib/database/data/post";
+import CreatePostView from "@/components/CreatePostView";
+import Button from "@/components/Button";
+import { SocketContext } from "@/lib/contexts/SocketContext";
 import { useRouter } from "next/router";
 import { useCookies } from "react-cookie";
-import PostFeed from "../../components/PostFeed";
-import { BackendServiceContext } from "../../lib/contexts/BackendServiceContext";
+import PostFeed from "@/components/PostFeed";
+import { BackendServiceContext } from "@/lib/contexts/BackendServiceContext";
 
 export default function HomePage() {
   const [cookie, setCookie, removeCookie] = useCookies(["bearerToken"]);

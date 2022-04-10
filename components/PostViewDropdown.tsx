@@ -3,8 +3,8 @@ import { ChevronDownIcon } from "@heroicons/react/solid";
 import { useRouter } from "next/router";
 import { Fragment, useContext } from "react";
 import { useCookies } from "react-cookie";
-import { BackendServiceContext } from "../lib/contexts/BackendServiceContext";
-import { Post } from "../lib/database/data/post";
+import { BackendServiceContext } from "@/lib/contexts/BackendServiceContext";
+import { Post } from "@/lib/database/data/post";
 
 export default function PostViewDropdown(props: { post: Post }) {
   let router = useRouter();

@@ -3,7 +3,7 @@ import { LockClosedIcon } from "@heroicons/react/solid";
 import InputField from "../../components/form/InputField";
 import { useRouter } from "next/router";
 import { useCookies } from "react-cookie";
-import { BackendServiceContext } from "../../lib/contexts/BackendServiceContext";
+import { BackendServiceContext } from "@/lib/contexts/BackendServiceContext";
 
 export default function LoginForm(props: {
   email: string;

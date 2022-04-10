@@ -1,9 +1,9 @@
 import { ArrowLeftIcon } from "@heroicons/react/solid";
 import Link from "next/link";
-import PostView from "../../components/PostView";
+import PostView from "@/components/PostView";
 import { useContext } from "react";
 import { useCookies } from "react-cookie";
-import { BackendServiceContext } from "../../lib/contexts/BackendServiceContext";
+import { BackendServiceContext } from "@/lib/contexts/BackendServiceContext";
 import useSWR from "swr";
 import Error from "next/error";
 

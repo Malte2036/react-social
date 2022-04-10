@@ -1,9 +1,9 @@
 import { useContext, useEffect, useRef, useState } from "react";
 import { useCookies } from "react-cookie";
-import { Post } from "../lib/database/data/post";
+import { Post } from "@/lib/database/data/post";
 import lottie, { AnimationItem } from "lottie-web";
-import hearthLottie from "../public/lottie/hearth.json";
-import { BackendServiceContext } from "../lib/contexts/BackendServiceContext";
+import hearthLottie from "@/public/lottie/hearth.json";
+import { BackendServiceContext } from "@/lib/contexts/BackendServiceContext";
 import useSWR, { mutate } from "swr";
 
 export default function PostLike(props: { post: Post }) {

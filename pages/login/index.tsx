@@ -1,6 +1,6 @@
 import React, { useContext } from "react";
-import LoginForm from "../../components/welcome/LoginForm";
-import RegisterForm from "../../components/welcome/RegisterForm";
+import LoginForm from "@/components/welcome/LoginForm";
+import RegisterForm from "@/components/welcome/RegisterForm";
 
 enum welcomeStateType {
   login,

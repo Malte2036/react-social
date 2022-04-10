@@ -2,8 +2,8 @@ import Image from "next/image";
 import { useContext } from "react";
 import { useCookies } from "react-cookie";
 import useSWR from "swr";
-import { BackendServiceContext } from "../lib/contexts/BackendServiceContext";
-import defaultProfilePicture from "../public/default_profile_picture.png";
+import { BackendServiceContext } from "@/lib/contexts/BackendServiceContext";
+import defaultProfilePicture from "@/public/default_profile_picture.png";
 
 export default function ProfilePicture(props: {
   imageId: string | null;

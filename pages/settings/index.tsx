@@ -1,4 +1,4 @@
-import ToogleSwitch from "../../components/form/ToogleSwitch";
+import ToogleSwitch from "@/components/form/ToogleSwitch";
 
 export default function SettingsPage(props: {}) {
   return (

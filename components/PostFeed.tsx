@@ -1,4 +1,4 @@
-import { Post } from "../lib/database/data/post";
+import { Post } from "@/lib/database/data/post";
 import PostView from "./PostView";
 
 export default function PostFeed(props: { posts: Post[] }) {

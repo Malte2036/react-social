@@ -1,6 +1,6 @@
 import { useContext } from "react";
 import { useCookies } from "react-cookie";
-import { BackendServiceContext } from "../lib/contexts/BackendServiceContext";
+import { BackendServiceContext } from "@/lib/contexts/BackendServiceContext";
 import useSWR from "swr";
 
 export default function PostViewImage(props: { imageId: string | null }) {

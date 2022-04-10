@@ -1,10 +1,10 @@
 import type { AppProps } from "next/app";
-import useDarkmode from "../lib/hooks/DarkmodeHook";
+import useDarkmode from "@/lib/hooks/DarkmodeHook";
 import { CookiesProvider, useCookies } from "react-cookie";
 import "./styles/globals.css";
 import { useContext, useEffect } from "react";
-import { BackendServiceContext } from "../lib/contexts/BackendServiceContext";
-import { AccountProvider } from "../lib/contexts/AccountContext";
+import { BackendServiceContext } from "@/lib/contexts/BackendServiceContext";
+import { AccountProvider } from "@/lib/contexts/AccountContext";
 import Script from "next/script";
 import useSWR from "swr";
 import { useRouter } from "next/router";

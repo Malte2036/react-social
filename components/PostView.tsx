@@ -1,15 +1,15 @@
 import { useContext } from "react";
-import { Post } from "../lib/database/data/post";
-import { User } from "../lib/database/data/user";
+import { Post } from "@/lib/database/data/post";
+import { User } from "@/lib/database/data/user";
 import PostViewDropdown from "./PostViewDropdown";
 import PostViewImage from "./PostViewImage";
 import ProfilePicture from "./ProfilePicture";
 import Link from "next/link";
 import PostLike from "./PostLike";
 import { useCookies } from "react-cookie";
-import { BackendServiceContext } from "../lib/contexts/BackendServiceContext";
-import { useAccount } from "../lib/contexts/AccountContext";
-import { MyFile } from "../lib/database/data/myFile";
+import { BackendServiceContext } from "@/lib/contexts/BackendServiceContext";
+import { useAccount } from "@/lib/contexts/AccountContext";
+import { MyFile } from "@/lib/database/data/myFile";
 import useSWR from "swr";
 
 export default function PostView(props: {
