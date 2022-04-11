@@ -7,13 +7,14 @@ import { useRouter } from "next/router";
 import { useCookies } from "react-cookie";
 import PostFeed from "@/components/PostFeed";
 import { BackendServiceContext } from "@/lib/contexts/BackendServiceContext";
+import { PostId } from "@/lib/database/data/postId";
 
 export default function HomePage() {
   const [cookie, setCookie, removeCookie] = useCookies(["bearerToken"]);
 
   const backendService = useContext(BackendServiceContext);
 
-  const [posts, setPosts] = useState<Post[]>([]);
+  const [postIds, setPostIds] = useState<PostId[]>([]);
 
   const socket = useContext(SocketContext);
 
@@ -21,22 +22,22 @@ export default function HomePage() {
 
   useEffect(() => {
     backendService
-      .getAllPosts(cookie.bearerToken)
-      .then((posts) => setPosts(posts));
+      .getAllPostIds(cookie.bearerToken)
+      .then((fetchedPostIds) => setPostIds(fetchedPostIds));
   }, [backendService, cookie.bearerToken]);
 
   useEffect(() => {
     socket.on("posts", (post: Post) => {
       post.createdAt = new Date(post.createdAt);
 
-      const postsCopy = posts !== undefined ? [...posts] : [];
-      postsCopy.push(post);
-      setPosts(postsCopy);
+      const postIdsCopy = postIds !== undefined ? [...postIds] : [];
+      postIdsCopy.push(post);
+      setPostIds(postIdsCopy);
     });
     return () => {
       socket.off("posts");
     };
-  }, [posts, socket]);
+  }, [postIds, socket]);
 
   return (
     <div className="flex justify-center min-h-screen">
@@ -44,7 +45,7 @@ export default function HomePage() {
         <div>
           <h1 className="text-center text-5xl font-extrabold">Feed</h1>
           <CreatePostView></CreatePostView>
-          <PostFeed posts={posts} />
+          <PostFeed postIds={postIds} />
         </div>
         <Button
           onClickHandler={async () => {

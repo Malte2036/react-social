@@ -4,6 +4,7 @@ import { AccountPrefs } from "./data/accountPrefs";
 import { Comment } from "./data/comment";
 import { MyFile } from "./data/myFile";
 import { Post } from "./data/post";
+import { PostId } from "./data/postId";
 import { User } from "./data/user";
 
 export default class BackendService {
@@ -89,6 +90,22 @@ export default class BackendService {
     return response.data as Array<Post>;
   }
 
+  async getAllPostIds(bearerToken: string): Promise<PostId[]> {
+    const response = await axios.get(`${this.endpoint}/posts/id`, {
+      headers: this.authHeader(bearerToken),
+    });
+
+    if (response.status !== 200) {
+      return [];
+    }
+
+    response.data.map((data: any) => {
+      data.createdAt = new Date(data.createdAt);
+      return data;
+    });
+    return response.data as Array<PostId>;
+  }
+
   async getAllPostsByCreatorId(
     creatorId: string,
     bearerToken: string
@@ -109,6 +126,28 @@ export default class BackendService {
       return data;
     });
     return response.data as Array<Post>;
+  }
+
+  async getAllPostIdsByCreatorId(
+    creatorId: string,
+    bearerToken: string
+  ): Promise<PostId[]> {
+    const response = await axios.get(
+      `${this.endpoint}/posts/byCreatorId/${creatorId}/id`,
+      {
+        headers: this.authHeader(bearerToken),
+      }
+    );
+
+    if (response.status !== 200) {
+      return [];
+    }
+
+    response.data.map((data: any) => {
+      data.createdAt = new Date(data.createdAt);
+      return data;
+    });
+    return response.data as Array<PostId>;
   }
 
   async getPostById(postId: string, bearerToken: string): Promise<Post | null> {

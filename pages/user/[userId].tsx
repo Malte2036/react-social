@@ -30,13 +30,16 @@ export default function UserPage(props: { userId: string }) {
       await backendService.getUserById(props.userId, cookie.bearerToken)
   );
 
-  const { data: posts } = useSWR(
-    user ? `/posts/byCreatorId/${user.id}` : null,
+  const { data: postIds } = useSWR(
+    user ? `/posts/byCreatorId/${user.id}/id` : null,
     async () =>
-      await backendService.getAllPostsByCreatorId(user!.id, cookie.bearerToken)
+      await backendService.getAllPostIdsByCreatorId(
+        user!.id,
+        cookie.bearerToken
+      )
   );
 
-  async function changeProfilePicture(event:any): Promise<void> {
+  async function changeProfilePicture(event: any): Promise<void> {
     if (event.target.files != null) {
       await backendService.setCurrentUserProfilePicture(
         event.target.files[0],
@@ -75,7 +78,7 @@ export default function UserPage(props: { userId: string }) {
           <></>
         )}
 
-        <PostFeed posts={posts ?? []} />
+        <PostFeed postIds={postIds ?? []} />
       </div>
     </div>
   );

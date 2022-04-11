@@ -1,6 +1,4 @@
 import { useContext } from "react";
-import { Post } from "@/lib/database/data/post";
-import { User } from "@/lib/database/data/user";
 import PostViewDropdown from "./PostViewDropdown";
 import PostViewImage from "./PostViewImage";
 import ProfilePicture from "./ProfilePicture";
@@ -9,11 +7,11 @@ import PostLike from "./PostLike";
 import { useCookies } from "react-cookie";
 import { BackendServiceContext } from "@/lib/contexts/BackendServiceContext";
 import { useAccount } from "@/lib/contexts/AccountContext";
-import { MyFile } from "@/lib/database/data/myFile";
 import useSWR from "swr";
+import { PostId } from "@/lib/database/data/postId";
 
 export default function PostView(props: {
-  post: Post;
+  postId: PostId;
   showComments?: boolean;
 }) {
   const [cookie] = useCookies(["bearerToken"]);
@@ -21,20 +19,30 @@ export default function PostView(props: {
 
   const [account] = useAccount();
 
-  const { data: creator } = useSWR(
-    `/users/${props.post.creatorId}`,
+  const { data: post } = useSWR(
+    `/posts/${props.postId.id}`,
     async () =>
-      await backendService.getUserById(props.post.creatorId, cookie.bearerToken)
+      await backendService.getPostById(props.postId.id, cookie.bearerToken)
+  );
+
+  const { data: creator } = useSWR(
+    post ? `/users/${post.creatorId}` : null,
+    async () =>
+      await backendService.getUserById(post!.creatorId, cookie.bearerToken)
   );
 
   const { data: comments } = useSWR(
-    props.showComments ? "/posts/" + props.post.id + "/comments" : null,
+    props.showComments ? "/posts/" + props.postId.id + "/comments" : null,
     async () =>
       await backendService.getCommentsByPostId(
-        props.post.id,
+        props.postId.id,
         cookie.bearerToken
       )
   );
+
+  if (!post) {
+    return <></>;
+  }
 
   return (
     <div className="bg-white dark:bg-slate-800 rounded-lg my-3 shadow-xl">
@@ -46,7 +54,7 @@ export default function PostView(props: {
                 imageId={creator.imageId || null}
               ></ProfilePicture>
               <div className="umami--click--visit-user-button">
-                <Link href={`/user/${props.post.creatorId}`} passHref>
+                <Link href={`/user/${post.creatorId}`} passHref>
                   <span className="m-1 ml-2 cursor-pointer">
                     {creator.name}
                   </span>
@@ -59,28 +67,24 @@ export default function PostView(props: {
         </div>
         <div className="absolute right-3 m-3 flex flex-row">
           <span className="text-xs pt-0.5 opacity-50">
-            {(props.post.createdAt as Date).toDateString()}
+            {(post.createdAt as Date).toDateString()}
           </span>
-          {account?.id === props.post.creatorId && (
-            <PostViewDropdown post={props.post} />
-          )}
+          {account?.id === post.creatorId && <PostViewDropdown post={post} />}
         </div>
       </div>
 
-      <Link href={`/post/${props.post.id}`} passHref>
+      <Link href={`/post/${props.postId.id}`} passHref>
         <div className="cursor-pointer">
           <div className="m-8 flex flex-col">
-            <p className="mt-0 break-all">{props.post.message}</p>
-            {props.post.imageId != null && (
-              <PostViewImage imageId={props.post.imageId} />
-            )}
+            <p className="mt-0 break-all">{post.message}</p>
+            {post.imageId != null && <PostViewImage imageId={post.imageId} />}
           </div>
         </div>
       </Link>
 
       <div className="relative h-12 border-t-2 border-gray-200 dark:border-gray-900">
         <div className=" m-2 ml-4 flex flex-row">
-          <PostLike post={props.post} />
+          <PostLike postId={props.postId} />
         </div>
       </div>
       {props.showComments && comments ? (

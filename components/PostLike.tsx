@@ -1,30 +1,33 @@
 import { useContext, useEffect, useRef, useState } from "react";
 import { useCookies } from "react-cookie";
-import { Post } from "@/lib/database/data/post";
 import lottie, { AnimationItem } from "lottie-web";
 import hearthLottie from "@/public/lottie/hearth.json";
 import { BackendServiceContext } from "@/lib/contexts/BackendServiceContext";
 import useSWR, { mutate } from "swr";
+import { PostId } from "@/lib/database/data/postId";
 
-export default function PostLike(props: { post: Post }) {
+export default function PostLike(props: { postId: PostId }) {
   const [cookie] = useCookies(["bearerToken"]);
   const backendService = useContext(BackendServiceContext);
 
   const { data: activeData } = useSWR(
-    `/posts/${props.post.id}/likes/me`,
+    `/posts/${props.postId.id}/likes/me`,
     async () =>
-      await backendService.isPostLikedByMe(props.post.id, cookie.bearerToken),
+      await backendService.isPostLikedByMe(props.postId.id, cookie.bearerToken),
     {
-      onSuccess: (data) => setActive(data),
+      onSuccess: (data) => {
+        console.log("revalidate" + data);
+        setActive(data);
+      },
     }
   );
   const [active, setActive] = useState<boolean>(false);
 
   const { data: count } = useSWR(
-    "/posts/" + props.post.id + "/likes",
+    "/posts/" + props.postId.id + "/likes",
     async () =>
       await backendService.getLikesCountByPostId(
-        props.post.id,
+        props.postId.id,
         cookie.bearerToken
       )
   );
@@ -67,17 +70,17 @@ export default function PostLike(props: { post: Post }) {
           setActive(!active);
           if (!activeData) {
             await backendService.createLikeByPostId(
-              props.post.id,
+              props.postId.id,
               cookie.bearerToken
             );
           } else {
             await backendService.deleteLikeByPostId(
-              props.post.id,
+              props.postId.id,
               cookie.bearerToken
             );
           }
-          mutate("/posts/" + props.post.id + "/likes");
-          mutate("/posts/" + props.post.id + "/likes/me");
+          mutate("/posts/" + props.postId.id + "/likes");
+          mutate("/posts/" + props.postId.id + "/likes/me");
         }}
       />
       <span className="relative right-3">{count}</span>

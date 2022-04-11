@@ -1,14 +1,14 @@
-import { Post } from "@/lib/database/data/post";
+import { PostId } from "@/lib/database/data/postId";
 import PostView from "./PostView";
 
-export default function PostFeed(props: { posts: Post[] }) {
+export default function PostFeed(props: { postIds: PostId[] }) {
   const postViews =
-    props.posts
+    props.postIds
       ?.sort(
-        (a: Post, b: Post) =>
+        (a: PostId, b: PostId) =>
           (b.createdAt as Date).valueOf() - (a.createdAt as Date).valueOf()
       )
-      .map((post) => <PostView post={post} key={post.id} />) ?? [];
+      .map((postId) => <PostView postId={postId} key={postId.id} />) ?? [];
 
   return <div className="flex flex-col">{postViews}</div>;
 }
