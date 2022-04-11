@@ -31,6 +31,16 @@ $ npm run start
 ```
 Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
 
+### deploy with Docker
+
+```bash
+# build image
+docker build -t react-social .
+
+# deploy
+docker run -p 3000:3000 react-social
+```
+
 ## :technologist: Technologies used
 
 * [Next.js](https://nextjs.org/)
