@@ -234,7 +234,7 @@ export default class BackendService {
   ) {
     const formData = new FormData();
     formData.append("message", message);
-    
+
     if (image) {
       formData.append("image", image);
     }
@@ -299,5 +299,9 @@ export default class BackendService {
       return null;
     }
     return response.data as MyFile;
+  }
+
+  getFileUrlById(imageId: string) {
+    return `${this.endpoint}/files/${imageId}`;
   }
 }
