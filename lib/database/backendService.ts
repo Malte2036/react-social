@@ -264,24 +264,16 @@ export default class BackendService {
     return response.data as User;
   }
 
-  async setCurrentUserProfilePicture(picture: File, bearerToken: string) {
-    const base64 = await new Promise<string>((resolve, reject) => {
-      const reader = new FileReader();
-      reader.readAsDataURL(picture);
-      reader.onload = () => resolve(reader.result?.toString() || "");
-      reader.onerror = (error) => reject(error);
-    });
-    return await axios.post(
-      `${this.endpoint}/users/image`,
-      {
-        name: picture.name,
-        data: base64,
-        mimeType: picture.type,
+  async setCurrentUserProfilePicture(image: File, bearerToken: string) {
+    const formData = new FormData();
+    formData.append("image", image);
+
+    await axios.post(`${this.endpoint}/users/image`, formData, {
+      headers: {
+        ...this.authHeader(bearerToken),
+        "Content-Type": "multipart/form-data",
       },
-      {
-        headers: this.authHeader(bearerToken),
-      }
-    );
+    });
   }
 
   async getFileById(
