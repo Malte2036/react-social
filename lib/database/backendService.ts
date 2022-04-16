@@ -13,7 +13,7 @@ export default class BackendService {
     this.endpoint = `${url}:${port}`;
   }
 
-  authHeader(bearerToken: string): AxiosRequestHeaders | undefined {
+  authHeader(bearerToken: string): AxiosRequestHeaders | {} {
     if (bearerToken) {
       return { Authorization: `Bearer ${bearerToken}` };
     } else {
@@ -232,31 +232,19 @@ export default class BackendService {
     image: File | undefined,
     bearerToken: string
   ) {
-    let imageData = undefined;
+    const formData = new FormData();
+    formData.append("message", message);
+    
     if (image) {
-      const base64 = await new Promise<string>((resolve, reject) => {
-        const reader = new FileReader();
-        reader.readAsDataURL(image);
-        reader.onload = () => resolve(reader.result?.toString() || "");
-        reader.onerror = (error) => reject(error);
-      });
-      imageData = {
-        name: image.name,
-        data: base64,
-        mimeType: image.type,
-      };
+      formData.append("image", image);
     }
 
-    await axios.post(
-      `${this.endpoint}/posts`,
-      {
-        message: message,
-        image: imageData,
+    await axios.post(`${this.endpoint}/posts`, formData, {
+      headers: {
+        ...this.authHeader(bearerToken),
+        "Content-Type": "multipart/form-data",
       },
-      {
-        headers: this.authHeader(bearerToken),
-      }
-    );
+    });
   }
 
   async deletePost(postId: string, bearerToken: string) {
