@@ -22,18 +22,15 @@ export default class BackendService {
   }
 
   async getAccount(bearerToken: string): Promise<Account | null> {
-    try {
-      const response = await axios.get(`${this.endpoint}/users/account`, {
-        headers: this.authHeader(bearerToken),
-      });
+    const response = await axios.get(`${this.endpoint}/users/account`, {
+      headers: this.authHeader(bearerToken),
+    });
 
-      if (response.status !== 200) {
-        return null;
-      }
+    if (response.status !== 200) {
+      return null;
+    }
 
-      return response.data;
-    } catch (error) {}
-    return null;
+    return response.data;
   }
 
   async createAccount(

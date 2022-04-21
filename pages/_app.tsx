@@ -16,17 +16,25 @@ export default function MyApp({ Component, pageProps }: AppProps) {
   const [cookie] = useCookies(["bearerToken"]);
   let router = useRouter();
 
-  const { data: initAccount } = useSWR(
+  const { data: initAccount, error: initAccountError } = useSWR(
     "/auth/account",
-    async () => await backendService.getAccount(cookie.bearerToken)
+    async () => {
+      if (router.pathname != "/login") {
+        return await backendService.getAccount(cookie.bearerToken)
+      }
+      return {};
+    },
+    {
+      onSuccess: (res) => {
+        if (!res) {
+          router.reload()
+        }
+      },
+      onError: () => router.push("/login")
+    }
   );
 
   if (router.pathname != "/login") {
-
-    if (initAccount === null) {
-      router.reload();
-    }
-
     if (!initAccount) {
       return (
         <div className={darkmode ? "dark" : ""}>
