@@ -76,7 +76,7 @@ export default function PostView(props: {
       <Link href={`/post/${props.postId.id}`} passHref>
         <div className="cursor-pointer">
           <div className="m-8 flex flex-col">
-            <p className="mt-0 break-all">{post.message}</p>
+            <p className="mt-0 break-all whitespace-pre-line">{post.message}</p>
             {post.imageId != null && <PostViewImage imageId={post.imageId} />}
           </div>
         </div>
