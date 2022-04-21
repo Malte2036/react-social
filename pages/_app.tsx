@@ -8,6 +8,7 @@ import { AccountProvider } from "@/lib/contexts/AccountContext";
 import Script from "next/script";
 import useSWR from "swr";
 import { useRouter } from "next/router";
+import { Account } from "@/lib/database/data/account";
 
 export default function MyApp({ Component, pageProps }: AppProps) {
   const backendService = useContext(BackendServiceContext);
@@ -58,7 +59,7 @@ export default function MyApp({ Component, pageProps }: AppProps) {
         strategy="lazyOnload"
       />
       <CookiesProvider>
-        <AccountProvider account={initAccount}>
+        <AccountProvider account={initAccount === {} ? null : initAccount as Account}>
           <div className={darkmode ? "dark" : ""}>
             <div className="min-h-screen dark:text-white bg-gray-200 dark:bg-slate-900">
               <Component {...pageProps} />
