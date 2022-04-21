@@ -22,6 +22,11 @@ export default function MyApp({ Component, pageProps }: AppProps) {
   );
 
   if (router.pathname != "/login") {
+
+    if (initAccount === null) {
+      router.reload();
+    }
+
     if (!initAccount) {
       return (
         <div className={darkmode ? "dark" : ""}>
