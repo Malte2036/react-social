@@ -16,7 +16,6 @@ export default function PostLike(props: { postId: PostId }) {
       await backendService.isPostLikedByMe(props.postId.id, cookie.bearerToken),
     {
       onSuccess: (data) => {
-        console.log("revalidate" + data);
         setActive(data);
       },
     }
