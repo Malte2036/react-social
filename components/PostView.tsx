@@ -10,6 +10,7 @@ import { useAccount } from "@/lib/contexts/AccountContext";
 import useSWR from "swr";
 import { PostId } from "@/lib/database/data/postId";
 import CreateCommentView from "./CreateCommentView";
+import { Comment } from "@/lib/database/data/comment";
 
 export default function PostView(props: {
   postId: PostId;
@@ -44,6 +45,36 @@ export default function PostView(props: {
   if (!post) {
     return <></>;
   }
+
+  const commentsView =
+    props.showComments && comments ? (
+      <div className="bg-gray-200 dark:bg-slate-900 rounded-b-3xl">
+        {comments
+          .sort(
+            (a: Comment, b: Comment) =>
+              new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
+          )
+          .map((comment) => {
+            return (
+              <div
+                className="relative h-12 border-2 border-white dark:border-slate-800"
+                key={comment.id}
+              >
+                <div className="absolute left-0 m-2 flex flex-row">
+                  <div className="cursor-pointer">
+                    <div>
+                      {(comment.createdAt as Date).valueOf()}
+                      {comment.message}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            );
+          })}
+      </div>
+    ) : (
+      <></>
+    );
 
   return (
     <div className="bg-white dark:bg-slate-800 rounded-lg my-3 shadow-xl">
@@ -88,28 +119,10 @@ export default function PostView(props: {
           <PostLike postId={props.postId} />
         </div>
       </div>
-      {props.showComments && comments ? (
-        <div className="bg-gray-200 dark:bg-slate-900 rounded-b-3xl">
-          {comments.map((comment) => {
-            return (
-              <div
-                className="relative h-12 border-2 border-white dark:border-slate-800"
-                key={comment.id}
-              >
-                <div className="absolute left-0 m-2 flex flex-row">
-                  <div className="cursor-pointer">
-                    <div>{comment.message}</div>
-                  </div>
-                </div>
-              </div>
-            );
-          })}
-        </div>
-      ) : (
-        <></>
-      )}
+      {commentsView}
       <div className="pt-5">
-      <CreateCommentView postId={props.postId} /></div>
+        <CreateCommentView postId={props.postId} />
+      </div>
     </div>
   );
 }
