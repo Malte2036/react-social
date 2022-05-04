@@ -50,22 +50,28 @@ export default function PostView(props: {
 
   const commentsView =
     props.showComments && comments ? (
-      <div className="bg-gray-200 dark:bg-slate-900 rounded-b-3xl">
-        {comments.sort(compareByCreatedAt).map((comment) => {
-          return (
-            <div
-              className="relative h-12 border-2 border-white dark:border-slate-800"
-              key={comment.id}
-            >
-              <div className="absolute left-0 m-2 flex flex-row">
-                <div className="cursor-pointer">
-                  <PostComment comment={comment} />
+      <>
+        {" "}
+        <div className="bg-gray-200 dark:bg-slate-900 rounded-b-3xl">
+          {comments.sort(compareByCreatedAt).map((comment) => {
+            return (
+              <div
+                className="relative h-12 border-2 border-white dark:border-slate-800"
+                key={comment.id}
+              >
+                <div className="absolute left-0 m-2 flex flex-row">
+                  <div className="cursor-pointer">
+                    <PostComment comment={comment} />
+                  </div>
                 </div>
               </div>
-            </div>
-          );
-        })}
-      </div>
+            );
+          })}
+        </div>
+        <div className="pt-5">
+          <CreateCommentView postId={props.postId} />
+        </div>
+      </>
     ) : (
       <></>
     );
@@ -114,9 +120,6 @@ export default function PostView(props: {
         </div>
       </div>
       {commentsView}
-      <div className="pt-5">
-        <CreateCommentView postId={props.postId} />
-      </div>
     </div>
   );
 }
