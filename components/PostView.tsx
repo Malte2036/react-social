@@ -9,6 +9,7 @@ import { BackendServiceContext } from "@/lib/contexts/BackendServiceContext";
 import { useAccount } from "@/lib/contexts/AccountContext";
 import useSWR from "swr";
 import { PostId } from "@/lib/database/data/postId";
+import CreateCommentView from "./CreateCommentView";
 
 export default function PostView(props: {
   postId: PostId;
@@ -107,6 +108,8 @@ export default function PostView(props: {
       ) : (
         <></>
       )}
+      <div className="pt-5">
+      <CreateCommentView postId={props.postId} /></div>
     </div>
   );
 }

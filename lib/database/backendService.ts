@@ -224,6 +224,22 @@ export default class BackendService {
     return response.data as Comment[];
   }
 
+  async createCommentByPostId(
+    message: string,
+    postId: string,
+    bearerToken: string
+  ) {
+    await axios.post(
+      `${this.endpoint}/posts/${postId}/comments`,
+      {
+        message,
+      },
+      {
+        headers: this.authHeader(bearerToken),
+      }
+    );
+  }
+
   async createPost(
     message: string,
     image: File | undefined,
