@@ -12,6 +12,7 @@ import { PostId } from "@/lib/database/data/postId";
 import CreateCommentView from "./CreateCommentView";
 import { Comment } from "@/lib/database/data/comment";
 import { compareByCreatedAt } from "../helpers";
+import PostComment from "./PostComment";
 
 export default function PostView(props: {
   postId: PostId;
@@ -58,10 +59,7 @@ export default function PostView(props: {
             >
               <div className="absolute left-0 m-2 flex flex-row">
                 <div className="cursor-pointer">
-                  <div>
-                    {(comment.createdAt as Date).valueOf()}
-                    {comment.message}
-                  </div>
+                  <PostComment comment={comment} />
                 </div>
               </div>
             </div>
