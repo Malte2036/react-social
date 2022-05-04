@@ -11,6 +11,7 @@ import useSWR from "swr";
 import { PostId } from "@/lib/database/data/postId";
 import CreateCommentView from "./CreateCommentView";
 import { Comment } from "@/lib/database/data/comment";
+import { compareByCreatedAt } from "../helpers";
 
 export default function PostView(props: {
   postId: PostId;
@@ -49,28 +50,23 @@ export default function PostView(props: {
   const commentsView =
     props.showComments && comments ? (
       <div className="bg-gray-200 dark:bg-slate-900 rounded-b-3xl">
-        {comments
-          .sort(
-            (a: Comment, b: Comment) =>
-              new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
-          )
-          .map((comment) => {
-            return (
-              <div
-                className="relative h-12 border-2 border-white dark:border-slate-800"
-                key={comment.id}
-              >
-                <div className="absolute left-0 m-2 flex flex-row">
-                  <div className="cursor-pointer">
-                    <div>
-                      {(comment.createdAt as Date).valueOf()}
-                      {comment.message}
-                    </div>
+        {comments.sort(compareByCreatedAt).map((comment) => {
+          return (
+            <div
+              className="relative h-12 border-2 border-white dark:border-slate-800"
+              key={comment.id}
+            >
+              <div className="absolute left-0 m-2 flex flex-row">
+                <div className="cursor-pointer">
+                  <div>
+                    {(comment.createdAt as Date).valueOf()}
+                    {comment.message}
                   </div>
                 </div>
               </div>
-            );
-          })}
+            </div>
+          );
+        })}
       </div>
     ) : (
       <></>

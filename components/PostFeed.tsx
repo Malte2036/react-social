@@ -1,13 +1,11 @@
 import { PostId } from "@/lib/database/data/postId";
+import { compareByCreatedAt } from "../helpers";
 import PostView from "./PostView";
 
 export default function PostFeed(props: { postIds: PostId[] }) {
   const postViews =
     props.postIds
-      ?.sort(
-        (a: PostId, b: PostId) =>
-          (b.createdAt as Date).valueOf() - (a.createdAt as Date).valueOf()
-      )
+      ?.sort(compareByCreatedAt)
       .map((postId) => <PostView postId={postId} key={postId.id} />) ?? [];
 
   return <div className="flex flex-col">{postViews}</div>;
