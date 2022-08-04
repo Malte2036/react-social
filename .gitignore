@@ -24,5 +24,4 @@ yarn-error.log*
 
 .env
 .next
-package-lock.json
 next.config.js
