@@ -10,15 +10,16 @@ import { useAccount } from "@/lib/contexts/AccountContext";
 import useSWR from "swr";
 import { PostId } from "@/lib/database/data/postId";
 import CreateCommentView from "./CreateCommentView";
-import { Comment } from "@/lib/database/data/comment";
 import { compareByCreatedAt } from "../helpers";
 import PostComment from "./PostComment";
+import useFlag from "@/lib/hooks/FlagHook";
 
 export default function PostView(props: {
   postId: PostId;
   showComments?: boolean;
 }) {
   const [cookie] = useCookies(["bearerToken"]);
+  const [flags] = useFlag();
   const backendService = useContext(BackendServiceContext);
 
   const [account] = useAccount();
@@ -68,9 +69,11 @@ export default function PostView(props: {
             );
           })}
         </div>
-        <div className="pt-5">
-          <CreateCommentView postId={props.postId} />
-        </div>
+        {flags.writeComments && (
+          <div className="pt-5">
+            <CreateCommentView postId={props.postId} />
+          </div>
+        )}
       </>
     ) : (
       <></>
