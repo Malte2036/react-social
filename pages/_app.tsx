@@ -5,6 +5,8 @@ import "./styles/globals.css";
 import { useContext } from "react";
 import { BackendServiceContext } from "@/lib/contexts/BackendServiceContext";
 import { AccountProvider } from "@/lib/contexts/AccountContext";
+import { SettingsProvider } from "@/lib/contexts/SettingsContext";
+import { Layout } from "./layout";
 import Script from "next/script";
 import useSWR from "swr";
 import { useRouter } from "next/router";
@@ -12,7 +14,6 @@ import { Account } from "@/lib/database/data/account";
 
 export default function MyApp({ Component, pageProps }: AppProps) {
   const backendService = useContext(BackendServiceContext);
-  const [darkmode] = useDarkmode(backendService);
 
   const [cookie] = useCookies(["bearerToken"]);
   let router = useRouter();
@@ -21,28 +22,26 @@ export default function MyApp({ Component, pageProps }: AppProps) {
     "/auth/account",
     async () => {
       if (router.pathname != "/login") {
-        return await backendService.getAccount(cookie.bearerToken)
+        return await backendService.getAccount(cookie.bearerToken);
       }
       return {};
     },
     {
       onSuccess: (res) => {
         if (!res) {
-          router.reload()
+          router.reload();
         }
       },
-      onError: () => router.push("/login")
+      onError: () => router.push("/login"),
     }
   );
 
   if (router.pathname != "/login") {
     if (!initAccount) {
       return (
-        <div className={darkmode ? "dark" : ""}>
-          <div className="min-h-screen dark:text-white bg-gray-200 dark:bg-slate-900">
-            Fetching User Account...
-          </div>
-        </div>
+        <SettingsProvider>
+          <Layout>Fetching User Account...</Layout>
+        </SettingsProvider>
       );
     }
   }
@@ -59,12 +58,14 @@ export default function MyApp({ Component, pageProps }: AppProps) {
         strategy="lazyOnload"
       />
       <CookiesProvider>
-        <AccountProvider account={initAccount === {} ? null : initAccount as Account}>
-          <div className={darkmode ? "dark" : ""}>
-            <div className="min-h-screen dark:text-white bg-gray-200 dark:bg-slate-900">
+        <AccountProvider
+          account={initAccount === {} ? null : (initAccount as Account)}
+        >
+          <SettingsProvider>
+            <Layout>
               <Component {...pageProps} />
-            </div>
-          </div>
+            </Layout>
+          </SettingsProvider>
         </AccountProvider>
       </CookiesProvider>
     </>
