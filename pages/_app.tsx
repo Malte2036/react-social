@@ -9,6 +9,7 @@ import Script from "next/script";
 import useSWR from "swr";
 import { useRouter } from "next/router";
 import { Account } from "@/lib/database/data/account";
+import { GoogleOAuthProvider } from "@react-oauth/google";
 
 export default function MyApp({ Component, pageProps }: AppProps) {
   const backendService = useContext(BackendServiceContext);
@@ -21,17 +22,17 @@ export default function MyApp({ Component, pageProps }: AppProps) {
     "/auth/account",
     async () => {
       if (router.pathname != "/login") {
-        return await backendService.getAccount(cookie.bearerToken)
+        return await backendService.getAccount(cookie.bearerToken);
       }
       return {};
     },
     {
       onSuccess: (res) => {
         if (!res) {
-          router.reload()
+          router.reload();
         }
       },
-      onError: () => router.push("/login")
+      onError: () => router.push("/login"),
     }
   );
 
@@ -59,13 +60,20 @@ export default function MyApp({ Component, pageProps }: AppProps) {
         strategy="lazyOnload"
       />
       <CookiesProvider>
-        <AccountProvider account={initAccount === {} ? null : initAccount as Account}>
-          <div className={darkmode ? "dark" : ""}>
-            <div className="min-h-screen dark:text-white bg-gray-200 dark:bg-slate-900">
-              <Component {...pageProps} />
+        <GoogleOAuthProvider
+          clientId={process.env.NEXT_PUBLIC_REACT_APP_GOOGLE_CLIENT_ID ?? ""}
+        >
+          <AccountProvider
+            account={initAccount === {} ? null : (initAccount as Account)}
+          >
+            <div className={darkmode ? "dark" : ""}>
+              <div className="min-h-screen dark:text-white bg-gray-200 dark:bg-slate-900">
+                <Component {...pageProps} />
+              </div>
             </div>
-          </div>
-        </AccountProvider>
+          </AccountProvider>
+        </GoogleOAuthProvider>
+        ;
       </CookiesProvider>
     </>
   );
