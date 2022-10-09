@@ -74,6 +74,17 @@ export default class BackendService {
     return response.data.access_token;
   }
 
+  async googleLogin(token: string): Promise<string> {
+    const response = await axios.post(`${this.endpoint}/auth/google/`, {
+      token,
+    });
+    if (response.status !== 201) {
+      throw response.statusText;
+    }
+    console.log("Logged in with Google!");
+    return response.data.access_token;
+  }
+
   async getAllPosts(bearerToken: string): Promise<Post[]> {
     const response = await axios.get(`${this.endpoint}/posts`, {
       headers: this.authHeader(bearerToken),

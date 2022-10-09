@@ -10,5 +10,5 @@ export function compareByCreatedAt(
 ): number {
   if (!a.createdAt || !b.createdAt) return 0;
 
-  return new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime();
+  return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
 }

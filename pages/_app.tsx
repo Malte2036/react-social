@@ -11,6 +11,7 @@ import Script from "next/script";
 import useSWR from "swr";
 import { useRouter } from "next/router";
 import { Account } from "@/lib/database/data/account";
+import { GoogleOAuthProvider } from "@react-oauth/google";
 
 export default function MyApp({ Component, pageProps }: AppProps) {
   const backendService = useContext(BackendServiceContext);
@@ -58,15 +59,19 @@ export default function MyApp({ Component, pageProps }: AppProps) {
         strategy="lazyOnload"
       />
       <CookiesProvider>
-        <AccountProvider
-          account={initAccount === {} ? null : (initAccount as Account)}
+        <GoogleOAuthProvider
+          clientId={process.env.NEXT_PUBLIC_REACT_APP_GOOGLE_CLIENT_ID ?? ""}
         >
-          <SettingsProvider>
-            <Layout>
-              <Component {...pageProps} />
-            </Layout>
-          </SettingsProvider>
-        </AccountProvider>
+          <AccountProvider
+            account={initAccount === {} ? null : (initAccount as Account)}
+          >
+            <SettingsProvider>
+              <Layout>
+                <Component {...pageProps} />
+              </Layout>
+            </SettingsProvider>
+          </AccountProvider>
+        </GoogleOAuthProvider>
       </CookiesProvider>
     </>
   );
