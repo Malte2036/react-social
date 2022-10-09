@@ -4,7 +4,7 @@ interface Props {
   children: React.ReactNode;
 }
 
-export function Layout({ children }: Props) {
+export default function Layout({ children }: Props) {
   const { darkmode } = useDarkmode();
 
   return (
