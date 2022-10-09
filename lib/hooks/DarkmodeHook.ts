@@ -1,19 +1,11 @@
-import { Dispatch, SetStateAction, useEffect, useState } from "react";
-import BackendService from "../database/backendService";
+import { useContext } from "react";
+import { SettingsContext } from "../contexts/SettingsContext";
 
-export default function useDarkmode(
-  backendService: BackendService
-): [boolean, Dispatch<SetStateAction<boolean>>] {
-  const [darkmode, setDarkmode] = useState<boolean>(() => {
-    backendService
-      .getAccountPrefs()
-      .then((accountPrefs) => setDarkmode(accountPrefs.darkmode));
-    return true;
-  });
+export default function useDarkmode() {
+  const { darkmode, setDarkmode } = useContext(SettingsContext);
 
-  useEffect(() => {
-    backendService.updateAccountPrefs({ darkmode: darkmode });
-  }, [backendService, darkmode]);
-
-  return [darkmode, setDarkmode];
+  return {
+    darkmode,
+    setDarkmode,
+  };
 }

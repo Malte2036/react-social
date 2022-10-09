@@ -7,6 +7,8 @@ import { Post } from "./data/post";
 import { PostId } from "./data/postId";
 import { User } from "./data/user";
 
+const isServer = () => typeof window === "undefined";
+
 export default class BackendService {
   endpoint: string;
   constructor(url: string, port: number) {
@@ -50,9 +52,10 @@ export default class BackendService {
   }
 
   async getAccountPrefs(): Promise<AccountPrefs> {
-    return { darkmode: true };
-    /*const prefs = localStorage.getItem("accountPrefs");
-    return prefs ? JSON.parse(prefs) : { darkmode: true };*/
+    if (isServer()) return { darkmode: true };
+
+    const prefs = localStorage.getItem("accountPrefs");
+    return prefs ? JSON.parse(prefs) : { darkmode: true };
   }
 
   async updateAccountPrefs(accountPrefs: AccountPrefs) {
