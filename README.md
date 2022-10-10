@@ -1,4 +1,9 @@
 <h1 align="center">:muscle: React Social</h1>
+
+<div align="center">
+    <img alt="Desktop" title="#Desktop" src="./public/mockup.jpg" width="680px" />
+</div>
+
 <p align="center">Frontend for <a href="https://github.com/Malte2036/react-social-backend">react-social-backend</a>.</p>
 
 ## :zap: Pages
