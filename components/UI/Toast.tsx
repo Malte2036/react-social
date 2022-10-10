@@ -1,6 +1,5 @@
 import { ToastContextState } from "@/lib/contexts/ToastContext";
 import React, { useContext, useState, useEffect, useCallback } from "react";
-import useDarkmode from "@/lib/hooks/DarkmodeHook";
 
 export default function Toast() {
   const { ToastData, setToast } = useContext(ToastContextState);
@@ -42,7 +41,6 @@ export default function Toast() {
     warning: "text-yellow-500",
     info: "text-blue-500",
   };
-  console.log(color[ToastData.type]);
   return (
     <div
       className={`transition-all absolute w-1/4 flex justify-between items-top bg-white p-2 rounded-md shadow-lg shadow-grey right-5 z-50 ${

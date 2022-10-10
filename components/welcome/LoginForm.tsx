@@ -27,11 +27,10 @@ export default function LoginForm(props: {
       setCookie("bearerToken", bearerToken, { secure: true });
       router.push("/home");
     } catch (error) {
-      // alert(`Error ${error}`);
       ToastService.setToast({
         show: true,
-        type: "success",
-        message: "this is it",
+        type: "error",
+        message: `${error}`,
       });
     }
   }

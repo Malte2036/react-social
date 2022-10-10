@@ -2,7 +2,7 @@ import { createContext, useContext, useState } from "react";
 
 interface ToastInterface {
   show: boolean;
-  type: string;
+  type: "" | "success" | "warning" | "info" | "error";
   message: string;
 }
 

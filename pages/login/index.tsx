@@ -5,6 +5,7 @@ import { CredentialResponse, GoogleLogin } from "@react-oauth/google";
 import { BackendServiceContext } from "@/lib/contexts/BackendServiceContext";
 import { useCookies } from "react-cookie";
 import { useRouter } from "next/router";
+import { ToastContextState } from "@/lib/contexts/ToastContext";
 
 enum welcomeStateType {
   login,
@@ -15,6 +16,7 @@ export default function WelcomePage() {
   let router = useRouter();
 
   const backendService = useContext(BackendServiceContext);
+  const ToastService = useContext(ToastContextState);
   const [cookie, setCookie] = useCookies(["bearerToken"]);
 
   const [welcomeState, setWelcomeState] =
@@ -80,7 +82,13 @@ export default function WelcomePage() {
           <br />
           <GoogleLogin
             onSuccess={responseGoogleSuccess}
-            onError={() => console.log("Google Login Error")}
+            onError={() =>
+              ToastService.setToast({
+                show: true,
+                type: "error",
+                message: `Google Login Error`,
+              })
+            }
             useOneTap
           />
         </div>
