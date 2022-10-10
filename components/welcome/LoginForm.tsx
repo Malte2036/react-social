@@ -4,6 +4,7 @@ import InputField from "../../components/form/InputField";
 import { useRouter } from "next/router";
 import { useCookies } from "react-cookie";
 import { BackendServiceContext } from "@/lib/contexts/BackendServiceContext";
+import { ToastContextState } from "@/lib/contexts/ToastContext";
 
 export default function LoginForm(props: {
   email: string;
@@ -13,6 +14,7 @@ export default function LoginForm(props: {
 }) {
   let router = useRouter();
   const backendService = useContext(BackendServiceContext);
+  const ToastService = useContext(ToastContextState);
   const [cookie, setCookie] = useCookies(["bearerToken"]);
 
   async function onSubmitHandler(event: React.FormEvent<HTMLFormElement>) {
@@ -25,7 +27,11 @@ export default function LoginForm(props: {
       setCookie("bearerToken", bearerToken, { secure: true });
       router.push("/home");
     } catch (error) {
-      alert(`Error ${error}`);
+      ToastService.setToast({
+        show: true,
+        type: "error",
+        message: `${error}`,
+      });
     }
   }
 

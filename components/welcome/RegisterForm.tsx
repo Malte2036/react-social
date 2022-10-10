@@ -4,6 +4,7 @@ import React, { Dispatch, SetStateAction, useContext } from "react";
 import InputField from "../../components/form/InputField";
 import { useCookies } from "react-cookie";
 import { BackendServiceContext } from "@/lib/contexts/BackendServiceContext";
+import { ToastContextState } from "@/lib/contexts/ToastContext";
 
 export default function RegisterForm(props: {
   username: string;
@@ -15,6 +16,7 @@ export default function RegisterForm(props: {
 }) {
   let router = useRouter();
   const backendService = useContext(BackendServiceContext);
+  const ToastService = useContext(ToastContextState);
   const [cookie, setCookie] = useCookies(["bearerToken"]);
 
   async function onSubmitHandler(event: React.FormEvent<HTMLFormElement>) {
@@ -29,7 +31,11 @@ export default function RegisterForm(props: {
 
       router.push("/home");
     } catch (error) {
-      alert(`Error ${error}`);
+      ToastService.setToast({
+        show: true,
+        type: "error",
+        message: `${error}`,
+      });
     }
   }
 

@@ -1,16 +1,19 @@
 import type { AppProps } from "next/app";
+import useDarkmode from "@/lib/hooks/DarkmodeHook";
 import { CookiesProvider, useCookies } from "react-cookie";
 import "./styles/globals.css";
 import { useContext } from "react";
 import { BackendServiceContext } from "@/lib/contexts/BackendServiceContext";
 import { AccountProvider } from "@/lib/contexts/AccountContext";
 import { SettingsProvider } from "@/lib/contexts/SettingsContext";
+import Layout from "./layout";
 import Script from "next/script";
 import useSWR from "swr";
 import { useRouter } from "next/router";
 import { Account } from "@/lib/database/data/account";
 import { GoogleOAuthProvider } from "@react-oauth/google";
-import Layout from "./layout";
+import Toast from "@/components/UI/Toast";
+import { ToastStateProvider } from "@/lib/contexts/ToastContext";
 
 export default function MyApp({ Component, pageProps }: AppProps) {
   const backendService = useContext(BackendServiceContext);
@@ -64,11 +67,14 @@ export default function MyApp({ Component, pageProps }: AppProps) {
           <AccountProvider
             account={initAccount === {} ? null : (initAccount as Account)}
           >
-            <SettingsProvider>
-              <Layout>
-                <Component {...pageProps} />
-              </Layout>
-            </SettingsProvider>
+            <ToastStateProvider>
+              <SettingsProvider>
+                <Layout>
+                  <Toast />
+                  <Component {...pageProps} />
+                </Layout>
+              </SettingsProvider>
+            </ToastStateProvider>
           </AccountProvider>
         </GoogleOAuthProvider>
       </CookiesProvider>
