@@ -5,7 +5,7 @@ export function middleware(req: NextRequest) {
     return NextResponse.next();
   }
 
-  const bearerToken = req.cookies.bearerToken;
+  const bearerToken = req.cookies["bearerToken"];
   if (!bearerToken) {
     return NextResponse.redirect(new URL("/login", req.url));
   }
