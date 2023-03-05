@@ -1,4 +1,4 @@
-import Image from "next/image";
+import Image from "next/legacy/image";
 import { useContext } from "react";
 import { BackendServiceContext } from "@/lib/contexts/BackendServiceContext";
 import defaultProfilePicture from "@/public/default_profile_picture.png";
@@ -22,8 +22,8 @@ export default function ProfilePicture(props: {
       }
       alt=""
       layout="fixed"
-      width={`${props.size ?? 32}px`}
-      height={`${props.size ?? 32}px`}
+      width={props.size ?? 32}
+      height={props.size ?? 32}
     />
   );
 }

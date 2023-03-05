@@ -65,7 +65,7 @@ export default function MyApp({ Component, pageProps }: AppProps) {
           clientId={process.env.NEXT_PUBLIC_REACT_APP_GOOGLE_CLIENT_ID ?? ""}
         >
           <AccountProvider
-            account={initAccount === {} ? null : (initAccount as Account)}
+            account={Object.keys(initAccount ?? {}).length == 0 ? null : (initAccount as Account)}
           >
             <ToastStateProvider>
               <SettingsProvider>
